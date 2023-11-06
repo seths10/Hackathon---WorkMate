@@ -1,4 +1,4 @@
-<!-- <img src="./logo/bus-tracking.png" width="100%" height="600vh"/> -->
+<img src="./assets/top-img-3.png" width="100%" height="600vh"/>
 <h1 align="center"> WorkMate </h1>
 <!-- <p align="center">This project is designed to </p> -->
 
