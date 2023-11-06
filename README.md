@@ -34,9 +34,9 @@ Our solution primarily deals with `Future of Education` and `Smart Technology fo
 
 <p align="left">
 <a href="https://github.com/seths10"><img width="128px" src="https://avatars1.githubusercontent.com/seths10"></a>
-<a href="https://github.com/shineteye"><img width="128px" src="https://avatars.githubusercontent.com/armah001"></a>
-<a href="https://github.com/seths10"><img width="128px" src="https://avatars1.githubusercontent.com/nathannunana"></a>
-<a href="https://github.com/shineteye"><img width="128px" src="https://avatars.githubusercontent.com/perrykwarteng"></a>
+<a href="https://github.com/armah001"><img width="128px" src="https://avatars.githubusercontent.com/armah001"></a>
+<a href="https://github.com/nathannunana"><img width="128px" src="https://avatars1.githubusercontent.com/nathannunana"></a>
+<a href="https://github.com/perrykwarteng"><img width="128px" src="https://avatars.githubusercontent.com/perrykwarteng"></a>
 
 </p>
 
