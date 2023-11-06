@@ -1,4 +1,4 @@
-<img src="./assets/top-img-3.png" width="100%" height="600vh"/>
+<img src="./assets/workmate logo.png" width="100%" height="100%"/>
 <h1 align="center"> WorkMate </h1>
 <!-- <p align="center">This project is designed to </p> -->
 
