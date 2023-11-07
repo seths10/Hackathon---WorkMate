@@ -5,10 +5,10 @@ import { signin, signup } from '../../controllers/Auth/auth';
 const router = express.Router()
 
 // login router
-router.post("/auth/signin", signin)
+router.post("/signin", signin)
 
 
 // signup router
-router.post("/auth/signup", signup)
+router.post("/signup", signup)
 
 export default router;

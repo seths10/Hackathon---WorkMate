@@ -18,9 +18,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: "*" }));
 
 // route middlewares
-app.use("/api", authRoute);
-app.use("/api", auth, communityRoute);
-app.use("/api", auth, bookingRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/community", auth, communityRoute);
+app.use("/api/booking", auth, bookingRoute);
 
 mongoose.Promise = bluebird;
 const mongodb_uri = DB_URI! || "mongodb://localhost:27017/workmate";
