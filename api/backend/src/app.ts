@@ -3,6 +3,9 @@ import cors from "cors";
 import mongoose, { ConnectOptions } from "mongoose";
 import bluebird from "bluebird";
 import { DB_URI } from "./utils/secrets";
+import authRoute from "./routes/Community/Auth";
+import communityRoute from "./routes/Community/Auth";
+import { auth } from "./utils/middlewares";
 
 // instance of express
 const app = express();
@@ -13,12 +16,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: "*" }));
 
+// route middlewares
+app.use("/api", authRoute);
+app.use("/api", auth, communityRoute)
+
 mongoose.Promise = bluebird;
-const mongodb_uri = DB_URI!
+const mongodb_uri = DB_URI! || "mongodb://localhost:27017/workmate";
 
 // db connection
 mongoose
-  .connect(mongodb_uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true } as ConnectOptions)
+  .connect(mongodb_uri, { useNewUrlParser: true, useUnifiedTopology: true } as ConnectOptions)
   .then(() => {
     console.log("db connection establlished");
   })
@@ -26,6 +33,7 @@ mongoose
     throw err;
   });
 
+// test route
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
