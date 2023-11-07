@@ -2,7 +2,12 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+// comment model
 const commentSchema = new Schema({
+    question_id: {
+        type: Schema.Types.ObjectId,
+        ref: "Question",
+    },
     content: {
         type: String,
         required: true,
@@ -11,7 +16,7 @@ const commentSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User"
     },
-    created_by: {
+    created_at: {
         type: Date,
         default: Date.now(),
     }

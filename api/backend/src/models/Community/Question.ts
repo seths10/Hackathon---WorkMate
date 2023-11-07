@@ -12,7 +12,7 @@ const questionSchema = new Schema({
     type: String,
     required: true,
   },
-  tag: [
+  tags: [
     {
       type: String,
     },
@@ -20,6 +20,10 @@ const questionSchema = new Schema({
   author_id: {
     type: Schema.Types.ObjectId,
     ref: "User",
+  },
+  comment_id: {
+    type: Schema.Types.ObjectId,
+    ref: "Comment",
   },
   votes: {
     type: Number,

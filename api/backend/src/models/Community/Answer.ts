@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+// answer model
 const answerSchema = new Schema({
   content: {
     type: String,
@@ -12,8 +13,12 @@ const answerSchema = new Schema({
     ref: "Question",
   },
   author_id: {
-    typ: Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "User",
+  },
+  comment_id: {
+    type: Schema.Types.ObjectId,
+    ref: "Comment"
   },
   votes: {
     type: Number,
