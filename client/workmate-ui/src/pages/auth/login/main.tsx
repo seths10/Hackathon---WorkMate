@@ -25,7 +25,7 @@ const LoginScreen = () => {
             <div className="flex items-center justify-end space-x-2">
               <label className=" me-5 mt-2 text-xl">Dont't have an account? </label>
             
-              <Button label={"Register"} width={100}  onClick={function (): void {
+              <Button label={"Register"} width={100}  backgroundColor="orange" onClick={function (): void {
                 throw new Error("Function not implemented.");
                 } }>
               </Button>
@@ -54,7 +54,7 @@ const LoginScreen = () => {
                     <input name="Password" type="password" placeholder="Type Here" className="mb-2 peer h-full w-full rounded-md border border-gray-700 border-t-transparent bg-transparent px-3 py-3 font-sans text-sm font-normal text-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-gray-200 placeholder-shown:border-t-gray-200 focus:border-2 focus:border-orange-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-gray-50 border-style: border-solid border-2 border-orange-600 rounded-md"></input>
                   </div>
 
-                  <Button label={"Login"} width={100}  onClick={function (): void {
+                  <Button label={"Login"} width={100} backgroundColor="orange" onClick={function (): void {
                     throw new Error("Function not implemented.");
                     } }>
                   </Button>
