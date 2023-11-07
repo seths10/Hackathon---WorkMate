@@ -1,4 +1,9 @@
-<img src="./assets/workmate logo.png" width="100%" height="100%"/>
+<!-- <img src="./assets/workmate logo.png" width="100%" height="100%"/> -->
+
+
+https://github.com/seths10/WorkMate/assets/59029978/f26ede9c-35ef-40d3-982f-534cebe26704
+
+
 <h1 align="center"> WorkMate </h1>
 <!-- <p align="center">This project is designed to </p> -->
 
@@ -20,6 +25,8 @@ git clone https://github.com/seths10/WorkMate.git
   ##### To run the frontend, navigate to the \`_client_` directory
 ```bash
 cd client
+cd workmate-ui
+npm run dev
 ```
 
   ##### To run the app server, navigate to the \`_api_` directory
