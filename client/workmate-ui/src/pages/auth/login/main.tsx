@@ -1,8 +1,8 @@
 import * as React from "react";
 import { siteTitle } from "../../../constants/app";
 import { Button } from "../../../components/button";
-import MainLogo from '../../../../../../assets/workmate.png'
-import SignIpImg from '../../../../../../assets/signin.png'
+import MainLogo from '../../../assets/images/workmate.png'
+import SignInImg from '../../../assets/images/signin.png'
 
 
 const LoginScreen = () => {
@@ -16,7 +16,7 @@ const LoginScreen = () => {
       <div className="flex-auto w-10 bg-orange-100 p-5">
           <img src={MainLogo} alt="mainlogo" className="logo w-64" />
           <div className="signupImg flex items-center justify-center h-5/6">
-            <img src={SignIpImg} alt="Signup png" className="w-96 object-cover"/>
+            <img src={SignInImg} alt="Signup png" className="w-96 object-cover"/>
           </div>
         </div>
 
