@@ -17,6 +17,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bluebird": "^3.7.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "errorhandler": "^1.5.1",
@@ -24,8 +26,11 @@
     "mongoose": "^8.0.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/bluebird": "^3.5.41",
     "@types/cors": "^2.8.15",
     "@types/errorhandler": "^1.5.2",
+    "@types/mongoose": "^5.11.97",
     "@types/node": "^20.8.10",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
