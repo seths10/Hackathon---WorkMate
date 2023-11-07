@@ -3,8 +3,8 @@ import cors from "cors";
 import mongoose, { ConnectOptions } from "mongoose";
 import bluebird from "bluebird";
 import { DB_URI } from "./utils/secrets";
-import authRoute from "./routes/Auth";
-import communityRoute from "./routes/Auth";
+import authRoute from "./routes/Community/Auth";
+import communityRoute from "./routes/Community/Auth";
 import { auth } from "./utils/middlewares";
 
 // instance of express
