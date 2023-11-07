@@ -2,25 +2,29 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
 // user schema
-const userSchema = new mongoose.Schema({
-  firstname: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    firstname: {
+      type: String,
+      required: [true, "Enter your firstname"],
+    },
+    lastname: {
+      type: String,
+      required: [true, "Enter your lastname"],
+    },
+    email: {
+      type: String,
+      required: [true,"Enter your work email"],
+      unique: true,
+      min: [20, "Invalid number of characters"]
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  lastname: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-}, {timestamps: true});
+  { timestamps: true }
+);
 
 // password comparison check
 userSchema.methods.comparePassword = function (candidatePassword: string) {
