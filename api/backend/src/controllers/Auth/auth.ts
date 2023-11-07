@@ -17,7 +17,7 @@ export const signin = async (req: Request, res: Response) => {
   }
 
   try {
-    const user = await User.findOne({ email }).exec();
+    var user = await User.findOne({ email }).exec();
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -44,18 +44,29 @@ export const signin = async (req: Request, res: Response) => {
       { algorithm: "HS256", expiresIn: "1h" }
     );
 
-    user.token = token;
+    
+    const userData = {
+      id: user.id,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      token: token,
+    }
 
     return res.status(200).json({
       success: true,
-      data: user,
+      data: userData,
     });
+
   } catch (err) {
-    throw new Error("Internal Server Error");
+    return res.status(500).json({
+      success: false,
+      data: "Internal Server Error",
+    });
   }
 };
 
-export const signup = async (req: Request, res:Response) => {
+export const signup = async (req: Request, res: Response) => {
   // signup logic
   const { firstname, lastname, email, password } = req.body;
 
@@ -67,18 +78,21 @@ export const signup = async (req: Request, res:Response) => {
     });
   }
 
-  try{
-    const existingUser = await User.findOne({email}).exec();
-    if(existingUser){
+  try {
+    const existingUser = await User.findOne({ email }).exec();
+    if (existingUser) {
       return res.json({
         success: false,
-        data: "User already exist"
-      })
+        data: "User already exist",
+      });
     }
-    const user = new User({firstname, lastname, password, email})
-    await user.save()
-    return res.status(201).json({success: true, data: "User registered"})
-  }catch(err){
-    throw new Error("Internal Server Error");
+    const user = new User({ firstname, lastname, password, email });
+    await user.save();
+    return res.status(201).json({ success: true, data: "User registered" });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      data: "Internal Server Error",
+    });
   }
 };

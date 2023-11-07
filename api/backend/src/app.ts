@@ -3,8 +3,9 @@ import cors from "cors";
 import mongoose, { ConnectOptions } from "mongoose";
 import bluebird from "bluebird";
 import { DB_URI } from "./utils/secrets";
-import authRoute from "./routes/Community/Auth";
-import communityRoute from "./routes/Community/Auth";
+import authRoute from "./routes/Auth/Auth";
+import communityRoute from "./routes/Community/Community";
+import bookingRoute from "./routes/Booking/Booking";
 import { auth } from "./utils/middlewares";
 
 // instance of express
@@ -18,7 +19,8 @@ app.use(cors({ origin: "*" }));
 
 // route middlewares
 app.use("/api", authRoute);
-app.use("/api", auth, communityRoute)
+app.use("/api", auth, communityRoute);
+app.use("/api", auth, bookingRoute);
 
 mongoose.Promise = bluebird;
 const mongodb_uri = DB_URI! || "mongodb://localhost:27017/workmate";

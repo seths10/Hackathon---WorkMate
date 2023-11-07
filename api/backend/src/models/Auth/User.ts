@@ -2,15 +2,15 @@ import { Schema, model, Model } from "mongoose";
 import bcrypt from "bcrypt";
 
 interface User {
-  firstname: String,
-  lastname: String,
-  email: String,
-  password: String,
-  token:String,
-  comparePassword (candidatePassword: string) : Promise<boolean>;
+  firstname: String;
+  lastname: String;
+  email: String;
+  password: String;
+  token: String;
+  comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-export interface UserDocument extends User, Document{}
+export interface UserDocument extends User, Document {}
 
 // user schema
 const userSchema = new Schema(
