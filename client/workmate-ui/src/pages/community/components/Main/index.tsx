@@ -10,9 +10,8 @@ function Index() {
   React.useEffect(() => {
     async function getQuestion() {
       await instance.get(`/api/community/question`).then((res) => {
-        console.log(res.data)
-        setQuestions(res?.data);
-        
+        console.log(res?.data?.data)
+        setQuestions(res?.data?.data);
       });
     }
     getQuestion();

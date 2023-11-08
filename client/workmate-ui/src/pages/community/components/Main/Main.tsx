@@ -5,12 +5,12 @@ import AllQuestions from "./AllQuestions";
 type Prop = {
   questions: [
     {
-      tags: [{ type: string }];
+      tags: string[];
       total_answers: string;
       title: string;
       _id: number;
       created_at: string;
-      author: { id: number, name: string };
+      author: { author_id: number, author_name: string };
       content: string;
     }
   ];

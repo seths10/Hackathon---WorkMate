@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, useReducer, useEffect } from "react";
 
-type User = {
+export type User = {
   success: boolean;
   data: {
     id: string;
