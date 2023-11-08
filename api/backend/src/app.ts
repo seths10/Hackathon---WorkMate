@@ -27,7 +27,7 @@ const mongodb_uri = DB_URI! || "mongodb://localhost:27017/workmate";
 
 // db connection
 mongoose
-  .connect(mongodb_uri, { useNewUrlParser: true, useUnifiedTopology: true } as ConnectOptions)
+  .connect(mongodb_uri, { useNewUrlParser: true, useUnifiedTopology: true, ssl: true } as ConnectOptions)
   .then(() => {
     console.log("db connection establlished");
   })
