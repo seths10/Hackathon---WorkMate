@@ -47,19 +47,18 @@
 }
 
 .question-answer > a {
-  color: #0151f0d8;
+  color: #d65627;
   font-size: 1.1rem;
   margin-bottom: 10px;
 }
 .question-answer > a:hover {
-  color: #1649b1d8;
+  color: #d65627e0;
   font-size: 1.1rem;
   margin-bottom: 10px;
 }
 
 .question-answer > p {
-  font-size: 0.9rem;
-  color: rgba(0, 0, 0, 0.7);
+  /* font-size: 0.9rem; */
   margin-bottom: 10px;
 }
 
@@ -82,7 +81,7 @@
 .auth-details > p {
   margin-left: 5px;
   font-size: small;
-  color: #0151f0d8;
+  color: #d65627;
 }
 
 .comments {
@@ -106,8 +105,8 @@
 
 .comment > p > span {
   padding: 3px;
-  background-color: #0151f028;
-  color: #0151f0d8;
+  background-color: #d656270c;
+  color: #d65627;
   border-radius: 2px;
 }
 
@@ -120,5 +119,5 @@
 }
 
 .comments > p:hover {
-  color: #0151f0a2;
+  color: #d65627e3;
 }

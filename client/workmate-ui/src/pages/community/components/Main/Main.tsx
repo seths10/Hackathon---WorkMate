@@ -24,7 +24,7 @@ function Main({ questions }: Prop) {
         <div className="main-top">
           <h2>All Questions</h2>
           <Link to="/community/ask-question">
-            <button className="bg-[#D65627] outline-none border-none">
+            <button className="bg-[#D65627] outline-none rounded-lg border-none hover:bg-[#d65627de] h-[3rem] text-white">
               Ask Question
             </button>
           </Link>

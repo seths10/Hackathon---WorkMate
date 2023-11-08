@@ -36,7 +36,7 @@ function AllQuestions({ data }: DataProp) {
             </div>
           </div>
         </div>
-        <div className="question-answer">
+        <div className="question-answer text-sm text-gray-700">
           <Link className="text-[#D65627]" to={`/community/view-question?q=${data?._id}`}>{data.title}</Link>
 
           <div
@@ -52,12 +52,12 @@ function AllQuestions({ data }: DataProp) {
             }}
           >
             {tags.map((tag) => (
-              <p className="my-[10px] mx-[5px] py-[2px] px-[8px] bg-blue-400 text-white rounded-full">
+              <p className="my-[10px] mx-[5px] text-sm py-[2px] px-[8px] bg-[#f874441a] text-[#d65627] rounded-lg">
                 {tag?.name}
               </p>
             ))}
           </div>
-          <div className="author">
+          <div className="author ">
             <small>{data.create_at}</small>
             <div className="auth-details">
               <Avatar name={data?.user?.displayName} round size={"25"} />
