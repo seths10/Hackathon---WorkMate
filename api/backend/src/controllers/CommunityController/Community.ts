@@ -3,7 +3,6 @@ import Question from "../../models/CommunityModel/Question";
 import Answer from "../../models/CommunityModel/Answer";
 import Comment from "../../models/CommunityModel/Comment";
 
-
 // post a question to workmate
 export const postQuestion = async (req: Request, res: Response) => {
   const { title, content, tags, author, votes, views } = req.body;
@@ -22,11 +21,10 @@ export const postQuestion = async (req: Request, res: Response) => {
       success: true,
       data: question,
     });
-
   } catch (err) {
     res.status(500).json({
       error: err,
-      msg:"Internal Server Error"
+      msg: "Internal Server Error",
     });
   }
 };
@@ -34,7 +32,7 @@ export const postQuestion = async (req: Request, res: Response) => {
 // get all questions from workmate
 export const getQuestions = async (req: Request, res: Response) => {
   try {
-    const question = await Question.find({}).exec();
+    const question = await Question.find({}).populate("comments").exec();
     res.status(200).json({
       success: true,
       data: question,
@@ -44,46 +42,45 @@ export const getQuestions = async (req: Request, res: Response) => {
   }
 };
 
-
-// get a particular question 
+// get a particular question
 export const getQuestionById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const question = await Question.findById(id);
+    const question = await Question.findById(id).populate("comments").exec();
+
     if (!question) {
       return res.status(404).json({
         success: false,
         data: "Question not found",
       });
     }
-    const comment = await Comment.findById(question.comment_id);
+    // const comment = await Comment.findById(question.comment);
 
-    const resp = {
-      title: question.title,
-      content: question.content,
-      tags: question.tags,
-      total_answers: question.total_answers,
-      votes: question.votes,
-      views: question.views,
-      created_at: question.created_at,
-      _id: question.id,
-      comment: {
-        content: comment?.content,
-        question_id: comment?.question_id,
-        author_id: comment?.author_id,
-        created_at: comment?.created_at,
-      }
-    }
+    // const resp = {
+    //   title: question.title,
+    //   content: question.content,
+    //   tags: question.tags,
+    //   total_answers: question.total_answers,
+    //   votes: question.votes,
+    //   views: question.views,
+    //   created_at: question.created_at,
+    //   _id: question.id,
+    //   comment: {
+    //     content: comment?.content,
+    //     question_id: comment?.question_id,
+    //     author: comment?.author,
+    //     created_at: comment?.created_at,
+    //   },
+    // };
 
     res.status(200).json({
       success: true,
-      data: resp,
+      data: question,
     });
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
 };
-
 
 // delete a question from workmate
 export const deleteQuestionById = async (req: Request, res: Response) => {
@@ -110,34 +107,33 @@ export const deleteQuestionById = async (req: Request, res: Response) => {
 
 // get a specific/particular answer from workmate
 export const getAnswersByQuestionId = async (req: Request, res: Response) => {
-    const { question_id } = req.params;
-    try {
-        const answer = await Answer.find({question_id}).exec();
-    
-        if (!answer) {
-          return res.status(404).json({
-            success: false,
-            data: "Answer not found",
-          });
-        }
-        res.status(200).json({
-          success: true,
-          data: answer,
-        });
-    } catch (err) {
-      res.status(500).send("Internal Server Error");
+  const { question_id } = req.params;
+  try {
+    const answer = await Answer.find({ question_id }).populate("comments").exec();
+
+    if (!answer) {
+      return res.status(404).json({
+        success: false,
+        data: "Answer not found",
+      });
     }
-  };
-  
+    res.status(200).json({
+      success: true,
+      data: answer,
+    });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
 
 // post an answer to workmate
 export const postAnswer = async (req: Request, res: Response) => {
-  const { content, question_id, author_id } = req.body;
+  const { content, question_id, author } = req.body;
   try {
     const newAnswer = new Answer({
       content,
       question_id,
-      author_id,
+      author,
     });
 
     const question = await newAnswer.save();
@@ -167,22 +163,21 @@ export const deleteAnswerById = async (req: Request, res: Response) => {
     await Answer.findByIdAndDelete(id);
     res.status(200).json({
       success: true,
-      data: "Question removed",
+      data: "Answer removed",
     });
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
 };
 
-
 // comment on a question
 export const postComment = async (req: Request, res: Response) => {
-  const { question_id, author_id, content } = req.body;
+  const { question_id, author, content } = req.body;
 
   try {
     const newComment = new Comment({
       question_id,
-      author_id,
+      author,
       content,
     });
 
@@ -197,24 +192,49 @@ export const postComment = async (req: Request, res: Response) => {
   }
 };
 
-
-// get comments to a question 
+// get comments to a question
 export const getComment = async (req: Request, res: Response) => {
   const { question_id } = req.params;
-    try {
-        const comment = await Comment.find({question_id}).exec();
-    
-        if (!comment) {
-          return res.status(404).json({
-            success: false,
-            data: "Comment not found",
-          });
-        }
-        res.status(200).json({
-          success: true,
-          data: comment,
-        });
-    } catch (err) {
-      res.status(500).send("Internal Server Error");
+  try {
+    const comment = await Comment.find({ question_id })
+      .populate("author", "firstname")
+      .exec();
+
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        data: "Comment not found",
+      });
     }
-}
+
+    res.status(200).json({
+      success: true,
+      data: comment,
+    });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+// remove a comment
+export const deleteComment = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const comment = await Comment.findById(id);
+
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        data: "Not found",
+      });
+    }
+
+    await Comment.findByIdAndDelete(id);
+    res.status(200).json({
+      success: true,
+      data: "Comment removed",
+    });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};

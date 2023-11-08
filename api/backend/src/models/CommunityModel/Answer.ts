@@ -1,4 +1,4 @@
-import {model, Schema} from "mongoose";
+import { model, Schema } from "mongoose";
 
 // answer model
 const answerSchema = new Schema({
@@ -10,14 +10,21 @@ const answerSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Question",
   },
-  author_id: {
-    type: Schema.Types.ObjectId,
+  author: {
+    author_name: {
+      type: String,
+      ref: "User"
+    },
+    author_id: {type: Schema.Types.ObjectId,
     ref: "User",
+    }
   },
-  comment_id: {
-    type: Schema.Types.ObjectId,
-    ref: "Comment"
-  },
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
   votes: {
     type: Number,
     default: 0,

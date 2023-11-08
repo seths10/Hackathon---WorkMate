@@ -21,7 +21,8 @@ const questionSchema = new Schema({
       ref: "User",
     },
     author_name: {
-      type: String
+      type: String,
+      ref: "User",
     }
   }
   ,
@@ -29,10 +30,10 @@ const questionSchema = new Schema({
     type: Number,
     default: 0,
   },
-  comment_id: {
+  comments: [{
     type: Schema.Types.ObjectId,
     ref: "Comment",
-  },
+  }],
   votes: {
     type: Number,
     default: 0,

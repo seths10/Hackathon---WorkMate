@@ -1,24 +1,35 @@
-import {model, Schema} from "mongoose";
+import { model, Schema } from "mongoose";
 
 // comment model
 const commentSchema = new Schema({
-    question_id: {
-        type: Schema.Types.ObjectId,
-        ref: "Question",
-    },
-    content: {
-        type: String,
-        required: true,
+  question_id: {
+    type: Schema.Types.ObjectId,
+    ref: "Question",
+    required: true,
+  },
+  answer_id: {
+    type: Schema.Types.ObjectId,
+    ref: "Answer",
+},
+  content: {
+    type: String,
+    required: true,
+  },
+  author: {
+    author_name: {
+      type: String,
+      ref: "User",
     },
     author_id: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    created_at: {
-        type: Date,
-        default: Date.now(),
-    }
-})
+  },
+  created_at: {
+    type: Date,
+    default: Date.now(),
+  },
+});
 
-
-export default model('Comment', commentSchema);
+export default model("Comment", commentSchema);
