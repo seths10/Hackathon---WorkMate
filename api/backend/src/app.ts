@@ -20,7 +20,7 @@ app.use(cors({ origin: "*" }));
 // route middlewares
 app.use("/api/auth", authRoute);
 app.use("/api/community", communityRoute);
-app.use("/api/booking", auth, bookingRoute);
+app.use("/api/booking", bookingRoute);
 
 mongoose.Promise = bluebird;
 const mongodb_uri = DB_URI! 

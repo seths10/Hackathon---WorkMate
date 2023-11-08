@@ -8,7 +8,8 @@ import {
   deleteAnswerById,
   postComment,
   getComment,
-  getAnswersByQuestionId
+  getAnswersByQuestionId,
+  deleteComment,
 } from "../../controllers/CommunityController/Community";
 
 const router = express.Router();
@@ -22,7 +23,6 @@ router.get("/question/:id", getQuestionById);
 
 router.delete("/question/:id", deleteQuestionById);
 
-
 // Answers
 router.get("/answer/:question_id", getAnswersByQuestionId)
 
@@ -34,6 +34,8 @@ router.delete("/answer/:id", deleteAnswerById);
 router.get("/comment/:question_id", getComment);
 
 router.post("/comment", postComment);
+
+router.delete("/comment/:id", deleteComment);
 
 
 export default router;
