@@ -25,6 +25,10 @@ const questionSchema = new Schema({
     }
   }
   ,
+  total_answers: {
+    type: Number,
+    default: 0,
+  },
   comment_id: {
     type: Schema.Types.ObjectId,
     ref: "Comment",
