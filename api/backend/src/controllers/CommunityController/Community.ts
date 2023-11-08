@@ -3,6 +3,8 @@ import Question from "../../models/CommunityModel/Question";
 import Answer from "../../models/CommunityModel/Answer";
 import Comment from "../../models/CommunityModel/Comment";
 
+
+// post a question to workmate
 export const postQuestion = async (req: Request, res: Response) => {
   const { title, content, tags, author, votes, views } = req.body;
   try {
@@ -29,6 +31,7 @@ export const postQuestion = async (req: Request, res: Response) => {
   }
 };
 
+// get all questions from workmate
 export const getQuestions = async (req: Request, res: Response) => {
   try {
     const question = await Question.find({}).exec();
@@ -41,6 +44,8 @@ export const getQuestions = async (req: Request, res: Response) => {
   }
 };
 
+
+// get a particular question 
 export const getQuestionById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -79,6 +84,8 @@ export const getQuestionById = async (req: Request, res: Response) => {
   }
 };
 
+
+// delete a question from workmate
 export const deleteQuestionById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -101,6 +108,7 @@ export const deleteQuestionById = async (req: Request, res: Response) => {
   }
 };
 
+// get a specific/particular answer from workmate
 export const getAnswersByQuestionId = async (req: Request, res: Response) => {
     const { question_id } = req.params;
     try {
@@ -122,7 +130,7 @@ export const getAnswersByQuestionId = async (req: Request, res: Response) => {
   };
   
 
-
+// post an answer to workmate
 export const postAnswer = async (req: Request, res: Response) => {
   const { content, question_id, author_id } = req.body;
   try {
@@ -143,6 +151,7 @@ export const postAnswer = async (req: Request, res: Response) => {
   }
 };
 
+// remove an answer by id
 export const deleteAnswerById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -165,6 +174,8 @@ export const deleteAnswerById = async (req: Request, res: Response) => {
   }
 };
 
+
+// comment on a question
 export const postComment = async (req: Request, res: Response) => {
   const { question_id, author_id, content } = req.body;
 
@@ -185,3 +196,25 @@ export const postComment = async (req: Request, res: Response) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
+
+// get comments to a question 
+export const getComment = async (req: Request, res: Response) => {
+  const { question_id } = req.params;
+    try {
+        const comment = await Comment.find({question_id}).exec();
+    
+        if (!comment) {
+          return res.status(404).json({
+            success: false,
+            data: "Comment not found",
+          });
+        }
+        res.status(200).json({
+          success: true,
+          data: comment,
+        });
+    } catch (err) {
+      res.status(500).send("Internal Server Error");
+    }
+}

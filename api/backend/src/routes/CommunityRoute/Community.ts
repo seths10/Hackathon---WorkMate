@@ -7,6 +7,7 @@ import {
   postAnswer,
   deleteAnswerById,
   postComment,
+  getComment,
   getAnswersByQuestionId
 } from "../../controllers/CommunityController/Community";
 
@@ -30,6 +31,8 @@ router.post("/answer", postAnswer);
 router.delete("/answer/:id", deleteAnswerById);
 
 // Comment
+router.get("/comment/:question_id", getComment);
+
 router.post("/comment", postComment);
 
 
