@@ -21,7 +21,10 @@ export const postQuestion = async (req: Request, res: Response) => {
       data: question,
     });
   } catch (err) {
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({
+      error: err,
+      msg:"Internal Server Error"
+    });
   }
 };
 

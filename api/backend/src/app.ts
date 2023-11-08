@@ -23,8 +23,8 @@ app.use("/api/community", communityRoute);
 app.use("/api/booking", auth, bookingRoute);
 
 mongoose.Promise = bluebird;
-const mongodb_uri = DB_URI!;
-//  || "mongodb+srv://nathankulewoshie:iVxRjA3id2lgwT59@workmate.7uoo1gc.mongodb.net/?retryWrites=true&w=majority";
+const mongodb_uri = DB_URI! 
+// || "mongodb+srv://nathankulewoshie:iVxRjA3id2lgwT59@workmate.7uoo1gc.mongodb.net/?retryWrites=true&w=majority";
 
 // db connection
 mongoose
