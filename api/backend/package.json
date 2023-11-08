@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Future of Education and Smart Technology for Sustainable Living",
   "main": "src/server.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "devStart": "nodemon src/server.ts",
     "start": "node ./dist/server.js",
