@@ -15,10 +15,16 @@ const questionSchema = new Schema({
       type: String,
     },
   ],
-  author_id: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
+  author: {
+    author_id: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    author_name: {
+      type: String
+    }
+  }
+  ,
   comment_id: {
     type: Schema.Types.ObjectId,
     ref: "Comment",
