@@ -4,16 +4,14 @@ import Avatar from "react-avatar";
 
 type DataProp = {
   data: {
-    tags: [{ name: string }];
-    answerDetails: string;
+    tags: [{ type: string }];
+    total_answers: string;
     title: string;
     _id: number;
-    create_at: string;
-    user: {
-      displayName: string;
-    };
-    body: string;
-  };
+    created_at: string;
+    author: { id: number, name: string };
+    content: string;
+  }
 };
 
 function AllQuestions({ data }: DataProp) {

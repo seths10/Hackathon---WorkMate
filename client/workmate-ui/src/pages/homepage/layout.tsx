@@ -1,17 +1,28 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { LOGIN } from "../../navigation/routes-constants";
-// import { ConfirmationAlert } from "../../assets";
-
-import Mainogo from '../../assets/images/workmate.png'
-import ProfileImg from '../../assets/images/profile.jpg'
+import Mainogo from "../../assets/images/workmate.png";
+import Avatar from "react-avatar";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/solid";
+import { useLogout } from "../../hooks/useLogout";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const HomePageLayout: React.FC<Props> = ({ children }) => {
+  const { logout } = useLogout();
+
   const navigate = useNavigate();
+  const { userState } = useAuthContext();
+
+  const first = userState?.data?.firstname;
+  const last = userState?.data?.lastname;
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <div className="flex flex-col flex-1 min-h-screen bg-white">
@@ -33,25 +44,25 @@ const HomePageLayout: React.FC<Props> = ({ children }) => {
 
           <div className="flex-1"></div>
         </div>
-      </div> */} 
-
+      </div> */}
 
       <div className="p-[6rem] pt-3 pb-3 flex justify-between">
         <div className="mainLogo w-64 me-3" onClick={() => navigate(LOGIN)}>
           <img src={Mainogo} alt="" />
         </div>
         <div className="profile flex items-center">
-          <img src={ProfileImg} alt="profile picture"  className="w-11 h-11 rounded-full"/>
-          <div className="ms-3">
-            <h3 className="text-lg font-bold color-grey-500">John Owusu</h3>
-            <p className="text-base	">UI/UX</p>
+          <Avatar size="35" round name={first + " " + last} />
+          <div className="mr-3 pr-3 border-r-2 border-gray-100 ms-1 gap-0">
+            <h3 className="text-lg font-bold color-gray-500 rounded-lg">
+              {first + " " + last}
+            </h3>
+          </div>
+          <div onClick={() => handleLogout()} className="flex cursor-pointer hover:bg-orange-400 items-center gap-2 px-[1rem] py-1 bg-orange-500 rounded-lg">
+            <ArrowRightOnRectangleIcon className="text-white w-5 h-5" />
+            <p className="text-white">Logout</p>
           </div>
         </div>
       </div>
-
-
-
-
 
       {children}
     </div>

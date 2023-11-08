@@ -2,10 +2,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, useReducer, useEffect } from "react";
 
-const initialState = {
-  isPageLoading: true,
-  userToken: null,
-  correlationId: null,
+type User = {
+  success: boolean;
+  data: {
+    id: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    token: string;
+  }
+}
+
+const initialState: User = {
+  success: false,
+  data: {
+    id: "",
+    firstname: "",
+    lastname: "",
+    token: "",
+    email: "",
+  }
 };
 
 export const AuthContext = createContext({
@@ -17,8 +33,7 @@ const authReducer = (state: any, action: any) => {
   switch (action.type) {
     case "LOGIN":
       return {
-        ...state,
-        user: action.payload,
+        userState: action.payload,
       };
     case "LOGOUT":
       return initialState;
@@ -36,10 +51,8 @@ export const AuthContextProvider = ({ children }: any) => {
     if (user) {
       dispatch({ type: "LOGIN", payload: user });
     }
-  }, []);
-
-  console.log("AuthContextProvider: ", state);
-
+  }, []);  
+  
   return (
     <AuthContext.Provider
       value={{

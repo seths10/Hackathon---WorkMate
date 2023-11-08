@@ -41,7 +41,7 @@ const RouterConfig = () => {
             index
             path={LANDING}
             element={
-              userState?.userToken ? (
+              userState?.data ? (
                 <React.Suspense fallback={TopLoader()}>
                   <HomepageScreen />
                 </React.Suspense>
@@ -50,10 +50,12 @@ const RouterConfig = () => {
               )
             }
           />
+          
+          
           <Route
             path={APP_COMMUNITY}
             element={
-              userState?.userToken ? (
+              userState?.data ? (
                 <React.Suspense fallback={TopLoader()}>
                   <CommunityScreen />
                 </React.Suspense>
@@ -65,7 +67,7 @@ const RouterConfig = () => {
           <Route
             path={APP_DESK_BOOKING}
             element={
-              userState?.userToken ? (
+              userState?.data ? (
                 <React.Suspense fallback={TopLoader()}>
                   <DeskBookingScreen />
                 </React.Suspense>
@@ -77,7 +79,7 @@ const RouterConfig = () => {
           <Route
             path={VIEW_QUESTION}
             element={
-              userState?.userToken ? (
+              userState?.data ? (
                 <React.Suspense fallback={TopLoader()}>
                   <ViewQuestionScreen />
                 </React.Suspense>
@@ -89,7 +91,7 @@ const RouterConfig = () => {
           <Route
             path={ASK_QUESTION}
             element={
-              userState?.userToken ? (
+              userState?.data ? (
                 <React.Suspense fallback={TopLoader()}>
                   <AskQuestionScreen />
                 </React.Suspense>
@@ -101,11 +103,11 @@ const RouterConfig = () => {
 
           <Route
             path={LOGIN}
-            element={!userState?.userToken ? <LoginScreen /> : <Navigate to={LANDING} />}
+            element={!userState?.data ? <LoginScreen /> : <Navigate to={LANDING} />}
           />
           <Route
             path={SIGNUP}
-            element={!userState?.userToken ? <SignupScreen /> : <Navigate to={LANDING} />}
+            element={!userState?.data ? <SignupScreen /> : <Navigate to={LANDING} />}
           />
           <Route path={NOT_FOUND} element={<NotFoundScreen />} />
         </Routes>

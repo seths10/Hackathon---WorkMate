@@ -3,9 +3,15 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/solid";
 import { Logo } from "../../../../assets";
+import { useAuthContext } from "../../../../hooks/useAuthContext";
 import Avatar from 'react-avatar';
 
 function Header() {
+  const { userState } = useAuthContext();
+
+  const first = userState?.data?.firstname;
+  const last = userState?.data?.lastname;
+  
   return (
     <header>
       <div className="flex flex-row items-center justify-around w-full bg-[#fbfafa]">
@@ -28,7 +34,7 @@ function Header() {
           <div className="flex gap-4 items-center py-5 px-10">
             {window.innerWidth < 768 && <MagnifyingGlassIcon className="text-gray-500 w-4 h-4"/>}
 
-            <Avatar name={"Seth Addo"} size={"45"} className="w-4 h-4" round />
+            <Avatar size="35" round name={first + " " + last} />
           </div>
         </div>
       </div>
