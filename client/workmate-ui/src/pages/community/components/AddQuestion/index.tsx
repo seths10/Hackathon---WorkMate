@@ -75,7 +75,7 @@ function Index() {
         <div className="head-title">
           <Link to={APP_COMMUNITY}>
             <button className="">
-              <ArrowLeftIcon className="w-5 h-5 hover:text-[#d65627de] hover:bg-transparent text-gray-500"/>
+              <ArrowLeftIcon className="w-5 h-5 hover:text-[#d65627de] text-gray-500"/>
             </button>
           </Link>
           <h1>Ask a public question</h1>

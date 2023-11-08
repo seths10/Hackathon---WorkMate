@@ -1,21 +1,22 @@
+import * as React from "react";
 import Sidebar from "./Sidebar";
 import "./css/index.css";
 import Main from "./Main";
-import { questions } from "../../../../data/dummy";
-// import axios from "axios";
+import { instance } from "../../../../utils/axios-client";
 
 function Index() {
-  // const [questions, ] = useState([]);
+  const [questions, setQuestions] = React.useState([]);
 
-  // useEffect(() => {
-  //   async function getQuestion() {
-  //     await axios.get("/api/question").then((res) => {
-  //       setQuestions(res.data.reverse());
-  //       // console.log(res.data)
-  //     });
-  //   }
-  //   getQuestion();
-  // }, []);
+  React.useEffect(() => {
+    async function getQuestion() {
+      await instance.get(`/api/community/question`).then((res) => {
+        console.log(res.data)
+        setQuestions(res?.data);
+        
+      });
+    }
+    getQuestion();
+  }, []);
 
   return (
     <div className="stack-index">
