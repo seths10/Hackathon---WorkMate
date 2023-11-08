@@ -4,14 +4,14 @@ import Answer from "../../models/CommunityModel/Answer";
 import Comment from "../../models/CommunityModel/Comment";
 
 export const postQuestion = async (req: Request, res: Response) => {
-  const { title, content, tags, author_id, votes, views } = req.body;
+  const { title, content, tags, author, votes, views } = req.body;
   try {
     //   new question
     const newQuestion = new Question({
       title,
       content,
       tags,
-      author_id,
+      author,
     });
 
     const question = await newQuestion.save();
