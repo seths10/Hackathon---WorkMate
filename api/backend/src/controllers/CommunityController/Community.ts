@@ -4,14 +4,14 @@ import Answer from "../../models/CommunityModel/Answer";
 import Comment from "../../models/CommunityModel/Comment";
 
 export const postQuestion = async (req: Request, res: Response) => {
-  const { title, content, tags, author_id, votes, views } = req.body;
+  const { title, content, tags, author, votes, views } = req.body;
   try {
     //   new question
     const newQuestion = new Question({
       title,
       content,
       tags,
-      author_id,
+      author,
     });
 
     const question = await newQuestion.save();
@@ -20,8 +20,12 @@ export const postQuestion = async (req: Request, res: Response) => {
       success: true,
       data: question,
     });
+
   } catch (err) {
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({
+      error: err,
+      msg:"Internal Server Error"
+    });
   }
 };
 
@@ -47,9 +51,28 @@ export const getQuestionById = async (req: Request, res: Response) => {
         data: "Question not found",
       });
     }
+    const comment = await Comment.findById(question.comment_id);
+
+    const resp = {
+      title: question.title,
+      content: question.content,
+      tags: question.tags,
+      total_answers: question.total_answers,
+      votes: question.votes,
+      views: question.views,
+      created_at: question.created_at,
+      _id: question.id,
+      comment: {
+        content: comment?.content,
+        question_id: comment?.question_id,
+        author_id: comment?.author_id,
+        created_at: comment?.created_at,
+      }
+    }
+
     res.status(200).json({
       success: true,
-      data: question,
+      data: resp,
     });
   } catch (err) {
     res.status(500).send("Internal Server Error");
