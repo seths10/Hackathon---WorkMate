@@ -29,7 +29,7 @@ const Button: React.FC<ButtonComponentProp> = ({
       ) : (
         <div
           style={{ color }}
-          className="mx-2 font-semibold text-center text-white text-md"
+          className="mx-2 font-semibold text-center text-white text-md rounded-md"
         >
           {label}
         </div>
