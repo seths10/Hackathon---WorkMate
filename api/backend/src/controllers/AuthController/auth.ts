@@ -41,7 +41,7 @@ export const signin = async (req: Request, res: Response) => {
         email: user.email,
       },
       secretKey!,
-      { algorithm: "HS256", expiresIn: "1h" }
+      { algorithm: "HS256", expiresIn: "1d" }
     );
 
     

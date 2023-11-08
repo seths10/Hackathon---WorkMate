@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { GlobeAsiaAustraliaIcon, HomeIcon } from "@heroicons/react/24/solid";
+import { HomeIcon } from "@heroicons/react/24/solid";
 import "./css/Sidebar.css";
 
 function Sidebar() {

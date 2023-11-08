@@ -2,10 +2,14 @@ import { SetStateAction, useState } from "react";
 import { TagsInput } from "react-tag-input-component";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { APP_COMMUNITY } from "../../../../navigation/routes-constants";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./index.css";
+import { instance } from "../../../../utils/axios-client";
+import { useAuthContext } from "../../../../hooks/useAuthContext";
 
 function Index() {
   const modules = {
@@ -37,37 +41,41 @@ function Index() {
     "image",
   ];
 
+  const { userState } = useAuthContext();
+
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [tag] = useState([]);
-  // const navigate = useNavigate();
+  const [tag, setTag] = useState([""]);
+
+  const navigate = useNavigate();
 
   const handleQuill = (value: SetStateAction<string>) => {
     setBody(value);
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   if (title !== "" && body !== "") {
-  //     const bodyJSON = {
-  //       title: title,
-  //       body: body,
-  //       tag: JSON.stringify(tag),
-  //       user: user,
-  //     };
-  //     await axios
-  //       .post("/api/question", bodyJSON)
-  //       .then((res) => {
-  //         // console.log(res.data);
-  //         alert("Question added successfully");
-  //         navigate("/");
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  // };
+  const handleSubmit = async () => {
+    // e.preventDefault();
+    if (title !== "" && body !== "") {
+      const bodyJSON = {
+        title: title,
+        content: body,
+        tags: JSON.stringify(tag),
+        author: {
+          author_id: userState?.data?.id,
+          author_name: userState?.data?.firstname,
+        },
+      };
+      await instance
+        .post("/api/community/question", bodyJSON)
+        .then(() => {
+          toast.success("Question added successfully");
+          navigate(APP_COMMUNITY);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
   return (
     <div className="add-question">
@@ -75,7 +83,7 @@ function Index() {
         <div className="head-title">
           <Link to={APP_COMMUNITY}>
             <button className="">
-              <ArrowLeftIcon className="w-5 h-5 hover:text-[#d65627de] hover:bg-transparent text-gray-500"/>
+              <ArrowLeftIcon className="w-5 h-5 hover:text-[#d65627de] text-gray-500" />
             </button>
           </Link>
           <h1>Ask a public question</h1>
@@ -121,9 +129,12 @@ function Index() {
 
                 <TagsInput
                   value={tag}
-                  // onChange={setTag}
+                  onChange={(e) => setTag(e)}
                   name="chapters"
-                  classNames={{ input: "focus:border-gray-100", tag: "bg-gray-100" }}
+                  classNames={{
+                    input: "focus:border-gray-100",
+                    tag: "bg-gray-100",
+                  }}
                   placeHolder="press enter to add new tag"
                 />
               </div>
@@ -132,8 +143,8 @@ function Index() {
         </div>
 
         <button
-          type="submit"  
-          // onClick={handleSubmit}
+          type="submit"
+          onClick={handleSubmit}
           className="bg-[#D65627] outline-none border-none hover:bg-[#d65627de] h-[3rem] text-white"
         >
           Add your question

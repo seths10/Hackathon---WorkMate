@@ -1,18 +1,17 @@
 import { Link } from "react-router-dom";
 import "./css/Main.css";
 import AllQuestions from "./AllQuestions";
-// import axios from "axios";
 
 type Prop = {
   questions: [
     {
-      tags: [{ name: string }];
-      answerDetails: string;
+      tags: string[];
+      total_answers: string;
       title: string;
       _id: number;
-      create_at: string;
-      user: { displayName: string };
-      body: string;
+      created_at: string;
+      author: { author_id: number, author_name: string };
+      content: string;
     }
   ];
 };

@@ -6,9 +6,9 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
   var token: any = req.headers.authorization || req.query.token;
 
   if (!token) {
-    return res.status(403).json({
+    return res.status(401).json({
       success: false,
-      data: "Token Required",
+      data: "Not Authorized",
     });
   }
 

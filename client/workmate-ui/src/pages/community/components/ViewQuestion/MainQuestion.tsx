@@ -2,41 +2,42 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./index.css";
 import ReactQuill from "react-quill";
-// import axios from "axios";
 import "react-quill/dist/quill.snow.css";
 import Avatar from "react-avatar";
+import React from "react";
+import { instance } from "../../../../utils/axios-client";
 
-const questionData = {
-  comments: [
-    {
-      _id: "3",
-      user: { displayName: "Nunana" },
-      comment: "Hello",
-      created_at: "4-6-2012",
-    },
-  ],
-  tags: [{ name: "support" }, { name: "tech" }],
-  answerDetails: [
-    {
-      _id: 1,
-      created_at: "4-6-2012",
-      user: { displayName: "Nunana" },
-      answer:
-        "You’ve probably heard someone say, “If it’s on the internet, it’s not private.” That’s not totally true, however, since there are several ways you can ensure your privacy across digital platforms and services. Still, you should be concerned. Not everybody may be interested in your things, but somebody probably is",
-    },
-    {
-      _id: 2,
-      created_at: "4-6-2012",
-      user: { displayName: "Private" },
-      answer: "adfa",
-    },
-  ],
-  title: "Should I be worried about my privacy?",
-  _id: 3,
-  created_at: "7-05-2023",
-  user: { displayName: "Seth Addo" },
-  body: "Should I be worried about my online privacy? If yes, how can I make sure I’m protected?",
-};
+// const questionData = {
+//   comments: [
+//     {
+//       _id: "3",
+//       user: { displayName: "Nunana" },
+//       comment: "Hello",
+//       created_at: "4-6-2012",
+//     },
+//   ],
+//   tags: [{ name: "support" }, { name: "tech" }],
+//   answerDetails: [
+//     {
+//       _id: 1,
+//       created_at: "4-6-2012",
+//       user: { displayName: "Nunana" },
+//       answer:
+//         "You’ve probably heard someone say, “If it’s on the internet, it’s not private.” That’s not totally true, however, since there are several ways you can ensure your privacy across digital platforms and services. Still, you should be concerned. Not everybody may be interested in your things, but somebody probably is",
+//     },
+//     {
+//       _id: 2,
+//       created_at: "4-6-2012",
+//       user: { displayName: "Private" },
+//       answer: "adfa",
+//     },
+//   ],
+//   title: "Should I be worried about my privacy?",
+//   _id: 3,
+//   created_at: "7-05-2023",
+//   user: { displayName: "Seth Addo" },
+//   body: "Should I be worried about my online privacy? If yes, how can I make sure I’m protected?",
+// };
 
 function MainQuestion() {
   const modules = {
@@ -68,11 +69,11 @@ function MainQuestion() {
     "image",
   ];
 
-  // const search = window.location.search;
-  // const params = new URLSearchParams(search);
-  // const id = params.get("q");
+  const search = window.location.search;
+  const params = new URLSearchParams(search);
+  const id = params.get("q");
 
-  // const [questionData, setQuestionData] = useState();
+  const [questionData, setQuestionData] = useState();
   const [answer, setAnswer] = useState("");
   const [show, setShow] = useState(false);
   const [comment, setComment] = useState("");
@@ -81,22 +82,24 @@ function MainQuestion() {
     setAnswer(value);
   };
 
-  // useEffect(() => {
-  //   async function getFunctionDetails() {
-  //     await axios
-  //       .get(`/api/question/${id}`)
-  //       .then((res) => setQuestionData(res.data[0]))
-  //       .catch((err) => console.log(err));
-  //   }
-  //   getFunctionDetails();
-  // }, [id]);
+  React.useEffect(() => {
+    async function getFunctionDetails() {
+      await instance
+        .get(`/api/community/question/${id}`)
+        .then((res) => setQuestionData(res.data))
+        .catch((err) => console.log(err));
+    }
+    getFunctionDetails();
+  }, [id]);
 
   // async function getUpdatedAnswer() {
-  //   await axios
-  //     .get(`/api/question/${id}`)
+  //   await instance
+  //     .get(`/api/community/question/${id}`)
   //     .then((res) => setQuestionData(res.data[0]))
   //     .catch((err) => console.log(err));
   // }
+
+  // getUpdatedAnswer();
 
   // const handleSubmit = async () => {
   //   const body = {
@@ -152,7 +155,7 @@ function MainQuestion() {
           <div className="flex w-full gap-4 text-gray-500 text-sm">
             <p>
               Asked
-              <span className="font-bold "> {new Date(questionData?.created_at).toLocaleString()}</span>
+              <span className="font-bold "> {new Date(questionData?.data?.created_at).toLocaleString()}</span>
             </p>
             <p>
               Active<span className="font-bold"> today</span>
