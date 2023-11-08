@@ -10,7 +10,7 @@
     "devStart": "nodemon src/server.ts",
     "start": "node ./dist/server.js",
     "watch-ts": "tsc -w",
-    "build": "tsc"
+    "build": "babel src -d dist"
   },
   "keywords": [
     "amalitech",
@@ -30,6 +30,9 @@
     "mongoose": "^8.0.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.23.0",
+    "@babel/core": "^7.23.2",
+    "@babel/preset-env": "^7.23.2",
     "@types/bcrypt": "^5.0.2",
     "@types/bluebird": "^3.5.41",
     "@types/cors": "^2.8.15",
