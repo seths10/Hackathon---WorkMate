@@ -2,6 +2,7 @@ import * as React from "react";
 import { siteTitle } from "../../constants/app";
 import { APP_DESK_BOOKING } from "../../navigation/routes-constants";
 import BreadCrumb from "../../components/breadcrumb/breadcrumb";
+import DeskIcon from "./component/DeskIcon";
 
 const pages = [{ name: "Desk Booking", href: APP_DESK_BOOKING, current: true }];
 
@@ -22,6 +23,11 @@ const DeskBooking = () => {
           </div>
 
           <p>This is the Desk Booking page</p>
+
+          <div>
+              <DeskIcon/>
+          </div>
+          
         </div>
       </main>
     </React.Fragment>

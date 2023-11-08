@@ -19,7 +19,7 @@ app.use(cors({ origin: "*" }));
 
 // route middlewares
 app.use("/api/auth", authRoute);
-app.use("/api/community", auth, communityRoute);
+app.use("/api/community", communityRoute);
 app.use("/api/booking", auth, bookingRoute);
 
 mongoose.Promise = bluebird;
