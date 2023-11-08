@@ -1,0 +1,50 @@
+
+// signup
+import { useSignup } from ..
+
+
+const {signup, error, isLoading } = useSignup()
+
+handleSubmit = async (e) => {
+    e.preventDefault()
+    await signup(username, password)
+}
+
+
+return (
+    {error && div.error {error}}
+)
+
+isLoading signup button is disabled
+
+
+
+//logout
+import {useLogout} from ...
+
+const {logout} = useLogout()
+
+const handleLogout = () => {
+    logout()
+}
+
+separate divs for logout and signup/login
+
+
+
+// signin
+import { useLogin } from ..
+
+
+const {signin, error, isLoading } = useLogin()
+
+handleSubmit = async (e) => {
+    e.preventDefault()
+    await login(username, password)
+}
+
+return (
+    {error && div.error {error}}
+)
+
+isLoading login button is disabled
