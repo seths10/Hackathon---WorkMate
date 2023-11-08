@@ -10,7 +10,7 @@ export const signin = async (req: Request, res: Response) => {
 
   // validate email
   if (!emailRegEx.test(email)) {
-    return res.json({
+    return res.status(422).json({
       success: false,
       data: "Invalid email address",
     });
@@ -72,7 +72,7 @@ export const signup = async (req: Request, res: Response) => {
 
   // validate email
   if (!emailRegEx.test(email)) {
-    return res.json({
+    return res.status(422).json({
       success: false,
       data: "Invalid email address",
     });
@@ -88,7 +88,7 @@ export const signup = async (req: Request, res: Response) => {
     }
     const user = new User({ firstname, lastname, password, email });
     await user.save();
-    res.status(201).json({ success: true, data: "User registered" });
+    res.status(201).json({ success: true, data: "User registered successfully" });
   } catch (err) {
     res.status(500).json({
       success: false,
