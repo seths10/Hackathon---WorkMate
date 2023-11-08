@@ -1,7 +1,9 @@
-// import axios from "axios";
 import { useState } from "react";
-import "./index.css";
 import { Link } from "react-router-dom";
+import "./index.css";
+import ReactQuill from "react-quill";
+// import axios from "axios";
+import "react-quill/dist/quill.snow.css";
 import Avatar from "react-avatar";
 
 const questionData = {
@@ -37,18 +39,47 @@ const questionData = {
 };
 
 function MainQuestion() {
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      ["link", "image"],
+      ["clean"],
+    ],
+  };
+
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
+  ];
+
   // const search = window.location.search;
   // const params = new URLSearchParams(search);
   // const id = params.get("q");
 
   // const [questionData, setQuestionData] = useState();
-  // const [answer, setAnswer] = useState("");
+  const [answer, setAnswer] = useState("");
   const [show, setShow] = useState(false);
   const [comment, setComment] = useState("");
 
-  // const handleQuill = (value: never) => {
-  //   setAnswer(value);
-  // };
+  const handleQuill = (value: never) => {
+    setAnswer(value);
+  };
 
   // useEffect(() => {
   //   async function getFunctionDetails() {
@@ -112,7 +143,7 @@ function MainQuestion() {
         <div className="main-top">
           <h2 className="main-question">{questionData?.title} </h2>
           <Link to="/community/ask-question">
-            <button className="bg-[#D65627] outline-none border-none">
+            <button className="bg-[#D65627] rounded-lg outline-none border-none hover:bg-[#d65627de] h-[3rem] text-white">
               Ask Question
             </button>
           </Link>
@@ -121,35 +152,36 @@ function MainQuestion() {
           <div className="flex w-full gap-4 text-gray-500 text-sm">
             <p>
               Asked
-              <span>{new Date(questionData?.created_at).toLocaleString()}</span>
+              <span className="font-bold "> {new Date(questionData?.created_at).toLocaleString()}</span>
             </p>
             <p>
-              Active<span> today</span>
+              Active<span className="font-bold"> today</span>
             </p>
             <p>
-              Viewed <span>43 times</span>
+              Viewed <span className="font-bold">43 times</span>
             </p>
           </div>
         </div>
         <div className="all-questions">
           <div className="all-questions-container">
             <div className="all-questions-left">
-              <div className="all-options">
-                <p className="arrow">▲</p>
+              <div className="all-options gap-3">
+                <div className="rounded-full border border-gray-300 px-2.5 py-1.5">
+                  <p className="text-[2rem] text-[#000000] -mt-1 text-lg">▲</p>
+                </div>
+                <p className="text-[2rem] text-xl font-bold text-[#000000]">
+                  0
+                </p>
 
-                <p className="arrow">0</p>
-
-                <p className="arrow">▼</p>
-
-                {/* <BookmarkIcon />
-
-                <ArrowUturnLeftIcon /> */}
+                <div className="rounded-full border border-gray-300 px-2.5 py-1.5">
+                  <p className="text-[2rem] text-[#000000] -mt-1 text-lg">▼</p>
+                </div>
               </div>
             </div>
             <div className="question-answer">
-              <p>{questionData?.body}</p>
+              <p className="font-normal text-larger">{questionData?.body}</p>
 
-              <div className="author">
+              <div className="author bg-[#d656270c] px-2 py-2 rounded">
                 <small>
                   asked {new Date(questionData?.created_at).toLocaleString()}
                 </small>
@@ -204,6 +236,7 @@ function MainQuestion() {
                       style={{
                         maxWidth: "fit-content",
                       }}
+                      className="bg-[#D65627] outline-none rounded-lg border-none hover:bg-[#d65627de] h-[3rem] text-white"
                     >
                       Add comment
                     </button>
@@ -223,7 +256,7 @@ function MainQuestion() {
             style={{
               marginBottom: "20px",
               fontSize: "1.3rem",
-              fontWeight: "300",
+              fontWeight: "500",
             }}
           >
             {questionData && questionData?.answerDetails.length} Answers
@@ -238,28 +271,33 @@ function MainQuestion() {
                 className="all-questions-container pb-3 mt-1"
               >
                 <div className="all-questions-left">
-                  <div className="all-options">
-                    <p className="text-[2rem] text-[#00000040]">▲</p>
+                  <div className="all-options gap-3">
+                    <div className="rounded-full border border-gray-300 px-2.5 py-1.5">
+                      <p className="text-[2rem] text-[#000000] -mt-1 text-lg">
+                        ▲
+                      </p>
+                    </div>
+                    <p className="text-[2rem] text-xl font-bold text-[#000000]">
+                      0
+                    </p>
 
-                    <p className="text-[2rem] text-[#00000040]">0</p>
-
-                    <p className="text-[2rem] text-[#00000040]">▼</p>
-
-                    {/* <BookmarkIcon className="text-gray-500 w-4 h-4"/>
-
-                    <ArrowUturnLeftIcon className="text-gray-500 w-4 h-4"/> */}
+                    <div className="rounded-full border border-gray-300 px-2.5 py-1.5">
+                      <p className="text-[2rem] text-[#000000] -mt-1 text-lg">
+                        ▼
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <div className="question-answer">
                   {_q.answer}
-                  <div className="author">
+                  <div className="author bg-[#d656270c] px-2 py-2 rounded">
                     <small>
                       asked {new Date(_q.created_at).toLocaleString()}
                     </small>
-                    <div className="auth-details">
+                    <div className="auth-details ">
                       <Avatar
-                        className="text-gray-500 w-4 h-4"
-                        round
+                        className="text-gray-500 w-4 h-4 rounded"
+                        // round
                         name={_q?.user?.displayName}
                         size={"25"}
                       />
@@ -275,14 +313,6 @@ function MainQuestion() {
             </>
           ))}
         </div>
-        {/* <div className="questions">
-          <div className="question">
-            <AllQuestions />
-            <AllQuestions />
-            <AllQuestions />
-            <AllQuestions />
-          </div>
-        </div> */}
       </div>
       <div className="main-answer">
         <h3
@@ -294,18 +324,17 @@ function MainQuestion() {
         >
           Your Answer
         </h3>
-        
-        <textarea
-          className="border-dotted border-gray-200 focus:border-[#D65627]"
-          name="yourAnswer"
-          id="yourAnswer"
-          cols={95}
-          rows={10}
-        ></textarea>
+
+        <ReactQuill
+          value={answer}
+          modules={modules}
+          formats={formats}
+          onChange={handleQuill}
+        />
       </div>
       <button
         // onClick={handleSubmit}
-        className="bg-[#D65627] outline-none border-none"
+        className="bg-[#D65627] outline-none rounded-lg border-none hover:bg-[#d65627de] h-[3rem] text-white"
         style={{
           marginTop: "100px",
           maxWidth: "fit-content",
