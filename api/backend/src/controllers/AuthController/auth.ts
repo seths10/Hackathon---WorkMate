@@ -8,6 +8,13 @@ export const signin = async (req: Request, res: Response) => {
   // sign in logic
   const { email, password } = req.body;
 
+  if(!email || !password){
+    res.status(400).json({
+      success: false,
+      data: "Provide email and password"
+    })
+  }
+
   // validate email
   if (!emailRegEx.test(email)) {
     return res.status(422).json({
@@ -69,6 +76,13 @@ export const signin = async (req: Request, res: Response) => {
 export const signup = async (req: Request, res: Response) => {
   // signup logic
   const { firstname, lastname, email, password } = req.body;
+
+  if(!firstname || !lastname || !email || !password){
+    res.status(400).json({
+      success: false,
+      data: "Provide firstname, lastname, email and password"
+    })
+  }
 
   // validate email
   if (!emailRegEx.test(email)) {

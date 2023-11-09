@@ -1,28 +1,39 @@
 import express from "express";
-import { getAllDesks, getDesk, addDesk, removeDesk } from "../../controllers/BookingController/Booking";
+import {
+  getAllDesks,
+  getDesk,
+  addDesk,
+  removeDesk,
+  getAllBookings,
+  getBookingById,
+  addBooking,
+  removeBooking,
+  updateBooking,
+} from "../../controllers/BookingController/Booking";
 
-const router = express.Router()
+const router = express.Router();
 
+// Desk Routes
+
+router.get("/desk", getAllDesks);
+
+router.get("/desk/:id", getDesk);
+
+router.post("/desk", addDesk);
+
+router.delete("/desk:id", removeDesk);
 
 // Bookings Route
 
-router.get("/bookings", getAllDesks);
+router.get("/", getAllBookings);
 
-router.get("/bookings:id", getDesk);
+router.get("/:id", getBookingById);
 
-router.post("/bookings", addDesk);
+router.post("/", addBooking);
 
-router.delete("/bookings/:id", removeDesk);
+router.put("/", updateBooking);
 
-
-// Desk Routes
-router.get("/booking/desk", getAllDesks);
-
-router.get("/booking/desk/:id", getDesk);
-
-router.post("/booking/desk", addDesk);
-
-router.delete("/booking/desk:id", removeDesk);
+router.delete("/:id", removeBooking);
 
 
 export default router;

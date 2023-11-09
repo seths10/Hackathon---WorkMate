@@ -7,6 +7,12 @@ import Comment from "../../models/CommunityModel/Comment";
 export const postQuestion = async (req: Request, res: Response) => {
   const { title, content, tags, author, votes, views } = req.body;
   try {
+    if(!title || !content){
+      res.status(400).json({
+        success: false,
+        data: "Provide the title and content of question"
+      })
+    }
     //   new question
     const newQuestion = new Question({
       title,
@@ -109,7 +115,9 @@ export const deleteQuestionById = async (req: Request, res: Response) => {
 export const getAnswersByQuestionId = async (req: Request, res: Response) => {
   const { question_id } = req.params;
   try {
-    const answer = await Answer.find({ question_id }).populate("comments").exec();
+    const answer = await Answer.find({ question_id })
+      .populate("comments")
+      .exec();
 
     if (!answer) {
       return res.status(404).json({
