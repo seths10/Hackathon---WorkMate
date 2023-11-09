@@ -13,7 +13,6 @@ import {
 import { TopLoader } from "../components/loaders/Loaders";
 import { useAuthContext } from "../hooks/useAuthContext";
 
-
 // lazy imports for pages
 const LoginScreen = React.lazy(() => import("../pages/auth/login"));
 const SignupScreen = React.lazy(() => import("../pages/auth/signup"));
@@ -28,13 +27,11 @@ const ViewQuestionScreen = React.lazy(
 const HomepageScreen = React.lazy(() => import("../pages/homepage"));
 const NotFoundScreen = React.lazy(() => import("../pages/not-found"));
 
-
 const RouterConfig = () => {
   const { userState } = useAuthContext();
 
   return (
     <React.Fragment>
-      {/* HashRouter has been declared in index.tsx in root directory */}
       <React.Suspense fallback={TopLoader()}>
         <Routes>
           <Route
@@ -50,8 +47,7 @@ const RouterConfig = () => {
               )
             }
           />
-          
-          
+
           <Route
             path={APP_COMMUNITY}
             element={
@@ -103,11 +99,15 @@ const RouterConfig = () => {
 
           <Route
             path={LOGIN}
-            element={!userState?.data ? <LoginScreen /> : <Navigate to={LANDING} />}
+            element={
+              !userState?.data ? <LoginScreen /> : <Navigate to={LANDING} />
+            }
           />
           <Route
             path={SIGNUP}
-            element={!userState?.data ? <SignupScreen /> : <Navigate to={LANDING} />}
+            element={
+              !userState?.data ? <SignupScreen /> : <Navigate to={LANDING} />
+            }
           />
           <Route path={NOT_FOUND} element={<NotFoundScreen />} />
         </Routes>

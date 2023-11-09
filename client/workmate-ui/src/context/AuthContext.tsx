@@ -10,8 +10,8 @@ export type User = {
     lastname: string;
     email: string;
     token: string;
-  }
-}
+  };
+};
 
 const initialState: User = {
   success: false,
@@ -21,7 +21,7 @@ const initialState: User = {
     lastname: "",
     token: "",
     email: "",
-  }
+  },
 };
 
 export const AuthContext = createContext({
@@ -51,8 +51,8 @@ export const AuthContextProvider = ({ children }: any) => {
     if (user) {
       dispatch({ type: "LOGIN", payload: user });
     }
-  }, []);  
-  
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
