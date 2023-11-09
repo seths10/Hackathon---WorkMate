@@ -21,7 +21,7 @@ router.get("/desk/:id", getDesk);
 
 router.post("/desk", addDesk);
 
-router.delete("/desk:id", removeDesk);
+router.delete("/desk/:id", removeDesk);
 
 // Bookings Route
 

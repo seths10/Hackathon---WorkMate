@@ -12,12 +12,14 @@ const bookingSchema = new Schema({
     }
   },
   desk: {
-    type: Schema.Types.ObjectId,
+    type: String,
     ref: "Desk"
   },
   startDate: Date,
   endDate: Date,
-  status: String,
+  status: {
+    type: String
+  },
 });
 
 export default model("Booking", bookingSchema);
