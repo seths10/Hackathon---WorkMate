@@ -13,11 +13,9 @@ const answerSchema = new Schema({
   author: {
     author_name: {
       type: String,
-      ref: "User"
+      ref: "User",
     },
-    author_id: {type: Schema.Types.ObjectId,
-    ref: "User",
-    }
+    author_id: { type: Schema.Types.ObjectId, ref: "User" },
   },
   comments: [
     {

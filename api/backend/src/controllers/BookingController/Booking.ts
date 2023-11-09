@@ -1,13 +1,23 @@
 import { Request, Response } from "express";
 import Desk from "../../models/Booking/Desk";
 import Booking from "../../models/Booking/Booking";
+import nodemailer from "nodemailer";
+import { GMAIL_PASSWORD, GMAIL_USER } from "../../utils/secrets";
+
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: GMAIL_USER,
+    pass: GMAIL_PASSWORD,
+  },
+});
 
 // Desk Controllers
 export const getAllDesks = async (req: Request, res: Response) => {
   try {
     const desks = await Desk.find({}).exec();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: desks,
     });
@@ -23,7 +33,7 @@ export const getDesk = async (req: Request, res: Response) => {
     const desk = await Desk.findById(id).exec();
 
     if (!desk) {
-      res.status(404).json({
+      return res.status(404).json({
         success: false,
         data: "Not found",
       });
@@ -43,11 +53,11 @@ export const addDesk = async (req: Request, res: Response) => {
   try {
     const dsk = new Desk({ name, facility, location });
 
-    if(!name || !facility || !location){
-      res.status(400).json({
+    if (!name || !facility || !location) {
+      return res.status(400).json({
         success: false,
-        data: "Provide name, facility, and location of desk"
-      })
+        data: "Provide name, facility, and location of desk",
+      });
     }
 
     await dsk.save();
@@ -63,6 +73,21 @@ export const addDesk = async (req: Request, res: Response) => {
 export const removeDesk = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
+    const desk = await Desk.findById(id).exec();
+
+    if (!desk) {
+      return res.status(404).json({
+        success: false,
+        data: "Not found",
+      });
+    }
+
+    await Desk.findByIdAndDelete(id).exec();
+
+    res.status(200).json({
+      success: true,
+      data: "Desk removed successfully",
+    });
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
@@ -72,7 +97,7 @@ export const removeDesk = async (req: Request, res: Response) => {
 
 export const getAllBookings = async (req: Request, res: Response) => {
   try {
-    const bookings = await Booking.find({}).exec();
+    const bookings = await Booking.find({}).populate("desk").limit(3).exec();
 
     res.status(200).json({
       success: true,
@@ -89,7 +114,30 @@ export const getBookingById = async (req: Request, res: Response) => {
     const booking = await Booking.findById(id).exec();
 
     if (!booking) {
-      res.status(404).json({
+      return res.status(404).json({
+        success: false,
+        data: "Not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      data: booking,
+    });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+export const getBookingByUserId = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  try {
+    const booking = await Booking.find({ "user.userId": userId })
+      .sort({ endDate: "asc" })
+      .limit(5)
+      .exec();
+
+    if (!booking) {
+      return res.status(404).json({
         success: false,
         data: "Not found",
       });
@@ -104,22 +152,59 @@ export const getBookingById = async (req: Request, res: Response) => {
 };
 
 export const addBooking = async (req: Request, res: Response) => {
-  const { user, desk, startDate, endDate, status } = req.body;
+  const { user, desk, startDate, endDate, email } = req.body;
   try {
-    const booking = new Booking({ user, desk, startDate, endDate, status });
-     
-    // Validate required fields
-     if (!user || !desk || !startDate || !endDate) {
-      return res.status(400).json({
+    const dsk = await Desk.findOne({ name: desk }).exec();
+
+    if (!dsk) {
+      return res.status(404).json({
         success: false,
-        error: 'Please provide user, desk(id), startDate, endDate and status.',
+        data: "Desk not found",
       });
     }
-    
+
+    if (!dsk.isAvailable) {
+      return res.status(400).json({
+        success: false,
+        data: "Desk is already booked",
+      });
+    }
+
+    const booking = new Booking({ user, desk, startDate, endDate });
+
+    // Validate required fields
+    if (!user || !desk || !startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        error: "Please provide user, desk(id), startDate, endDate and status.",
+      });
+    }
+
     await booking.save();
-    res.status(200).json({
-      success: true,
-      data: "Added successfully",
+
+    dsk.isAvailable = false;
+
+    await dsk.save();
+
+    // Compose the email message
+    console.log(GMAIL_USER, GMAIL_PASSWORD);
+    const message = {
+      from: GMAIL_USER,
+      to: email,
+      subject: "🎉DESK RESERVATION",
+      text: `You have booked ${desk} from ${startDate} to ${endDate}`,
+    };
+
+    transporter.sendMail(message, async (error, info) => {
+      if (error) {
+        console.log(error);
+        return res
+          .status(500)
+          .json({ success: false, message: "Failed to send email" });
+      }
+      return res
+        .status(200)
+        .json({ success: true, data: "Desk booked successfully" });
     });
   } catch (err) {
     res.status(500).send("Internal Server Error");
@@ -129,6 +214,21 @@ export const addBooking = async (req: Request, res: Response) => {
 export const removeBooking = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
+    const booking = await Booking.findById(id).exec();
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        data: "Not found",
+      });
+    }
+
+    await Booking.findByIdAndDelete(id).exec();
+
+    res.status(200).json({
+      success: true,
+      data: "Booking removed successfully",
+    });
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }

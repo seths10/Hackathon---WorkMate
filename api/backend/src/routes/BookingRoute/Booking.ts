@@ -6,6 +6,7 @@ import {
   removeDesk,
   getAllBookings,
   getBookingById,
+  getBookingByUserId,
   addBooking,
   removeBooking,
   updateBooking,
@@ -21,7 +22,7 @@ router.get("/desk/:id", getDesk);
 
 router.post("/desk", addDesk);
 
-router.delete("/desk:id", removeDesk);
+router.delete("/desk/:id", removeDesk);
 
 // Bookings Route
 
@@ -34,6 +35,8 @@ router.post("/", addBooking);
 router.put("/", updateBooking);
 
 router.delete("/:id", removeBooking);
+
+router.get("/user/:userId", getBookingByUserId);
 
 
 export default router;
