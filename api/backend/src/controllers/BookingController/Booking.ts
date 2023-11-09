@@ -97,7 +97,7 @@ export const removeDesk = async (req: Request, res: Response) => {
 
 export const getAllBookings = async (req: Request, res: Response) => {
   try {
-    const bookings = await Booking.find({}).exec();
+    const bookings = await Booking.find({}).limit(3).exec();
 
     res.status(200).json({
       success: true,
@@ -181,6 +181,7 @@ export const addBooking = async (req: Request, res: Response) => {
       }
       return res.json({ success: true, data: "Email sent successfully" });
     });
+
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
