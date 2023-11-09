@@ -4,6 +4,7 @@ const deskSchema = new Schema({
   name: {
     type: String,
     required: true,
+    unique: true
   },
   facility: {
     type: String,

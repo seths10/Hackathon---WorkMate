@@ -20,6 +20,8 @@ function MainQuestion() {
 
   const { userState } = useAuthContext();
 
+  const fullName = userState?.data?.firstname + " " + userState?.data?.lastname
+
   const [questionData, setQuestionData] = useState({
     _id: "",
     title: "",
@@ -146,7 +148,10 @@ function MainQuestion() {
     const body = {
       question_id: id,
       content: answer,
-      author_id: userState?.data?.id,
+      author: {
+        author_id: userState?.data?.id,
+        author_name: fullName
+      },
     };
 
     const config = {
@@ -170,7 +175,10 @@ function MainQuestion() {
       const body = {
         question_id: id,
         content: comment,
-        author_id: userState?.data?.id,
+        author: {
+          author_id: userState?.data?.id,
+          author_name: fullName
+        },
       };
 
       const config = {
