@@ -1,10 +1,5 @@
 import { model, Schema } from "mongoose";
 
-enum BookingStatus {
-  booked,
-  canceled
-}
-
 const bookingSchema = new Schema({
   user: {
     userId: {
@@ -22,7 +17,7 @@ const bookingSchema = new Schema({
   },
   startDate: Date,
   endDate: Date,
-  status: BookingStatus
+  status: String,
 });
 
-export default model("Desk", bookingSchema);
+export default model("Booking", bookingSchema);
