@@ -168,6 +168,7 @@ export const addBooking = async (req: Request, res: Response) => {
       data: "Added successfully",
     });
     // Compose the email message
+    console.log(GMAIL_USER, GMAIL_PASSWORD)
     const message = {
       from: GMAIL_USER,
       to: email,
