@@ -1,19 +1,16 @@
 import { Request, Response } from "express";
 import Desk from "../../models/Booking/Desk";
 import Booking from "../../models/Booking/Booking";
+import nodemailer from "nodemailer";
+import { GMAIL_PASSWORD, GMAIL_USER } from "../../utils/secrets";
 
-
-// let transporter = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//     type: 'OAuth2',
-//     user: process.env.MAIL_USERNAME,
-//     pass: process.env.MAIL_PASSWORD,
-//     clientId: process.env.OAUTH_CLIENTID,
-//     clientSecret: process.env.OAUTH_CLIENT_SECRET,
-//     refreshToken: process.env.OAUTH_REFRESH_TOKEN
-//   }
-// });
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: GMAIL_USER,
+    pass: GMAIL_PASSWORD,
+  },
+});
 
 // Desk Controllers
 export const getAllDesks = async (req: Request, res: Response) => {
@@ -132,9 +129,9 @@ export const getBookingById = async (req: Request, res: Response) => {
 };
 
 export const addBooking = async (req: Request, res: Response) => {
-  const { user, desk, startDate, endDate, status } = req.body;
+  const { user, desk, startDate, endDate, email } = req.body;
   try {
-    const dsk = await Desk.findOne({name: desk}).exec();
+    const dsk = await Desk.findOne({ name: desk }).exec();
 
     if (!dsk) {
       return res.status(404).json({
@@ -169,6 +166,20 @@ export const addBooking = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       data: "Added successfully",
+    });
+    // Compose the email message
+    const message = {
+      from: GMAIL_USER,
+      to: email,
+      subject: "DESK RESERVATION",
+      text: `You have booked ${desk} from ${startDate} to ${endDate}`,
+    };
+
+    transporter.sendMail(message, async (error, info) => {
+      if (error) {
+        return res.status(500).json({ success: false, message: "Failed to send email" });
+      }
+      return res.json({ success: true, data: "Email sent successfully" });
     });
   } catch (err) {
     res.status(500).send("Internal Server Error");
