@@ -5,12 +5,11 @@ import { useLogin } from "../../../hooks/useLogin";
 import { ButtonLoader } from "../../../components/loaders/Loaders";
 import { classNames } from "../../../components/className";
 import { SIGNUP } from "../../../navigation/routes-constants";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
 import SignInImg from "../../../assets/images/signin.png";
 
 const LoginScreen = () => {
-  const navigate = useNavigate();
   const { login, isLoading } = useLogin();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");

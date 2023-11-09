@@ -13,6 +13,26 @@ function Sidebar() {
               <Link to="/" className="font-bold">
                 HOME
               </Link>
+
+              <div className="link mt-3">
+                <div className="link-tag">
+                  <div>Chapters</div>
+
+                  {/* <a href="/">Question</a> */}
+                </div>
+
+                <div className="tags">
+                  <p>Front End</p>
+                  <p>Back End</p>
+                  <p>DevOps</p>
+                  <p>UI/UX</p>
+                  <p>QA</p>
+                  <p>Product Management</p>
+                  <p>Testing</p>
+                  <p>Data Science</p>
+                  <p>Others</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
