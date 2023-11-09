@@ -1,6 +1,5 @@
 import axios from "axios";
 const user = JSON.parse(localStorage.getItem("user")!);
-console.log(user);
 
 export const instance = axios.create({
   baseURL: "https://workmate-u6j3.onrender.com",

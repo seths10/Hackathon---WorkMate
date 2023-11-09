@@ -6,11 +6,11 @@ type Prop = {
   questions: [
     {
       tags: string[];
-      total_answers: string;
+      total_answers: number;
       title: string;
-      _id: number;
+      _id: string;
       created_at: string;
-      author: { author_id: number, author_name: string };
+      author: { author_id: number; author_name: string };
       content: string;
     }
   ];

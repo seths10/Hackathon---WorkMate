@@ -1,17 +1,25 @@
+import * as React from "react";
 import { SetStateAction, useState } from "react";
 import { TagsInput } from "react-tag-input-component";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { APP_COMMUNITY } from "../../../../navigation/routes-constants";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
+import { instance } from "../../../../utils/axios-client";
+import { useAuthContext } from "../../../../hooks/useAuthContext";
+import { siteTitle } from "../../../../constants/app";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./index.css";
-import { instance } from "../../../../utils/axios-client";
-import { useAuthContext } from "../../../../hooks/useAuthContext";
 
 function Index() {
+  const navigate = useNavigate();
+  const { userState } = useAuthContext();
+
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [tag, setTag] = useState<string[]>([]);
+
   const modules = {
     toolbar: [
       [{ header: [1, 2, false] }],
@@ -41,25 +49,16 @@ function Index() {
     "image",
   ];
 
-  const { userState } = useAuthContext();
-
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [tag, setTag] = useState([""]);
-
-  const navigate = useNavigate();
-
   const handleQuill = (value: SetStateAction<string>) => {
     setBody(value);
   };
 
   const handleSubmit = async () => {
-    // e.preventDefault();
     if (title !== "" && body !== "") {
       const bodyJSON = {
         title: title,
         content: body,
-        tags: JSON.stringify(tag),
+        tags: tag,
         author: {
           author_id: userState?.data?.id,
           author_name: userState?.data?.firstname,
@@ -76,6 +75,10 @@ function Index() {
         });
     }
   };
+
+  React.useEffect(() => {
+    document.title = `Ask Question | ${siteTitle}`;
+  }, []);
 
   return (
     <div className="add-question">
@@ -129,7 +132,7 @@ function Index() {
 
                 <TagsInput
                   value={tag}
-                  onChange={(e) => setTag(e)}
+                  onChange={(newTag) => setTag(newTag)}
                   name="chapters"
                   classNames={{
                     input: "focus:border-gray-100",

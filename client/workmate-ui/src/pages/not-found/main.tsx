@@ -1,9 +1,15 @@
+import * as React from "react";
 import { Link } from "react-router-dom";
 import { LANDING } from "../../navigation/routes-constants";
 
 type Props = object;
 
 const NotFoundScreen = (props: Props) => {
+  
+  React.useEffect(() => {
+    document.title = `Not Found`;
+  }, []);
+
   return (
     <div className="h-screen w-screen bg-gray-100 flex items-center">
       <div className="container flex gap-5 flex-col md:flex-row items-center justify-center px-5 text-gray-700">

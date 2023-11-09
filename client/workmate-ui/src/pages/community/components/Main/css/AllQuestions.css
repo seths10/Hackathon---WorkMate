@@ -1,6 +1,5 @@
 .all-questions {
   display: flex;
-  /* flex-direction: column; */
   width: 100%;
   padding: 15px 12px;
   border-bottom: 1px solid #eee;
@@ -11,7 +10,6 @@
   display: flex;
   flex-direction: column;
   flex-direction: row;
-  /* align-items: center; */
   justify-content: space-between;
   width: 100%;
 }
@@ -58,7 +56,6 @@
 }
 
 .question-answer > p {
-  /* font-size: 0.9rem; */
   margin-bottom: 10px;
 }
 

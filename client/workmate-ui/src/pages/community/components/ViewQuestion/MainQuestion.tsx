@@ -1,45 +1,66 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { instance } from "../../../../utils/axios-client";
+import { useAuthContext } from "../../../../hooks/useAuthContext";
+import { toast } from "sonner";
 import "./index.css";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Avatar from "react-avatar";
 import React from "react";
-import { instance } from "../../../../utils/axios-client";
-
-// const questionData = {
-//   comments: [
-//     {
-//       _id: "3",
-//       user: { displayName: "Nunana" },
-//       comment: "Hello",
-//       created_at: "4-6-2012",
-//     },
-//   ],
-//   tags: [{ name: "support" }, { name: "tech" }],
-//   answerDetails: [
-//     {
-//       _id: 1,
-//       created_at: "4-6-2012",
-//       user: { displayName: "Nunana" },
-//       answer:
-//         "You’ve probably heard someone say, “If it’s on the internet, it’s not private.” That’s not totally true, however, since there are several ways you can ensure your privacy across digital platforms and services. Still, you should be concerned. Not everybody may be interested in your things, but somebody probably is",
-//     },
-//     {
-//       _id: 2,
-//       created_at: "4-6-2012",
-//       user: { displayName: "Private" },
-//       answer: "adfa",
-//     },
-//   ],
-//   title: "Should I be worried about my privacy?",
-//   _id: 3,
-//   created_at: "7-05-2023",
-//   user: { displayName: "Seth Addo" },
-//   body: "Should I be worried about my online privacy? If yes, how can I make sure I’m protected?",
-// };
 
 function MainQuestion() {
+  const search = window.location.search;
+  const params = new URLSearchParams(search);
+  const id = params.get("q");
+
+  const [answer, setAnswer] = useState("");
+  const [show, setShow] = useState(false);
+  const [comment, setComment] = useState("");
+
+  const { userState } = useAuthContext();
+
+  const [questionData, setQuestionData] = useState({
+    _id: "",
+    title: "",
+    created_at: "",
+    content: "",
+    views: 0,
+    votes: 0,
+    total_answers: 0,
+    author: {
+      author_name: "",
+      author_id: "0",
+    },
+    tags: [""],
+  });
+
+  const [commentData, setCommentData] = useState([
+    {
+      _id: "",
+      created_at: "",
+      content: "",
+      votes: 0,
+      author: {
+        author_name: "",
+        author_id: "0",
+      },
+    },
+  ]);
+
+  const [answerData, setAnswerData] = useState([
+    {
+      _id: "",
+      created_at: "",
+      content: "",
+      votes: 0,
+      author: {
+        author_name: "",
+        author_id: "0",
+      },
+    },
+  ]);
+
   const modules = {
     toolbar: [
       [{ header: [1, 2, false] }],
@@ -69,15 +90,6 @@ function MainQuestion() {
     "image",
   ];
 
-  const search = window.location.search;
-  const params = new URLSearchParams(search);
-  const id = params.get("q");
-
-  const [questionData, setQuestionData] = useState();
-  const [answer, setAnswer] = useState("");
-  const [show, setShow] = useState(false);
-  const [comment, setComment] = useState("");
-
   const handleQuill = (value: never) => {
     setAnswer(value);
   };
@@ -86,59 +98,95 @@ function MainQuestion() {
     async function getFunctionDetails() {
       await instance
         .get(`/api/community/question/${id}`)
-        .then((res) => setQuestionData(res.data))
+        .then((res) => {
+          setQuestionData(res?.data?.data);
+        })
         .catch((err) => console.log(err));
     }
+
+    async function getComments() {
+      await instance
+        .get(`/api/community/comment/${id}`)
+        .then((res) => {
+          console.log(res?.data?.data);
+          setCommentData(res?.data?.data);
+        })
+        .catch((err) => console.log(err));
+    }
+
+    async function getAnswers() {
+      await instance
+        .get(`/api/community/answer/${id}`)
+        .then((res) => {
+          console.log(res?.data?.data);
+          setAnswerData(res?.data?.data);
+        })
+        .catch((err) => console.log(err));
+    }
+    getAnswers();
+    getComments();
     getFunctionDetails();
   }, [id]);
 
-  // async function getUpdatedAnswer() {
-  //   await instance
-  //     .get(`/api/community/question/${id}`)
-  //     .then((res) => setQuestionData(res.data[0]))
-  //     .catch((err) => console.log(err));
-  // }
+  async function getUpdatedAnswer() {
+    await instance
+      .get(`/api/community/answer/${id}`)
+      .then((res) => setAnswerData(res?.data?.data))
+      .catch((err) => console.log(err));
+  }
 
-  // getUpdatedAnswer();
+  async function getUpdatedComment() {
+    await instance
+      .get(`/api/community/comment/${id}`)
+      .then((res) => setCommentData(res?.data?.data))
+      .catch((err) => console.log(err));
+  }
 
-  // const handleSubmit = async () => {
-  //   const body = {
-  //     question_id: id,
-  //     answer: answer,
-  //     user: user,
-  //   };
-  //   const config = {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   };
+  const handleSubmit = async () => {
+    const body = {
+      question_id: id,
+      content: answer,
+      author_id: userState?.data?.id,
+    };
 
-  //   await axios
-  //     .post("/api/answer", body, config)
-  //     .then(() => {
-  //       alert("Answer added successfully");
-  //       setAnswer("");
-  //       getUpdatedAnswer();
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-  // const handleComment = async () => {
-  //   if (comment !== "") {
-  //     const body = {
-  //       question_id: id,
-  //       comment: comment,
-  //       user: user,
-  //     };
-  //     await axios.post(`/api/comment/${id}`, body).then((res) => {
-  //       setComment("");
-  //       setShow(false);
-  //       getUpdatedAnswer();
-  //       // console.log(res.data);
-  //     });
-  //   }
+    await instance
+      .post("/api/community/answer/", body, config)
+      .then(() => {
+        toast.success("Answer added successfully");
+        setAnswer("");
+        getUpdatedAnswer();
+      })
+      .catch((err) => console.log(err));
+  };
 
-  // setShow(true)
+  const handleComment = async () => {
+    if (comment !== "") {
+      const body = {
+        question_id: id,
+        content: comment,
+        author_id: userState?.data?.id,
+      };
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      await instance.post(`/api/community/comment`, body, config).then(() => {
+        toast.success("Comment added successfully");
+        setComment("");
+        setShow(false);
+        getUpdatedComment();
+      });
+    }
+  };
 
   return (
     <div className="main">
@@ -155,13 +203,10 @@ function MainQuestion() {
           <div className="flex w-full gap-4 text-gray-500 text-sm">
             <p>
               Asked
-              <span className="font-bold "> {new Date(questionData?.data?.created_at).toLocaleString()}</span>
-            </p>
-            <p>
-              Active<span className="font-bold"> today</span>
-            </p>
-            <p>
-              Viewed <span className="font-bold">43 times</span>
+              <span className="font-bold ">
+                {" "}
+                {new Date(questionData?.created_at).toLocaleString()}
+              </span>
             </p>
           </div>
         </div>
@@ -182,7 +227,7 @@ function MainQuestion() {
               </div>
             </div>
             <div className="question-answer">
-              <p className="font-normal text-larger">{questionData?.body}</p>
+              <p className="font-normal text-larger">{questionData?.content}</p>
 
               <div className="author bg-[#d656270c] px-2 py-2 rounded">
                 <small>
@@ -190,25 +235,25 @@ function MainQuestion() {
                 </small>
                 <div className="auth-details">
                   <Avatar
-                    name={questionData?.user?.displayName}
+                    className="text-gray-500 w-4 h-4 rounded"
+                    name={questionData?.author?.author_name}
                     size="25"
-                    round
                   />
                   <p>
-                    {questionData?.user?.displayName
-                      ? questionData?.user?.displayName
-                      : "Natalia lee"}
+                    {questionData?.author?.author_name
+                      ? questionData?.author?.author_name
+                      : "Unknown"}
                   </p>
                 </div>
               </div>
               <div className="comments">
                 <div className="comment">
-                  {questionData?.comments &&
-                    questionData?.comments.map((_qd) => (
+                  {commentData &&
+                    commentData?.map((_qd) => (
                       <p key={_qd?._id}>
-                        {_qd.comment}{" "}
+                        {_qd.content}{" "}
                         <span>
-                          - {_qd.user ? _qd.user.displayName : "Nate Eldredge"}
+                          - {_qd.author ? _qd.author.author_name : "Unknown"}
                         </span>{" "}
                         {"    "}
                         <small>
@@ -230,12 +275,11 @@ function MainQuestion() {
                       }}
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
-                      // type="text"
                       placeholder="Add your comment..."
                       rows={5}
                     />
                     <button
-                      // onClick={handleComment}
+                      onClick={handleComment}
                       style={{
                         maxWidth: "fit-content",
                       }}
@@ -262,9 +306,9 @@ function MainQuestion() {
               fontWeight: "500",
             }}
           >
-            {questionData && questionData?.answerDetails.length} Answers
+            {answerData && answerData?.length} Answer(s)
           </p>
-          {questionData?.answerDetails.map((_q) => (
+          {answerData?.map((_q) => (
             <>
               <div
                 style={{
@@ -292,7 +336,7 @@ function MainQuestion() {
                   </div>
                 </div>
                 <div className="question-answer">
-                  {_q.answer}
+                  <div dangerouslySetInnerHTML={{ __html: _q?.content }}></div>
                   <div className="author bg-[#d656270c] px-2 py-2 rounded">
                     <small>
                       asked {new Date(_q.created_at).toLocaleString()}
@@ -300,14 +344,13 @@ function MainQuestion() {
                     <div className="auth-details ">
                       <Avatar
                         className="text-gray-500 w-4 h-4 rounded"
-                        // round
-                        name={_q?.user?.displayName}
+                        name={_q?.author?.author_name}
                         size={"25"}
                       />
                       <p>
-                        {_q?.user?.displayName
-                          ? _q?.user?.displayName
-                          : "Natalia lee"}
+                        {_q?.author?.author_name
+                          ? _q?.author?.author_name
+                          : "Unknown"}
                       </p>
                     </div>
                   </div>
@@ -336,7 +379,7 @@ function MainQuestion() {
         />
       </div>
       <button
-        // onClick={handleSubmit}
+        onClick={handleSubmit}
         className="bg-[#D65627] outline-none rounded-lg border-none hover:bg-[#d65627de] h-[3rem] text-white"
         style={{
           marginTop: "100px",
@@ -348,4 +391,5 @@ function MainQuestion() {
     </div>
   );
 }
+
 export default MainQuestion;

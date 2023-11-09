@@ -30,11 +30,6 @@
   margin: 5px 0;
 }
 
-/* .ql-syntax {
-  display: flex;
-  width: 90%;
-  overflow: hidden;
-} */
 pre {
   display: flex;
   width: 90px;

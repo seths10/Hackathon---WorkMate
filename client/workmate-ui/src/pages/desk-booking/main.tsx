@@ -1,10 +1,6 @@
 import * as React from "react";
 import { siteTitle } from "../../constants/app";
-import { APP_DESK_BOOKING } from "../../navigation/routes-constants";
-import BreadCrumb from "../../components/breadcrumb/breadcrumb";
 import DeskIcon from "./component/DeskIcon";
-
-const pages = [{ name: "Desk Booking", href: APP_DESK_BOOKING, current: true }];
 
 const DeskBooking = () => {
   React.useEffect(() => {
@@ -19,7 +15,6 @@ const DeskBooking = () => {
             <h1 className="mb-2 text-2xl font-semibold text-gray-700">
               Desk Booking
             </h1>
-            <BreadCrumb pages={pages} />
           </div>
 
           <p>This is the Desk Booking page</p>

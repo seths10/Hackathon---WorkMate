@@ -1,13 +1,13 @@
 import * as React from "react";
 import { HomePageLayout } from "./layout";
 import { siteTitle } from "../../constants/app";
-
-import HomeImg from "../../assets/images/COMMUNITY.png";
 import { Link } from "react-router-dom";
+import HomeImg from "../../assets/images/COMMUNITY.png";
 
 const HomePage = () => {
+  
   React.useEffect(() => {
-    document.title = `HomePage | ${siteTitle}`;
+    document.title = `Home | ${siteTitle}`;
   }, []);
 
   return (
@@ -22,7 +22,7 @@ const HomePage = () => {
                 can help you.
               </h2>
               <p className="text-xl text-grey-500 mt-3">
-                Brings a wealth of knowledge ans experience to your team.
+                Brings a wealth of knowledge and experience to your team.
               </p>
               <div className="flex">
                 <Link to="/community">
@@ -34,7 +34,8 @@ const HomePage = () => {
                     <i className="fa fa-users me-2"></i>Community
                   </button>
                 </Link>{" "}
-                <Link to="/desk-booking"
+                <Link
+                  to="/desk-booking"
                   className="mt-6 block w-[150px] select-none border-2 border-orange-500 rounded-full py-3 px-6 text-center font-sans text-lg font-medium text-black shadow-md shadow-black-500/20 transition-all hover:shadow-lg hover:shadow-black-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                   type="button"
                   data-ripple-light="true"

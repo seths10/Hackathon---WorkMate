@@ -1,8 +1,8 @@
 import * as React from "react";
+import { instance } from "../../../../utils/axios-client";
 import Sidebar from "./Sidebar";
 import "./css/index.css";
 import Main from "./Main";
-import { instance } from "../../../../utils/axios-client";
 
 function Index() {
   const [questions, setQuestions] = React.useState([]);

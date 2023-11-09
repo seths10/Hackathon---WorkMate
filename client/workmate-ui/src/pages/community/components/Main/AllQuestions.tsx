@@ -1,18 +1,18 @@
-import "./css/AllQuestions.css";
 import { Link } from "react-router-dom";
-import Avatar from "react-avatar";
 import { getDateAndTimeFromISOString } from "../../../../utils/utils";
+import "./css/AllQuestions.css";
+import Avatar from "react-avatar";
 
 type DataProp = {
   data: {
     tags: string[];
-    total_answers: string;
+    total_answers: number;
     title: string;
-    _id: number;
+    _id: string;
     created_at: string;
-    author: { author_id: number, author_name: string };
+    author: { author_id: number; author_name: string };
     content: string;
-  }
+  };
 };
 
 function AllQuestions({ data }: DataProp) {
@@ -21,28 +21,26 @@ function AllQuestions({ data }: DataProp) {
       <div className="all-questions-container">
         <div className="all-questions-left">
           <div className="all-options">
-            {/* <div className="all-option">
-              <p>0</p>
-              <span>votes</span>
-            </div> */}
             <div className="all-option">
               <p>{data?.total_answers}</p>
               <span>answers</span>
             </div>
-            {/* <div className="all-option">
-              <small>2 views</small>
-            </div> */}
           </div>
         </div>
         <div className="question-answer text-sm text-gray-700">
-          <Link className="text-[#D65627]" to={`/community/view-question?q=${data?._id}`}>{data.title}</Link>
+          <Link
+            className="text-[#D65627]"
+            to={`/community/view-question?q=${data?._id}`}
+          >
+            {data.title}
+          </Link>
 
           <div
             style={{
               maxWidth: "90%",
             }}
           >
-            <div dangerouslySetInnerHTML={{__html: data?.content}}></div>
+            <div dangerouslySetInnerHTML={{ __html: data?.content }}></div>
           </div>
           <div
             style={{
@@ -50,7 +48,10 @@ function AllQuestions({ data }: DataProp) {
             }}
           >
             {data?.tags.map((tag) => (
-              <p key={tag} className="my-[10px] mx-[5px] text-sm py-[2px] px-[8px] bg-[#f874441a] text-[#d65627] rounded-lg">
+              <p
+                key={tag}
+                className="my-[10px] mx-[5px] text-sm py-[2px] px-[8px] bg-[#f874441a] text-[#d65627] rounded-lg"
+              >
                 {tag}
               </p>
             ))}

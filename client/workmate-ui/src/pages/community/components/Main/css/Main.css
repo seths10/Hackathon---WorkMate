@@ -1,6 +1,5 @@
 .main {
   display: flex;
-  /* max-width: 700px; */
   padding: 30px 10px;
   flex: 0.75;
   flex-direction: column;
@@ -28,9 +27,7 @@
 
 button {
   padding: 10px;
-  background-color: #0095ff;
   color: #fff;
-  border: 2px solid #007cd446;
   outline: none;
   border-radius: 3px;
   cursor: pointer;
@@ -71,12 +68,12 @@ button {
 .main-filter-item {
   display: flex;
   padding: 5px;
-  border: 1px solid #0095ff;
+  border: 1px solid #d65627;
   border-radius: 3px;
-  background-color: #00ccff17;
+  background-color: #d6562742;
   font-size: small;
   align-items: center;
-  color: #007cd4;
+  color: #d65627e0;
   cursor: pointer;
 }
 
@@ -101,9 +98,6 @@ pre {
 
 @media screen and (min-width: 768px) {
   .main {
-    /* display: flex;
-  max-width: 700px;
-  padding: 30px 10px; */
     flex: 0.6;
   }
 }
