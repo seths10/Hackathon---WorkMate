@@ -97,7 +97,7 @@ export const removeDesk = async (req: Request, res: Response) => {
 
 export const getAllBookings = async (req: Request, res: Response) => {
   try {
-    const bookings = await Booking.find({}).limit(3).exec();
+    const bookings = await Booking.find({}).populate("desk").limit(3).exec();
 
     res.status(200).json({
       success: true,
@@ -120,6 +120,29 @@ export const getBookingById = async (req: Request, res: Response) => {
       });
     }
     return res.status(200).json({
+      success: true,
+      data: booking,
+    });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+export const getBookingByUserId = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  try {
+    const booking = await Booking.find({ "user.userId": userId })
+      .sort({ endDate: "asc" })
+      .limit(5)
+      .exec();
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        data: "Not found",
+      });
+    }
+    res.status(200).json({
       success: true,
       data: booking,
     });
@@ -163,26 +186,26 @@ export const addBooking = async (req: Request, res: Response) => {
 
     await dsk.save();
 
-    res.status(200).json({
-      success: true,
-      data: "Added successfully",
-    });
     // Compose the email message
-    console.log(GMAIL_USER, GMAIL_PASSWORD)
+    console.log(GMAIL_USER, GMAIL_PASSWORD);
     const message = {
       from: GMAIL_USER,
       to: email,
-      subject: "DESK RESERVATION",
+      subject: "🎉DESK RESERVATION",
       text: `You have booked ${desk} from ${startDate} to ${endDate}`,
     };
 
     transporter.sendMail(message, async (error, info) => {
       if (error) {
-        return res.status(500).json({ success: false, message: "Failed to send email" });
+        console.log(error);
+        return res
+          .status(500)
+          .json({ success: false, message: "Failed to send email" });
       }
-      return res.json({ success: true, data: "Email sent successfully" });
+      return res
+        .status(200)
+        .json({ success: true, data: "Desk booked successfully" });
     });
-
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
