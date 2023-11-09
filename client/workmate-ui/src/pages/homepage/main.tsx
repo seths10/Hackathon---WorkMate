@@ -53,9 +53,9 @@ const HomePage = () => {
             </div>
           </div>
 
-          <div className="flex justify-content items-center mt-[4rem] gap-5 mb-20 px-[5rem]">
-            <div className="max-w-sm p-6  border-2 border-dashed border-white rounded-lg">
-              <i className="fa fa-users bg-white flex items-center justify-center rounded-lg px-2 py-2 me-2 w-9 h-9 text-gray-500 mb-3"></i>
+          <div className="flex justify-center mt-[4rem] gap-5 mb-20 px-[5rem]">
+            <div className="max-w-sm p-6 bg-white	drop-shadow-md rounded-md">
+              <i className="fa fa-users bg-orange-500 flex items-center justify-center rounded-lg px-2 py-2 me-2 w-9 h-9 text-white mb-3"></i>
                 <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
                   Community
                 </h5>
@@ -64,8 +64,8 @@ const HomePage = () => {
               </p>
             </div>
 
-            <div className="max-w-sm p-6  border-2 border-dashed border-white rounded-lg">
-              <i className="fa fa-briefcase bg-white flex items-center justify-center rounded-lg px-2 py-2 me-2 w-9 h-9 text-gray-500 mb-3"></i>
+            <div className="max-w-sm p-6 bg-white	drop-shadow-md rounded-md">
+              <i className="fa fa-briefcase bg-orange-500 flex items-center justify-center rounded-lg px-2 py-2 me-2 w-9 h-9  text-white mb-3"></i>
                 <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
                   Desk Booking
                 </h5>

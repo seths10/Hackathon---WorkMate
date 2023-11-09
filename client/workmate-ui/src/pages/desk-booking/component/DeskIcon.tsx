@@ -15,8 +15,7 @@ const DeskIcon: React.FC = () => {
   };
 
   return (
-    <div>
-      
+    <div> 
 <svg viewBox="0 3.27 1657.63 961.263" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" xmlns="http://www.w3.org/2000/svg">
   <rect id="workmate-block-b-df-s-rect1" width="1629.58" height="721.177" rx="3" ry="3" transform="matrix(1, 0, 0, 1, 14.26100063323976, 32.007999420166016)" fill="#eff7fa" stroke="#88a3b8" stroke-width="10"/>
   <text id="workmate-block-b-df-s-text1" dx="0" dy="0" font-family="&quot;Arial, sans-serif&quot;" font-size="32" font-weight="700" transform="matrix(1.3847750425338745, 0, 0, 1.6769839525222778, 487.3762279655966, 697.6706036578207)" ><tspan id="workmate-block-b-df-s-tspan1" y="0" font-weight="700">
