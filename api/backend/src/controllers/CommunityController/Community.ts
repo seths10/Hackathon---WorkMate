@@ -8,7 +8,7 @@ export const postQuestion = async (req: Request, res: Response) => {
   const { title, content, tags, author, votes, views } = req.body;
   try {
     if(!title || !content){
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         data: "Provide the title and content of question"
       })
@@ -138,6 +138,13 @@ export const getAnswersByQuestionId = async (req: Request, res: Response) => {
 export const postAnswer = async (req: Request, res: Response) => {
   const { content, question_id, author } = req.body;
   try {
+    if(!content){
+      return res.status(400).json({
+        success: false,
+        data: "Provide the content"
+      })
+    }
+
     const newAnswer = new Answer({
       content,
       question_id,
@@ -183,6 +190,13 @@ export const postComment = async (req: Request, res: Response) => {
   const { question_id, author, content } = req.body;
 
   try {
+    if(!content){
+      return res.status(400).json({
+        success: false,
+        data: "Provide the content"
+      })
+    }
+    
     const newComment = new Comment({
       question_id,
       author,

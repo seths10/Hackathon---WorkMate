@@ -186,8 +186,7 @@ export const addBooking = async (req: Request, res: Response) => {
 
     await dsk.save();
 
-    // Compose the email message
-    console.log(GMAIL_USER, GMAIL_PASSWORD);
+    // Composed email message
     const message = {
       from: GMAIL_USER,
       to: email,
@@ -211,7 +210,7 @@ export const addBooking = async (req: Request, res: Response) => {
   }
 };
 
-export const removeBooking = async (req: Request, res: Response) => {
+export const deleteBooking = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const booking = await Booking.findById(id).exec();
@@ -227,7 +226,7 @@ export const removeBooking = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      data: "Booking removed successfully",
+      data: "Booking deleted successfully",
     });
   } catch (err) {
     res.status(500).send("Internal Server Error");
@@ -235,22 +234,45 @@ export const removeBooking = async (req: Request, res: Response) => {
 };
 
 export const updateBooking = async (req: Request, res: Response) => {
-  const { id, startDate, endDate, status } = req.body;
+  const { desk } = req.params;
   try {
-    if (startDate) {
-      await Booking.findByIdAndUpdate(id, { startDate }).exec();
+    const dsk = await Desk.findOne({ name: desk }).exec();
+
+    if (!dsk) {
+      return res.status(404).json({
+        success: false,
+        data: "Desk not found",
+      });
     }
-    if (endDate) {
-      await Booking.findByIdAndUpdate(id, { endDate }).exec();
-    }
-    if (status) {
-      await Booking.findByIdAndUpdate(id, { status });
-    }
+
+    await Desk.findOneAndUpdate({ name: desk }, { isAvailable: true }).exec();
+
     res.status(200).json({
       success: true,
-      data: "Updated successfully",
+      data: `unbooked ${desk} successfully`,
     });
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
 };
+
+// export const updateBooking = async (req: Request, res: Response) => {
+//   const { id, startDate, endDate, status } = req.body;
+//   try {
+//     if (startDate) {
+//       await Booking.findByIdAndUpdate(id, { startDate }).exec();
+//     }
+//     if (endDate) {
+//       await Booking.findByIdAndUpdate(id, { endDate }).exec();
+//     }
+//     if (status) {
+//       await Booking.findByIdAndUpdate(id, { status });
+//     }
+//     res.status(200).json({
+//       success: true,
+//       data: "Updated successfully",
+//     });
+//   } catch (err) {
+//     res.status(500).send("Internal Server Error");
+//   }
+// };

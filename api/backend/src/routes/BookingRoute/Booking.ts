@@ -8,8 +8,8 @@ import {
   getBookingById,
   getBookingByUserId,
   addBooking,
-  removeBooking,
   updateBooking,
+  deleteBooking,
 } from "../../controllers/BookingController/Booking";
 
 const router = express.Router();
@@ -30,13 +30,15 @@ router.get("/", getAllBookings);
 
 router.get("/:id", getBookingById);
 
+router.get("/user/:userId", getBookingByUserId);
+
 router.post("/", addBooking);
 
-router.put("/", updateBooking);
+// router.put("/", updateBooking);
 
-router.delete("/:id", removeBooking);
+router.put("/:desk", updateBooking);
 
-router.get("/user/:userId", getBookingByUserId);
+router.delete("/:id", deleteBooking);
 
 
 export default router;
