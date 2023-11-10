@@ -11,10 +11,15 @@ https://github.com/seths10/WorkMate/assets/59029978/f26ede9c-35ef-40d3-982f-534c
 ### Description
 Our solution mainly consists of functionality and software components.
    
- - A desk booking system to help with space management.
+ - A desk booking system to help with office space utilization.
   
- - A Stack Oveflow inspired software for asking questions and receiving answers from work mate on several topics
+ - A Stack Overflow inspired software for asking questions and receiving answers from individuals in the company on several topics
 
+
+## Designs
+```js
+  ##### To view the designs, [Click Here]("https://www.figma.com/file/33UUWwoHytGtxEBDerbvP0/Workmate?type=design&node-id=0%3A1&mode=design&t=pw7ODjmDXHEvgdls-1")  
+```
 
 ## Setup
 
@@ -32,10 +37,12 @@ npm run dev
   ##### To run the app server, navigate to the \`_api_` directory
 ```bash
 cd api
+cd backend
+npm run devStart
 ```
 
 ## About
-Our solution primarily deals with `Future of Education` and `Smart Technology for Sustainable Living`. We're the **Team SPAN**! 
+Our solution primarily targets the themes: `Future of Education` and `Smart Technology for Sustainable Living`. We are **Team <SPAN />**! 
 
 ##### Build by 
 
