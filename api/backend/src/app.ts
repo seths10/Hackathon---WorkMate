@@ -37,7 +37,7 @@ mongoose
 
 // test route
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
+  res.send("Workmate backend!");
 });
 
 export default app;
