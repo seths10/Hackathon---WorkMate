@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { emailRegEx } from "../../utils/constants";
+import { emailRegEx, passwordRegEx } from "../../utils/constants";
 import User from "../../models/AuthModel/User";
 import { secretKey } from "../../utils/secrets";
 
@@ -89,6 +89,13 @@ export const signup = async (req: Request, res: Response) => {
     return res.status(422).json({
       success: false,
       data: "Invalid email address",
+    });
+  }
+
+  if(!passwordRegEx.test(password)){
+    return res.status(422).json({
+      success: false,
+      data: "Password does not meet the required criteria. It must have at least one lowercase letter, one uppercase letter, one digit, and one special character (@$!%*?&), and be at least 8 characters long."
     });
   }
 
