@@ -17,9 +17,8 @@ Our solution mainly consists of functionality and software components.
 
 
 ## Designs
-```js
-  ##### To view the designs, [Click Here]("https://www.figma.com/file/33UUWwoHytGtxEBDerbvP0/Workmate?type=design&node-id=0%3A1&mode=design&t=pw7ODjmDXHEvgdls-1")  
-```
+>To view the designs, [Click Here](https://www.figma.com/file/33UUWwoHytGtxEBDerbvP0/Workmate?type=design&node-id=0%3A1&mode=design&t=pw7ODjmDXHEvgdls-1)  
+
 
 ## Setup
 
