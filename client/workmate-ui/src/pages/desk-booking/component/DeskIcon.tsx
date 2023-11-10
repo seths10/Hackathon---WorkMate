@@ -12,7 +12,7 @@ const DeskIcon: React.FC = () => {
   const handleEllipseClick = (event: React.MouseEvent<SVGEllipseElement>) => {
     const dataName = event.currentTarget.getAttribute("data-name");
     if (dataName) {
-      toast.info(`Desk ${dataName} selected`)
+      toast.info(`Desk ${dataName} selected. Click "View" to confirm details`)
       handleShapeClick(dataName);
     }
   };

@@ -8,6 +8,8 @@ import {
 } from "../../utils/utils";
 import { Greetings } from "../../components/greetings";
 import { instance } from "../../utils/axios-client";
+import { Link } from "react-router-dom";
+import { LANDING } from "../../navigation/routes-constants";
 import DeskIcon from "./component/DeskIcon";
 import Avatar from "react-avatar";
 
@@ -35,11 +37,11 @@ const DeskBooking = () => {
         .then((res) => {
           setBookingHistory(res?.data?.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {console.log(err)});
     }
 
     getBookingHistory();
-  }, []);
+  }, [userState?.data?.id]);
 
   React.useEffect(() => {
     document.title = `Desk Booking | ${siteTitle}`;
@@ -50,9 +52,11 @@ const DeskBooking = () => {
       <main className="flex-1">
         <div>
           {/* navbar */}
-          <div className="px-[5rem] mb-2 bg-[#d656270e]">
+          <div className="px-[5rem] mb-2 bg-[#6b4b4005]">
             <div className="flex items-center justify-between py-[1.2rem]">
-              <h1 className="font-bold text-xl text-gray-800">WorkMate.</h1>
+              <Link to={LANDING}>
+                <h1 className="font-bold text-xl text-gray-800">WorkMate.</h1>
+              </Link>
               <Avatar size="40" name={fullName} round />
             </div>
           </div>
@@ -87,15 +91,14 @@ const DeskBooking = () => {
             <div>
               <h1 className="font-bold mb-2">Booking History</h1>
               <div className="bg-gray-200 rounded py-3 px-3">
-                {booking &&
+                {booking.length > 0 ? (
                   booking.map((book) => (
                     <div
                       key={book._id}
                       className="bg-white mb-3 rounded-lg px-3 py-2"
                     >
                       <p className="text-xs">
-                        <span className="text-xs">Desk Name</span>{" "}
-                        {book?.desk}
+                        <span className="text-xs">Desk Name</span> {book?.desk}
                       </p>
                       <p className="text-xs">
                         <span className="text-xs">Start Date:</span>{" "}
@@ -117,7 +120,10 @@ const DeskBooking = () => {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ))
+                ) : (
+                  <div className="text-gray-700">No Bookings Available</div>
+                )}
               </div>
             </div>
           </div>

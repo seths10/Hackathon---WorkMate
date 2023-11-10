@@ -16,7 +16,7 @@ const HomePageLayout: React.FC<Props> = ({ children }) => {
   };
 
   return (
-    <div className="flex flex-col flex-1 min-h-screen bg-gray-200">
+    <div className="flex flex-col flex-1 min-h-screen bg-white">
       <div className="px-[5rem]">
         <div className="flex items-center justify-between py-[1.2rem]">
           <h1 className="font-bold text-xl text-gray-800">WorkMate.</h1>

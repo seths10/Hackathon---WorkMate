@@ -126,7 +126,7 @@ const LoginScreen = () => {
               to={SIGNUP}
               className="text-[#D65627] cursor-pointer hover:text-[#d65627b2] font-bold text-sm"
             >
-              Sign In
+              Create an Account
             </Link>
           </div>
         </div>

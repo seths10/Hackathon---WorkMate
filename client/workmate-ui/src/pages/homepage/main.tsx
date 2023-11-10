@@ -52,28 +52,6 @@ const HomePage = () => {
               <img src={HomeImg} alt="home image" />
             </div>
           </div>
-
-          <div className="flex justify-center mt-[4rem] gap-5 mb-20 px-[5rem]">
-            <div className="max-w-sm p-6 bg-white	drop-shadow-md rounded-md">
-              <i className="fa fa-users bg-orange-500 flex items-center justify-center rounded-lg px-2 py-2 me-2 w-9 h-9 text-white mb-3"></i>
-                <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-                  Community
-                </h5>
-              <p className="mb-3 font-normal text-gray-500">
-                Ask Questions and get quick answers from your workmates
-              </p>
-            </div>
-
-            <div className="max-w-sm p-6 bg-white	drop-shadow-md rounded-md">
-              <i className="fa fa-briefcase bg-orange-500 flex items-center justify-center rounded-lg px-2 py-2 me-2 w-9 h-9  text-white mb-3"></i>
-                <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900">
-                  Desk Booking
-                </h5>
-              <p className="mb-3 font-normal text-gray-500">
-                Ask Questions and get quick answers from your workmates
-              </p>
-            </div>
-          </div>
         </main>
       </HomePageLayout>
     </React.Fragment>

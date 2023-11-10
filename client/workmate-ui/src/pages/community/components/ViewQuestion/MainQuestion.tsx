@@ -202,7 +202,7 @@ function MainQuestion() {
         <div className="main-top">
           <h2 className="main-question">{questionData?.title} </h2>
           <Link to="/community/ask-question">
-            <button className="bg-[#D65627] rounded-lg outline-none border-none hover:bg-[#d65627de] h-[3rem] text-white">
+            <button className="bg-[#D65627] w-fit rounded-lg outline-none border-none hover:bg-[#d65627de] text-white">
               Ask Question
             </button>
           </Link>
@@ -235,7 +235,7 @@ function MainQuestion() {
               </div>
             </div>
             <div className="question-answer">
-              <p className="font-normal text-larger">{questionData?.content}</p>
+              <p className="font-normal text-larger" dangerouslySetInnerHTML={{ __html: questionData?.content }}></p>
 
               <div className="author bg-[#d656270c] px-2 py-2 rounded">
                 <small>
