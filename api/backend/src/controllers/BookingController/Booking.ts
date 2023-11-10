@@ -234,7 +234,7 @@ export const deleteBooking = async (req: Request, res: Response) => {
 };
 
 export const updateBooking = async (req: Request, res: Response) => {
-  const { desk } = req.params;
+  const { desk, userId } = req.body;
   try {
     const dsk = await Desk.findOne({ name: desk }).exec();
 
@@ -243,6 +243,15 @@ export const updateBooking = async (req: Request, res: Response) => {
         success: false,
         data: "Desk not found",
       });
+    }
+
+    const booking = await Booking.findOne({desk}).exec();
+
+    if (booking?.user?.userId !== userId){
+      return res.status(400).json({
+        success: false,
+        data: "You did not book this desk"
+      })
     }
 
     await Desk.findOneAndUpdate({ name: desk }, { isAvailable: true }).exec();
@@ -255,24 +264,3 @@ export const updateBooking = async (req: Request, res: Response) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
-// export const updateBooking = async (req: Request, res: Response) => {
-//   const { id, startDate, endDate, status } = req.body;
-//   try {
-//     if (startDate) {
-//       await Booking.findByIdAndUpdate(id, { startDate }).exec();
-//     }
-//     if (endDate) {
-//       await Booking.findByIdAndUpdate(id, { endDate }).exec();
-//     }
-//     if (status) {
-//       await Booking.findByIdAndUpdate(id, { status });
-//     }
-//     res.status(200).json({
-//       success: true,
-//       data: "Updated successfully",
-//     });
-//   } catch (err) {
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
