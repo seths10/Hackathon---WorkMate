@@ -151,11 +151,17 @@ export const postAnswer = async (req: Request, res: Response) => {
       author,
     });
 
-    const question = await newAnswer.save();
+    const answer = await newAnswer.save();
+    
+    const question = await Question.findById(question_id).exec()
+
+    if(question){
+      question.total_answers += 1;
+    }
 
     return res.status(201).json({
       success: true,
-      data: question,
+      data: answer,
     });
   } catch (err) {
     res.status(500).send("Internal Server Error");
