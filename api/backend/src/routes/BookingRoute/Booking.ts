@@ -36,7 +36,7 @@ router.get("/:id", getBookingById);
 
 router.get("/user/:userId", getBookingByUserId);
 
-router.get("/active", getActiveBookings);
+router.get("/active/:userId", getActiveBookings);
 
 router.post("/", addBooking);
 
