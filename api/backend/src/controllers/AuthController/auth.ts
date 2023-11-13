@@ -5,9 +5,10 @@ import User from "../../models/AuthModel/User";
 import { secretKey } from "../../utils/secrets";
 
 export const signin = async (req: Request, res: Response) => {
-  // sign in logic
+  // user credentials
   const { email, password } = req.body;
 
+  // check if credentials have been passed
   if(!email || !password){
     res.status(400).json({
       success: false,
@@ -24,7 +25,9 @@ export const signin = async (req: Request, res: Response) => {
   }
 
   try {
+    // find available user
     var user = await User.findOne({ email }).exec();
+
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -42,6 +45,7 @@ export const signin = async (req: Request, res: Response) => {
       });
     }
 
+    // token creation
     const token = jwt.sign(
       {
         id: user.id,
@@ -51,7 +55,8 @@ export const signin = async (req: Request, res: Response) => {
       { algorithm: "HS256", expiresIn: "1d" }
     );
 
-    
+
+    // user data format to be returned 
     const userData = {
       id: user.id,
       firstname: user.firstname,
@@ -74,9 +79,10 @@ export const signin = async (req: Request, res: Response) => {
 };
 
 export const signup = async (req: Request, res: Response) => {
-  // signup logic
+  // user signup credentials
   const { firstname, lastname, email, password } = req.body;
 
+  // checking is credentials have been passed
   if(!firstname || !lastname || !email || !password){
     res.status(400).json({
       success: false,
@@ -92,6 +98,7 @@ export const signup = async (req: Request, res: Response) => {
     });
   }
 
+  // checking for strong password using regular expression
   if(!passwordRegEx.test(password)){
     return res.status(422).json({
       success: false,
@@ -99,7 +106,9 @@ export const signup = async (req: Request, res: Response) => {
     });
   }
 
+  // error handling
   try {
+    // find existing of user
     const existingUser = await User.findOne({ email }).exec();
     if (existingUser) {
       return res.status(400).json({
@@ -107,10 +116,16 @@ export const signup = async (req: Request, res: Response) => {
         data: "User already exist",
       });
     }
+    // creating new user instance
     const user = new User({ firstname, lastname, password, email });
+    
+    // saving the newly created user
     await user.save();
+
+    // response to the client for a successful user creation
     res.status(201).json({ success: true, data: "User registered successfully" });
   } catch (err) {
+    // server error response
     res.status(500).json({
       success: false,
       data: "Internal Server Error",

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Desk from "../../models/Booking/Desk";
 import Booking from "../../models/Booking/Booking";
 import nodemailer from "nodemailer";
+import cron from "node-cron";
 import { GMAIL_PASSWORD, GMAIL_USER } from "../../utils/secrets";
 
 const transporter = nodemailer.createTransport({
@@ -26,7 +27,7 @@ export const getAllDesks = async (req: Request, res: Response) => {
   }
 };
 
-export const getDesk = async (req: Request, res: Response) => {
+export const getDeskById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
@@ -151,6 +152,66 @@ export const getBookingByUserId = async (req: Request, res: Response) => {
   }
 };
 
+export const getAvailableDesksPerDay = async (req: Request, res: Response) => {
+  const { date } = req.params;
+
+  try {
+    // Find all desks that are available
+    const availableDesks = await Desk.find({ isAvailable: true }).exec();
+
+    // Check for reservations on the specified date
+    const reservations = await Booking.find({
+      startDate: { $lte: new Date(date) },
+      endDate: { $gte: new Date(date) },
+    }).exec();
+
+    // Filter out desks that have reservations on the specified date
+    const availableDesksOnDate = availableDesks.filter((desk) =>
+      reservations.every(
+        (reservation) =>
+          reservation.desk &&
+          reservation.desk.toString() !== desk._id.toString()
+      )
+    );
+
+    res.status(200).json({
+      success: true,
+      data: availableDesksOnDate,
+    });
+  } catch (err) {
+    res.status(500).send(`Internal Server Error`);
+  }
+};
+
+export const getActiveBookings = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  try {
+    // Get active bookings for the specified user and current date
+    const currentDate = new Date();
+
+    const activeBookings = await Booking.find({
+      "user.userId": userId,
+      startDate: { $lte: currentDate }, // Booking must start before or on the current date
+      endDate: { $gte: currentDate }, // Booking must end after or on the current date
+    }).exec();
+
+    if (!activeBookings || activeBookings.length === 0) {
+      return res.json({
+        success: false,
+        data: "No active bookings found for the user",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: activeBookings,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 export const addBooking = async (req: Request, res: Response) => {
   const { user, desk, startDate, endDate, email } = req.body;
   try {
@@ -222,6 +283,13 @@ export const deleteBooking = async (req: Request, res: Response) => {
       });
     }
 
+    const dsk = await Desk.findOne({ desk: booking.desk }).exec();
+
+    if (dsk) {
+      dsk.isAvailable = true;
+      await dsk?.save();
+    }
+
     await Booking.findByIdAndDelete(id).exec();
 
     res.status(200).json({
@@ -245,13 +313,13 @@ export const updateBooking = async (req: Request, res: Response) => {
       });
     }
 
-    const booking = await Booking.findOne({desk}).exec();
+    const booking = await Booking.findOne({ desk }).exec();
 
-    if (booking?.user?.userId !== userId){
+    if (booking?.user?.userId?.toString() !== userId) {
       return res.status(400).json({
         success: false,
-        data: "You did not book this desk"
-      })
+        data: "You did not book this desk",
+      });
     }
 
     await Desk.findOneAndUpdate({ name: desk }, { isAvailable: true }).exec();
@@ -264,3 +332,28 @@ export const updateBooking = async (req: Request, res: Response) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
+// Schedule the task to run every day at midnight
+cron.schedule("0 0 * * *", async () => {
+  try {
+    const currentDate = new Date();
+
+    // Find reservations that have passed their endDate
+    const expiredReservations = await Booking.find({
+      endDate: { $lt: currentDate },
+      isAvailable: false,
+    }).exec();
+
+    // Update corresponding desks to set isAvailable to true
+    const deskIdsToFree = expiredReservations.map(
+      (reservation) => reservation.desk
+    );
+
+    await Desk.updateMany(
+      { _id: { $in: deskIdsToFree } },
+      { $set: { isAvailable: true } }
+    ).exec();
+  } catch (err) {
+    console.error("Error while auto-unbooking desks:", err);
+  }
+});

@@ -1,7 +1,7 @@
 import express from "express";
 import {
   getAllDesks,
-  getDesk,
+  getDeskById,
   addDesk,
   removeDesk,
   getAllBookings,
@@ -10,6 +10,8 @@ import {
   addBooking,
   updateBooking,
   deleteBooking,
+  getAvailableDesksPerDay,
+  getActiveBookings
 } from "../../controllers/BookingController/Booking";
 
 const router = express.Router();
@@ -18,7 +20,9 @@ const router = express.Router();
 
 router.get("/desk", getAllDesks);
 
-router.get("/desk/:id", getDesk);
+router.get("/desk/:id", getDeskById);
+
+router.get("/deskPerDay/:date", getAvailableDesksPerDay);
 
 router.post("/desk", addDesk);
 
@@ -32,11 +36,11 @@ router.get("/:id", getBookingById);
 
 router.get("/user/:userId", getBookingByUserId);
 
+router.get("/active/:userId", getActiveBookings);
+
 router.post("/", addBooking);
 
-// router.put("/", updateBooking);
-
-router.put("/:desk", updateBooking);
+router.put("/", updateBooking);
 
 router.delete("/:id", deleteBooking);
 
