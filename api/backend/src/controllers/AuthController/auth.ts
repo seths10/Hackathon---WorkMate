@@ -9,11 +9,11 @@ export const signin = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   // check if credentials have been passed
-  if(!email || !password){
-    res.status(400).json({
+  if (!email || !password) {
+    return res.status(400).json({
       success: false,
-      data: "Provide email and password"
-    })
+      data: "Provide email and password",
+    });
   }
 
   // validate email
@@ -55,21 +55,19 @@ export const signin = async (req: Request, res: Response) => {
       { algorithm: "HS256", expiresIn: "1d" }
     );
 
-
-    // user data format to be returned 
+    // user data format to be returned
     const userData = {
       id: user.id,
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
       token: token,
-    }
+    };
 
     res.status(200).json({
       success: true,
       data: userData,
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -83,11 +81,11 @@ export const signup = async (req: Request, res: Response) => {
   const { firstname, lastname, email, password } = req.body;
 
   // checking is credentials have been passed
-  if(!firstname || !lastname || !email || !password){
-    res.status(400).json({
+  if (!firstname || !lastname || !email || !password) {
+    return res.status(400).json({
       success: false,
-      data: "Provide firstname, lastname, email and password"
-    })
+      data: "Provide firstname, lastname, email and password",
+    });
   }
 
   // validate email
@@ -99,14 +97,13 @@ export const signup = async (req: Request, res: Response) => {
   }
 
   // checking for strong password using regular expression
-  if(!passwordRegEx.test(password)){
+  if (!passwordRegEx.test(password)) {
     return res.status(422).json({
       success: false,
-      data: "Password does not meet the required criteria. It must have at least one lowercase letter, one uppercase letter, one digit, and one special character (@$!%*?&), and be at least 8 characters long."
+      data: "Password does not meet the required criteria. It must have at least one lowercase letter, one uppercase letter, one digit, and one special character (@$!%*?&), and be at least 8 characters long.",
     });
   }
 
-  // error handling
   try {
     // find existing of user
     const existingUser = await User.findOne({ email }).exec();
@@ -118,12 +115,14 @@ export const signup = async (req: Request, res: Response) => {
     }
     // creating new user instance
     const user = new User({ firstname, lastname, password, email });
-    
+
     // saving the newly created user
     await user.save();
 
     // response to the client for a successful user creation
-    res.status(201).json({ success: true, data: "User registered successfully" });
+    res
+      .status(201)
+      .json({ success: true, data: "User registered successfully" });
   } catch (err) {
     // server error response
     res.status(500).json({
