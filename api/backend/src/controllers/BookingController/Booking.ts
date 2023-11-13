@@ -152,7 +152,7 @@ export const getBookingByUserId = async (req: Request, res: Response) => {
 };
 
 export const getDesksPerDay = async (req: Request, res: Response) => {
-  const { date } = req.params;
+  const { date } = req.body;
 
   try {
     // Find all desks that are available
