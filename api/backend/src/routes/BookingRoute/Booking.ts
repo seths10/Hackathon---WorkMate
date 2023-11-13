@@ -1,7 +1,7 @@
 import express from "express";
 import {
   getAllDesks,
-  getDesk,
+  getDeskById,
   addDesk,
   removeDesk,
   getAllBookings,
@@ -19,7 +19,7 @@ const router = express.Router();
 
 router.get("/desk", getAllDesks);
 
-router.get("/desk/:id", getDesk);
+router.get("/desk/:id", getDeskById);
 
 router.get("/deskPerDay", getDesksPerDay);
 

@@ -26,7 +26,7 @@ export const getAllDesks = async (req: Request, res: Response) => {
   }
 };
 
-export const getDesk = async (req: Request, res: Response) => {
+export const getDeskById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
