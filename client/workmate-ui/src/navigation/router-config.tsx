@@ -43,7 +43,9 @@ const RouterConfig = () => {
                   <HomepageScreen />
                 </React.Suspense>
               ) : (
-                <Navigate to={LOGIN} />
+                <div>
+                  <Navigate to={LOGIN} />
+                </div>
               )
             }
           />

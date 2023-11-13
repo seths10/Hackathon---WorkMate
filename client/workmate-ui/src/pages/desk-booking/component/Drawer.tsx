@@ -11,11 +11,13 @@ import { EyeIcon } from "@heroicons/react/24/solid";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
-type Prop = {
+type DrawerProps = {
   deskId: string;
+  isOpen: boolean;
+  onClose?: () => void;
 };
 
-const Drawer = ({ deskId }: Prop) => {
+const Drawer = ({ deskId, isOpen }: DrawerProps) => {
   const [isLoading, setLoading] = React.useState(false);
   const { userState } = useAuthContext();
   const fullName = userState?.data?.firstname + " " + userState?.data?.lastname;
@@ -68,8 +70,14 @@ const Drawer = ({ deskId }: Prop) => {
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content">
           {/* Page content here */}
-          <label htmlFor="my-drawer-4" className="flex items-center gap-1 drawer-button bg-gray-200 float-right text-sm text-gray-500 px-2 py-1 rounded-lg">
-            <EyeIcon className="w-4 h-4 text-gray-500"/>
+          <label
+            htmlFor="my-drawer-4"
+            className={`flex items-center gap-1 ${
+              isOpen ? "drawer-button" : "drawer-button"
+            } bg-gray-200 float-right text-sm text-gray-500 px-2 py-1 rounded-lg
+  `}
+          >
+            <EyeIcon className="w-4 h-4 text-gray-500" />
             View
           </label>
         </div>

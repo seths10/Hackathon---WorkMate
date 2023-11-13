@@ -1,16 +1,15 @@
 import * as React from "react";
 import { instance } from "../../../../utils/axios-client";
 import Sidebar from "./Sidebar";
+import Main, { Prop } from "./Main";
 import "./css/index.css";
-import Main from "./Main";
 
 function Index() {
-  const [questions, setQuestions] = React.useState([]);
+  const [questions, setQuestions] = React.useState();
 
   React.useEffect(() => {
     async function getQuestion() {
       await instance.get(`/api/community/question`).then((res) => {
-        console.log(res?.data?.data)
         setQuestions(res?.data?.data);
       });
     }
