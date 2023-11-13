@@ -4,6 +4,11 @@ import Drawer from "./Drawer";
 
 const DeskIcon: React.FC = () => {
   const [selectedId, setSelectedId] = useState<string>("");
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
+
+  const availableDesks = [
+    "AM-B-DF-R1-D6","AM-B-DF-R1-D5","AM-B-DF-R1-D4"
+  ]
 
   const handleShapeClick = (deskId: string) => {
     setSelectedId(deskId);
@@ -12,14 +17,15 @@ const DeskIcon: React.FC = () => {
   const handleEllipseClick = (event: React.MouseEvent<SVGEllipseElement>) => {
     const dataName = event.currentTarget.getAttribute("data-name");
     if (dataName) {
-      toast.info(`Desk ${dataName} selected`)
+      toast.info(`Desk ${dataName} selected.`)
       handleShapeClick(dataName);
+      setDrawerOpen(true);
     }
   };
 
   return (
     <>
-      <Drawer deskId={selectedId} />
+      <Drawer deskId={selectedId} isOpen={isDrawerOpen}/>
       <div>
         <svg
           viewBox="0 3.27 1657.63 961.263"
@@ -249,7 +255,7 @@ const DeskIcon: React.FC = () => {
               onClick={handleEllipseClick}
               data-name="AM-B-DF-R1-D6"
               cursor={"pointer"}
-              className={"hover:fill-blue-300"}
+              className={"hover:fill-blue-300 drawer-open"}
               id="workmate-block-b-df-u-r1d6"
               rx="13.48575"
               ry="13.48575"

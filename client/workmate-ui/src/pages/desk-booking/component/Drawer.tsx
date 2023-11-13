@@ -7,15 +7,18 @@ import { classNames } from "../../../components/className";
 import { ButtonLoader } from "../../../components/loaders/Loaders";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { instance } from "../../../utils/axios-client";
+import { EyeIcon } from "@heroicons/react/24/solid";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
-type Prop = {
+type DrawerProps = {
   deskId: string;
+  isOpen: boolean;
+  onClose?: () => void;
 };
 
-const Drawer = ({ deskId }: Prop) => {
-  const [isLoading] = React.useState(false);
+const Drawer = ({ deskId, isOpen }: DrawerProps) => {
+  const [isLoading, setLoading] = React.useState(false);
   const { userState } = useAuthContext();
   const fullName = userState?.data?.firstname + " " + userState?.data?.lastname;
 
@@ -31,6 +34,7 @@ const Drawer = ({ deskId }: Prop) => {
   const endDate = format(date[0].endDate, "yyyy/MM/dd");
 
   const handleSubmit = async () => {
+    setLoading(true);
     const body = {
       startDate: startDate,
       endDate: endDate,
@@ -52,21 +56,29 @@ const Drawer = ({ deskId }: Prop) => {
       .post("/api/bookings/", body, config)
       .then(() => {
         toast.success("Desk booked successfully");
+        setLoading(false);
       })
       .catch((err) => {
-        toast.error(err?.response?.data?.data)
+        toast.error(err?.response?.data?.data);
+        setLoading(false);
       });
   };
 
   return (
     <div>
       <div className="drawer drawer-end">
-        
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content">
           {/* Page content here */}
-          <label htmlFor="my-drawer-4" className="drawer-button">
-            Open drawer
+          <label
+            htmlFor="my-drawer-4"
+            className={`flex items-center gap-1 ${
+              isOpen ? "drawer-button" : "drawer-button"
+            } bg-gray-200 float-right text-sm text-gray-500 px-2 py-1 rounded-lg
+  `}
+          >
+            <EyeIcon className="w-4 h-4 text-gray-500" />
+            View
           </label>
         </div>
         <div className="drawer-side">
@@ -76,7 +88,7 @@ const Drawer = ({ deskId }: Prop) => {
             className="drawer-overlay"
           ></label>
           <div className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-            <h1 className="mb-10 text-lg font-bold">Confirm Details</h1>
+            <h1 className="mb-1 text-lg font-bold">Confirm Details</h1>
 
             <div className="mb-3">
               <DateRange

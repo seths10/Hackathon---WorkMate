@@ -53,9 +53,9 @@ const LoginScreen = () => {
                   Email
                 </label>
                 <div className="relative mb-4">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+                  <div className="absolute inset-y-0 left-0 bg-gray-200  rounded-l-lg flex items-center px-3.5 border border-gray-300 pointer-events-none">
                     <svg
-                      className="w-4 h-4 text-gray-500"
+                      className="w-3 h-3 text-gray-500"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="currentColor"
@@ -71,7 +71,7 @@ const LoginScreen = () => {
                     autoComplete="current-email"
                     onChange={(e) => setEmail(e.target.value)}
                     id="input-group-1"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#D65627] focus:border-[#D65627] block w-full pl-10 p-2.5 "
+                    className="bg-gray-50 border placeholder:px-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#D65627] focus:border-[#D65627] block w-full pl-10 p-2.5 "
                     placeholder="name@amalitech.com"
                   ></input>
                 </div>
@@ -126,7 +126,7 @@ const LoginScreen = () => {
               to={SIGNUP}
               className="text-[#D65627] cursor-pointer hover:text-[#d65627b2] font-bold text-sm"
             >
-              Sign In
+              Create an Account
             </Link>
           </div>
         </div>

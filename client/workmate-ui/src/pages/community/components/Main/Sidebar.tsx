@@ -14,11 +14,9 @@ function Sidebar() {
                 HOME
               </Link>
 
-              <div className="link mt-3">
+              <div className="mt-5">
                 <div className="link-tag">
                   <div>Chapters</div>
-
-                  {/* <a href="/">Question</a> */}
                 </div>
 
                 <div className="tags">
