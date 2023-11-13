@@ -33,9 +33,11 @@ const authReducer = (state: any, action: any) => {
   switch (action.type) {
     case "LOGIN":
       return {
+        ...state,
         userState: action.payload,
       };
     case "LOGOUT":
+      localStorage.removeItem("user");
       return initialState;
     default:
       return state;

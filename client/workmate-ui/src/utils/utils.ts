@@ -71,3 +71,33 @@ export function getDateAndTimeFromISOString(isoString: string | number | Date) {
 
   return `${day}${daySuffix} ${month}, ${year} at ${formattedHours}:${formattedMinutes} ${ampm}`;
 }
+
+export function getDateFromISOString(isoString: string | number | Date) {
+  const dateObj = new Date(isoString);
+
+  if (isNaN(dateObj.getDate())) {
+    return "N/A";
+  }
+
+  const day = dateObj.getDate();
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const month = monthNames[dateObj.getMonth()];
+  const year = dateObj.getFullYear();
+
+  const daySuffix = getDaySuffix(day);
+
+  return `${day}${daySuffix} ${month}, ${year}`;
+}

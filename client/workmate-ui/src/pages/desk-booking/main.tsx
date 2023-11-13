@@ -2,16 +2,14 @@
 import * as React from "react";
 import { siteTitle } from "../../constants/app";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import {
-  capitalizeFirstWord,
-  getDateAndTimeFromISOString,
-} from "../../utils/utils";
+import { capitalizeFirstWord, getDateFromISOString } from "../../utils/utils";
 import { Greetings } from "../../components/greetings";
 import { instance } from "../../utils/axios-client";
 import { Link } from "react-router-dom";
 import { LANDING } from "../../navigation/routes-constants";
+import { toast } from "sonner";
 import { format } from "date-fns";
-// import DatePicker from "react-datepicker";
+import DatePicker from "react-datepicker";
 import DeskIcon from "./component/DeskIcon";
 import Avatar from "react-avatar";
 import "react-datepicker/dist/react-datepicker.css";
@@ -19,12 +17,27 @@ import "react-datepicker/dist/react-datepicker.css";
 const DeskBooking = () => {
   const { userState } = useAuthContext();
   const [loading, setLoading] = React.useState(false);
-  const [startDate, ] = React.useState<Date | null>(new Date());
+  const [date, setDate] = React.useState<Date | null>(new Date());
   const [isOpen, setIsOpen] = React.useState(false);
+
+  const availabilityDate = format(date!, "yyyy-MM-dd");
 
   const fullName = userState?.data?.firstname + " " + userState?.data?.lastname;
 
-  const [booking, setBookingHistory] = React.useState([
+  const [bookingHistory, setBookingHistory] = React.useState([
+    {
+      _id: "",
+      user: {
+        userId: "",
+        userName: "",
+      },
+      desk: "",
+      startDate: "",
+      endDate: "",
+    },
+  ]);
+
+  const [activeBookings, setActiveBookings] = React.useState([
     {
       _id: "",
       user: {
@@ -56,8 +69,61 @@ const DeskBooking = () => {
         });
     }
 
+    async function getActiveBookings() {
+      await instance
+        .get(`/api/bookings/active/${userState?.data?.id}`)
+        .then((res) => {
+          setActiveBookings(res?.data?.data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    }
+
     getBookingHistory();
+    getActiveBookings();
   }, [userState?.data?.id]);
+
+  async function getUpdatedActiveBookings() {
+    await instance
+      .get(`/api/bookings/active/${userState?.data?.id}`)
+      .then((res) => setActiveBookings(res?.data?.data))
+      .catch((err) => console.log(err));
+  }
+
+  async function getUpdatedBookingHistory() {
+    await instance
+      .get(`/api/bookings/user/${userState?.data?.id}`)
+      .then((res) => setBookingHistory(res?.data?.data))
+      .catch((err) => console.log(err));
+  }
+
+  const handleDeleteBooking = async (id: any) => {
+    await instance
+      .delete(`/api/bookings/${id}`)
+      .then(() => {
+        getUpdatedBookingHistory();
+        toast.success("Booking Deleted successfully");
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleUnBooking = async (id: any) => {
+    const body = {
+      desk: id,
+      userId: userState?.data?.id,
+    };
+
+    await instance
+      .put(`/api/bookings/${id}`, body)
+      .then(() => {
+        getUpdatedActiveBookings();
+        toast.success("Booking Cancelled successfully");
+      })
+      .catch((err) => console.log(err));
+  };
 
   React.useEffect(() => {
     document.title = `Desk Booking | ${siteTitle}`;
@@ -68,8 +134,8 @@ const DeskBooking = () => {
       <main className="flex-1">
         <div>
           {/* navbar */}
-          <div className="px-[5rem] mb-2 bg-[#6b4b4005]">
-            <div className="flex items-center justify-between py-[1.2rem]">
+          <div className="px-[5rem] mb-2 bg-[#6b4b4005] border-b">
+            <div className="flex items-center justify-between py-[0.8rem]">
               <Link to={LANDING}>
                 <h1 className="font-bold text-xl text-gray-800">WorkMate.</h1>
               </Link>
@@ -100,22 +166,21 @@ const DeskBooking = () => {
             </div>
 
             <div className="flex items-center gap-2">
-              <p className="text-xs">Date: </p>
+              <p className="text-xs  font-bold">Select Date: </p>
               <button
                 className="bg-[#d65627] px-2 py-1 text-white rounded-lg"
                 onClick={handleClick}
               >
-                {startDate ? format(startDate, "dd-MM-yyyy") : "Select Date"}
+                {date ? format(date, "dd-MM-yyyy") : "Select Date"}
               </button>
               {isOpen && (
-                <p></p>
-                // <DatePicker
-                //   showIcon
-                //   className="relative z-50"
-                //   selected={startDate}
-                //   onChange={(newDate) => setStartDate(newDate)}
-                //   inline
-                // />
+                <DatePicker
+                  showIcon
+                  className="relative z-50"
+                  selected={date}
+                  onChange={(newDate) => setDate(newDate)}
+                  inline
+                />
               )}
             </div>
           </div>
@@ -123,7 +188,11 @@ const DeskBooking = () => {
           {/* map */}
           <div className="flex px-[5rem] gap-10">
             <div className="w-[55rem] border mt-8 border-gray-100 px-5 py-5">
-              <DeskIcon />
+              <DeskIcon
+                date={availabilityDate}
+                setActiveBookings={setActiveBookings}
+                setBookingHistory={setBookingHistory}
+              />
             </div>
 
             <div className="flex flex-col gap-10">
@@ -140,27 +209,30 @@ const DeskBooking = () => {
 
                       <p className="w-[2rem] bg-gray-100 h-2.5"></p>
                     </div>
-                  ) : booking.length > 0 ? (
-                    booking.map((book) => (
+                  ) : activeBookings.length > 0 ? (
+                    activeBookings.map((book) => (
                       <div
                         key={book?._id}
                         className="flex bg-white px-3 py-2 gap-2 rounded-lg items-center border border-gray-100"
                       >
-                        <div className="border-r px-2">
+                        <div className="border-r pr-2">
                           <p className="text-xs">
-                            <span className="text-xs">Desk Name</span>{" "}
+                            <span className="text-xs">Desk Name:</span>{" "}
                             {book?.desk}
                           </p>
                           <p className="text-xs">
                             <span className="text-xs">Start Date:</span>{" "}
-                            {getDateAndTimeFromISOString(book?.startDate)}
+                            {getDateFromISOString(book?.startDate)}
                           </p>
                           <p className="text-xs">
                             <span className="text-xs">End Date:</span>{" "}
-                            {getDateAndTimeFromISOString(book?.endDate)}
+                            {getDateFromISOString(book?.endDate)}
                           </p>
                         </div>
-                        <p className="text-red-400 cursor-pointer hover:text-red-500 text-xs">
+                        <p
+                          onClick={() => handleUnBooking(book?._id)}
+                          className="text-red-400 cursor-pointer hover:text-red-500 text-xs"
+                        >
                           Cancel
                         </p>
                       </div>
@@ -180,23 +252,31 @@ const DeskBooking = () => {
                       <div className="text-xs w-[15rem] bg-gray-100 h-2.5"></div>
                       <div className="text-xs w-[15rem] bg-gray-100 h-2.5"></div>
                     </div>
-                  ) : booking.length > 0 ? (
-                    booking.map((book) => (
+                  ) : bookingHistory.length > 0 ? (
+                    bookingHistory.map((book) => (
                       <div
                         key={book?._id}
-                        className="bg-white rounded-lg px-3 py-2"
+                        className="flex bg-white px-3 py-2 gap-2 rounded-lg items-center border border-gray-100"
                       >
-                        <p className="text-xs">
-                          <span className="text-xs">Desk Name</span>{" "}
-                          {book?.desk}
-                        </p>
-                        <p className="text-xs">
-                          <span className="text-xs">Start Date:</span>{" "}
-                          {getDateAndTimeFromISOString(book?.startDate)}
-                        </p>
-                        <p className="text-xs">
-                          <span className="text-xs">End Date:</span>{" "}
-                          {getDateAndTimeFromISOString(book?.endDate)}
+                        <div className="border-r pr-2">
+                          <p className="text-xs">
+                            <span className="text-xs">Desk Name:</span>{" "}
+                            {book?.desk}
+                          </p>
+                          <p className="text-xs">
+                            <span className="text-xs">Start Date:</span>{" "}
+                            {getDateFromISOString(book?.startDate)}
+                          </p>
+                          <p className="text-xs">
+                            <span className="text-xs">End Date:</span>{" "}
+                            {getDateFromISOString(book?.endDate)}
+                          </p>
+                        </div>
+                        <p
+                          onClick={() => handleDeleteBooking(book?._id)}
+                          className="text-red-400 cursor-pointer hover:text-red-500 text-xs"
+                        >
+                          Delete
                         </p>
                       </div>
                     ))

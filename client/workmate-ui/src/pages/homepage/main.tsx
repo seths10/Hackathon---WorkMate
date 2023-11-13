@@ -40,7 +40,7 @@ const HomePage = () => {
                 </Link>{" "}
                 <Link
                   to="/desk-booking"
-                  className="mt-6 block w-[150px] text-[#d65627] select-none border border-orange-500 rounded-full py-3 px-6 text-center font-sans text-lg font-medium shadow-md shadow-black-500/20 transition-all hover:shadow-lg hover:shadow-black-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                  className="mt-6 block w-[150px] text-[#d65627] select-none border border-orange-500 rounded-full py-3 px-6 text-center font-sans text-lg font-medium shadow-md shadow-black-500/20 transition-all hover:shadow-lg hover:text-[#d65627] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                   type="button"
                   data-ripple-light="true"
                 >

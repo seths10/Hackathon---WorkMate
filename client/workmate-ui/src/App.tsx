@@ -2,7 +2,11 @@ import RouterConfig from "./navigation";
 import "./App.css";
 
 function App() {
-  return <RouterConfig />;
+  return (
+    <div>
+      <RouterConfig />
+    </div>
+  );
 }
 
 export default App;

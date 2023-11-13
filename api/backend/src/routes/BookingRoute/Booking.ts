@@ -10,7 +10,7 @@ import {
   addBooking,
   updateBooking,
   deleteBooking,
-  getDesksPerDay,
+  getAvailableDesksPerDay,
   getActiveBookings
 } from "../../controllers/BookingController/Booking";
 
@@ -22,7 +22,7 @@ router.get("/desk", getAllDesks); // get all desks
  
 router.get("/desk/:id", getDeskById); // get a desk by desk id
 
-router.get("/deskPerDay/:date", getDesksPerDay); // get all desks available at a specified date
+router.get("/deskPerDay/:date", getAvailableDesksPerDay); // get all desks available at a specified date
 
 router.post("/desk", addDesk); // add or register a desk
 

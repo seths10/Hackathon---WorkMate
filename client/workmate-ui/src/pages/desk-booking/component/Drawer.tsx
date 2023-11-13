@@ -13,11 +13,13 @@ import "react-date-range/dist/theme/default.css";
 
 type DrawerProps = {
   deskId: string;
-  isOpen: boolean;
+  isOpen: any;
   onClose?: () => void;
+  setBookingHistory: any
+  setActiveBookings: any
 };
 
-const Drawer = ({ deskId, isOpen }: DrawerProps) => {
+const Drawer = ({ deskId, isOpen, setActiveBookings, setBookingHistory }: DrawerProps) => {
   const [isLoading, setLoading] = React.useState(false);
   const { userState } = useAuthContext();
   const fullName = userState?.data?.firstname + " " + userState?.data?.lastname;
@@ -32,6 +34,20 @@ const Drawer = ({ deskId, isOpen }: DrawerProps) => {
 
   const startDate = format(date[0].startDate, "yyyy/MM/dd");
   const endDate = format(date[0].endDate, "yyyy/MM/dd");
+
+  async function getUpdatedActiveBookings() {
+    await instance
+      .get(`/api/bookings/active/${userState?.data?.id}`)
+      .then((res) => setActiveBookings(res?.data?.data))
+      .catch((err) => console.log(err));
+  }
+
+  async function getUpdatedBookingHistory() {
+    await instance
+      .get(`/api/bookings/user/${userState?.data?.id}`)
+      .then((res) => setBookingHistory(res?.data?.data))
+      .catch((err) => console.log(err));
+  }
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -56,6 +72,8 @@ const Drawer = ({ deskId, isOpen }: DrawerProps) => {
       .post("/api/bookings/", body, config)
       .then(() => {
         toast.success("Desk booked successfully");
+        getUpdatedActiveBookings();
+        getUpdatedBookingHistory();
         setLoading(false);
       })
       .catch((err) => {
@@ -64,18 +82,17 @@ const Drawer = ({ deskId, isOpen }: DrawerProps) => {
       });
   };
 
+  
+
   return (
     <div>
-      <div className="drawer drawer-end">
+      <div className={`drawer drawer-end ${isOpen ? "open" : ""}`}>
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content">
           {/* Page content here */}
           <label
             htmlFor="my-drawer-4"
-            className={`flex items-center gap-1 ${
-              isOpen ? "drawer-button" : "drawer-button"
-            } bg-gray-200 float-right text-sm text-gray-500 px-2 py-1 rounded-lg
-  `}
+            className="flex items-center gap-1 drawer-button bg-gray-200 float-right text-sm text-gray-500 px-2 py-1 rounded-lg"
           >
             <EyeIcon className="w-4 h-4 text-gray-500" />
             View

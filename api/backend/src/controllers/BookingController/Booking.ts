@@ -152,7 +152,7 @@ export const getBookingByUserId = async (req: Request, res: Response) => {
   }
 };
 
-export const getDesksPerDay = async (req: Request, res: Response) => {
+export const getAvailableDesksPerDay = async (req: Request, res: Response) => {
   const { date } = req.params;
 
   try {
@@ -196,7 +196,7 @@ export const getActiveBookings = async (req: Request, res: Response) => {
     }).exec();
 
     if (!activeBookings || activeBookings.length === 0) {
-      return res.status(404).json({
+      return res.json({
         success: false,
         data: "No active bookings found for the user",
       });
