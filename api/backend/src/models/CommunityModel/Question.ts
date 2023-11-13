@@ -1,4 +1,4 @@
-import {model, Schema} from "mongoose";
+import { model, Schema } from "mongoose";
 
 // question model
 const questionSchema = new Schema({
@@ -23,17 +23,18 @@ const questionSchema = new Schema({
     author_name: {
       type: String,
       ref: "User",
-    }
-  }
-  ,
+    },
+  },
   total_answers: {
     type: Number,
     default: 0,
   },
-  comments: [{
-    type: Schema.Types.ObjectId,
-    ref: "Comment",
-  }],
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
   votes: {
     type: Number,
     default: 0,

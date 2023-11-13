@@ -32,7 +32,7 @@ function AllQuestions({ data }: DataProp) {
             className="text-[#D65627]"
             to={`/community/view-question?q=${data?._id}`}
           >
-            {data.title}
+            {data?.title}
           </Link>
 
           <div
@@ -57,7 +57,7 @@ function AllQuestions({ data }: DataProp) {
             ))}
           </div>
           <div className="author ">
-            <small>{getDateAndTimeFromISOString(data.created_at)}</small>
+            <small>{getDateAndTimeFromISOString(data?.created_at)}</small>
             <div className="auth-details">
               <Avatar name={data?.author?.author_name} round size={"25"} />
               <p>

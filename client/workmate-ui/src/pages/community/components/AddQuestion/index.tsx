@@ -30,7 +30,7 @@ function Index() {
         { indent: "-1" },
         { indent: "+1" },
       ],
-      ["link", "image"],
+      ["link", "image", "code-block", "video"],
       ["clean"],
     ],
   };
@@ -47,6 +47,8 @@ function Index() {
     "indent",
     "link",
     "image",
+    "video",
+    "code-block",
   ];
 
   const handleQuill = (value: SetStateAction<string>) => {
@@ -71,7 +73,7 @@ function Index() {
           navigate(APP_COMMUNITY);
         })
         .catch((err) => {
-          console.log(err);
+          toast.error(err);
         });
     }
   };

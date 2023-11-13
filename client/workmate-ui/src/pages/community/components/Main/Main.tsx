@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import "./css/Main.css";
 import AllQuestions from "./AllQuestions";
 
-type Prop = {
+export type Prop = {
   questions: [
     {
       tags: string[];
@@ -29,7 +29,7 @@ function Main({ questions }: Prop) {
           </Link>
         </div>
         <div className="main-desc">
-          <p>{questions.length} questions</p>
+          <p>{questions?.length} questions</p>
         </div>
         <div className="questions">
           {questions?.map((que) => (

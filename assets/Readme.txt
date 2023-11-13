@@ -1,1 +1,0 @@
-general assets for project

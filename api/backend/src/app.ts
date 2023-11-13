@@ -19,8 +19,8 @@ app.use(cors({ origin: "*" }));
 
 // route middlewares
 app.use("/api/auth", authRoute);
-app.use("/api/community", communityRoute);
-app.use("/api/bookings", bookingRoute);
+app.use("/api/community",auth, communityRoute);
+app.use("/api/bookings",auth, bookingRoute);
 
 mongoose.Promise = bluebird;
 const mongodb_uri = DB_URI! 
@@ -38,7 +38,7 @@ mongoose
 
 // test route
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
+  res.send("Workmate backend!");
 });
 
 export default app;
