@@ -152,8 +152,7 @@ export const getBookingByUserId = async (req: Request, res: Response) => {
 };
 
 export const getDesksPerDay = async (req: Request, res: Response) => {
-  const { date } = req.body;
-
+  const { date } = req.params;
   try {
     // Find all desks that are available
     const availableDesks = await Desk.find({ isAvailable: true }).exec();
@@ -173,6 +172,14 @@ export const getDesksPerDay = async (req: Request, res: Response) => {
       success: true,
       data: availableDesksOnDate,
     });
+  } catch (err) {
+    res.status(500).send(`Internal Server Error`);
+  }
+};
+
+export const getActiveBookings = async (req: Request, res: Response) => {
+
+  try {
   } catch (err) {
     res.status(500).send(`Internal Server Error`);
   }
