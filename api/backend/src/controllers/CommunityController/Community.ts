@@ -8,11 +8,11 @@ export const postQuestion = async (req: Request, res: Response) => {
   const { title, content, tags, author, votes, views } = req.body;
   try {
     // check passed data
-    if(!title || !content){
+    if (!title || !content) {
       return res.status(400).json({
         success: false,
-        data: "Provide the title and content of question"
-      })
+        data: "Provide the title and content of question",
+      });
     }
     // new question instance
     const newQuestion = new Question({
@@ -63,7 +63,7 @@ export const getQuestionById = async (req: Request, res: Response) => {
         data: "Question not found",
       });
     }
-    
+
     res.status(200).json({
       success: true,
       data: question,
@@ -77,9 +77,9 @@ export const getQuestionById = async (req: Request, res: Response) => {
 export const deleteQuestionById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    // checking if question exists
     const question = await Question.findById(id);
 
+    // checking if question exists
     if (!question) {
       return res.status(404).json({
         success: false,
@@ -125,11 +125,11 @@ export const getAnswersByQuestionId = async (req: Request, res: Response) => {
 export const postAnswer = async (req: Request, res: Response) => {
   const { content, question_id, author } = req.body;
   try {
-    if(!content){
+    if (!content) {
       return res.status(400).json({
         success: false,
-        data: "Provide the content"
-      })
+        data: "Provide the content",
+      });
     }
 
     const newAnswer = new Answer({
@@ -139,10 +139,10 @@ export const postAnswer = async (req: Request, res: Response) => {
     });
 
     const answer = await newAnswer.save();
-    
-    const question = await Question.findById(question_id).exec()
 
-    if(question){
+    const question = await Question.findById(question_id).exec();
+
+    if (question) {
       question.total_answers += 1;
     }
 
@@ -183,13 +183,13 @@ export const postComment = async (req: Request, res: Response) => {
   const { question_id, author, content } = req.body;
 
   try {
-    if(!content){
+    if (!content) {
       return res.status(400).json({
         success: false,
-        data: "Provide the content"
-      })
+        data: "Provide the content",
+      });
     }
-    
+
     const newComment = new Comment({
       question_id,
       author,
