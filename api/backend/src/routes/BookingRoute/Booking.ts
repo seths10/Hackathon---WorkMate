@@ -11,6 +11,7 @@ import {
   updateBooking,
   deleteBooking,
   getDesksPerDay,
+  getActiveBookings
 } from "../../controllers/BookingController/Booking";
 
 const router = express.Router();
@@ -21,7 +22,7 @@ router.get("/desk", getAllDesks);
 
 router.get("/desk/:id", getDeskById);
 
-router.get("/deskPerDay", getDesksPerDay);
+router.get("/deskPerDay/:date", getDesksPerDay);
 
 router.post("/desk", addDesk);
 
@@ -34,6 +35,8 @@ router.get("/", getAllBookings);
 router.get("/:id", getBookingById);
 
 router.get("/user/:userId", getBookingByUserId);
+
+router.get("/active", getActiveBookings);
 
 router.post("/", addBooking);
 

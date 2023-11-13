@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Desk from "../../models/Booking/Desk";
 import Booking from "../../models/Booking/Booking";
 import nodemailer from "nodemailer";
+import cron from "node-cron";
 import { GMAIL_PASSWORD, GMAIL_USER } from "../../utils/secrets";
 
 const transporter = nodemailer.createTransport({
@@ -153,6 +154,7 @@ export const getBookingByUserId = async (req: Request, res: Response) => {
 
 export const getDesksPerDay = async (req: Request, res: Response) => {
   const { date } = req.params;
+
   try {
     // Find all desks that are available
     const availableDesks = await Desk.find({ isAvailable: true }).exec();
@@ -164,8 +166,12 @@ export const getDesksPerDay = async (req: Request, res: Response) => {
     }).exec();
 
     // Filter out desks that have reservations on the specified date
-    const availableDesksOnDate = availableDesks.filter(desk =>
-      reservations.every(reservation => reservation.desk && reservation.desk.toString() !== desk._id.toString())
+    const availableDesksOnDate = availableDesks.filter((desk) =>
+      reservations.every(
+        (reservation) =>
+          reservation.desk &&
+          reservation.desk.toString() !== desk._id.toString()
+      )
     );
 
     res.status(200).json({
@@ -178,10 +184,24 @@ export const getDesksPerDay = async (req: Request, res: Response) => {
 };
 
 export const getActiveBookings = async (req: Request, res: Response) => {
-
+  const { userId } = req.params;
   try {
+    const dsk = await Desk.find({}).exec();
+
+    const booking = await Booking.find({ "user.userId": userId }).exec();
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        data: "Not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      data: booking,
+    });
   } catch (err) {
-    res.status(500).send(`Internal Server Error`);
+    res.status(500).send("Internal Server Error");
   }
 };
 
@@ -298,3 +318,28 @@ export const updateBooking = async (req: Request, res: Response) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
+// Schedule the task to run every day at midnight
+cron.schedule("0 0 * * *", async () => {
+  try {
+    const currentDate = new Date();
+
+    // Find reservations that have passed their endDate
+    const expiredReservations = await Booking.find({
+      endDate: { $lt: currentDate },
+      isAvailable: false,
+    }).exec();
+
+    // Update corresponding desks to set isAvailable to true
+    const deskIdsToFree = expiredReservations.map(
+      (reservation) => reservation.desk
+    );
+
+    await Desk.updateMany(
+      { _id: { $in: deskIdsToFree } },
+      { $set: { isAvailable: true } }
+    ).exec();
+  } catch (err) {
+    console.error("Error while auto-unbooking desks:", err);
+  }
+});
