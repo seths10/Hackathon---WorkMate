@@ -1,0 +1,325 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "workmate",
+    "dateExported": "2023-11-13T12:57:13.321Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "2e598003-fa0d-4dda-a1c6-d074ab0a4f95",
+            "name": "auth",
+            "containerId": "",
+            "created": "2023-11-08T18:43:45.557Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "6b89c3c4-5193-4d30-9160-e5f28b86b860",
+            "name": "community",
+            "containerId": "",
+            "created": "2023-11-08T18:44:04.663Z",
+            "sortNum": 20000
+        },
+        {
+            "_id": "6c23042e-d343-4b38-b0c6-6ddcff8dd2e2",
+            "name": "booking",
+            "containerId": "",
+            "created": "2023-11-09T07:35:28.026Z",
+            "sortNum": 30000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "1e845522-3200-4b9e-b7b1-f9545a0ab290",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "6b89c3c4-5193-4d30-9160-e5f28b86b860",
+            "name": "answer",
+            "url": "{{BASE_URL}}/community/answer/",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-11-08T18:47:04.464Z",
+            "modified": "2023-11-08T21:36:23.708Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"content\":\"This is a dummy answer\",\n  \"question_id\":\"654bf69b491a7498538dd66c\",\n   \"author\": {\n      \"author_id\": \"654b8dea09f50a921e1436f3\",\n      \"author_name\": \"Nathan\"\n    }\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "fdbe842e-05c1-4033-8036-9b5c6c6533b3",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "6b89c3c4-5193-4d30-9160-e5f28b86b860",
+            "name": "comment",
+            "url": "{{BASE_URL}}/community/comment/",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-11-08T19:05:24.296Z",
+            "modified": "2023-11-08T21:30:56.296Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"content\":\"This is a dummy comment\",\n  \"question_id\":\"654bf69b491a7498538dd66c\",\n  \"author\": {\n    \"author_id\":\"654b8dea09f50a921e1436f3\",\n    \"author_name\":\"Nathan\"\n  }\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "6c474277-e352-496c-a783-ca1f2b2f3d3e",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "6b89c3c4-5193-4d30-9160-e5f28b86b860",
+            "name": "comment",
+            "url": "{{BASE_URL}}/community/comment/654bf69b491a7498538dd66c",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2023-11-08T19:10:50.216Z",
+            "modified": "2023-11-08T21:32:09.548Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "b8cf57f7-56fd-4084-bf2b-b744eab84420",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "6b89c3c4-5193-4d30-9160-e5f28b86b860",
+            "name": "answer",
+            "url": "{{BASE_URL}}/community/answer/654bf69b491a7498538dd66c",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2023-11-08T19:40:55.258Z",
+            "modified": "2023-11-08T21:37:28.824Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "4a49cadb-4832-4f3c-ae5b-0873021fab2e",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "6b89c3c4-5193-4d30-9160-e5f28b86b860",
+            "name": "question",
+            "url": "{{BASE_URL}}/community/question/654bf69b491a7498538dd66c",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2023-11-08T20:04:45.862Z",
+            "modified": "2023-11-08T21:03:39.126Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "a364c09a-bd65-48ab-affe-d8d4b9169aa9",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "6b89c3c4-5193-4d30-9160-e5f28b86b860",
+            "name": "question",
+            "url": "{{BASE_URL}}/community/question/",
+            "method": "POST",
+            "sortNum": 70000,
+            "created": "2023-11-08T20:05:47.154Z",
+            "modified": "2023-11-08T20:10:12.331Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"title\": \"New question\",\n  \"content\":\"This is a dummy question\",\n  \"tags\": [\"new\", \"old\"],\n  \"author\": {\n    \"author_id\":\"654b8dea09f50a921e1436f3\",\n    \"author_name\":\"Nathan\"\n  }\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "f0f77993-1227-4d4d-aec1-b497670df8d3",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "6c23042e-d343-4b38-b0c6-6ddcff8dd2e2",
+            "name": "desk",
+            "url": "{{BASE_URL}}/bookings/desk/654c8e86324d0e0de13ae14f",
+            "method": "GET",
+            "sortNum": 80000,
+            "created": "2023-11-09T07:36:30.499Z",
+            "modified": "2023-11-09T08:58:49.413Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "46570034-d6b1-4224-94e4-db15c664e245",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "6c23042e-d343-4b38-b0c6-6ddcff8dd2e2",
+            "name": "desk",
+            "url": "{{BASE_URL}}/bookings/desk",
+            "method": "POST",
+            "sortNum": 90000,
+            "created": "2023-11-09T07:38:08.143Z",
+            "modified": "2023-11-10T06:40:20.591Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"AM-B-DF-R3-D7\",\n  \"facility\":\"Block B\",\n  \"location\":\"Accra\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NGI4ZGVhMDlmNTBhOTIxZTE0MzZmMyIsImVtYWlsIjoibmF0aGFuLmt1bGV3b3NoaWVAYW1hbGl0ZWNoLmNvbSIsImlhdCI6MTY5OTU5ODI5MiwiZXhwIjoxNjk5Njg0NjkyfQ.mpXLkwFrczUg9zzTLJcqRc5CuauYmszPqAeb0th7iAU"
+            },
+            "tests": []
+        },
+        {
+            "_id": "95f33470-1a5a-4794-b42e-4a7239f8b16e",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "2e598003-fa0d-4dda-a1c6-d074ab0a4f95",
+            "name": "signin",
+            "url": "{{BASE_URL}}/auth/signin",
+            "method": "POST",
+            "sortNum": 100000,
+            "created": "2023-11-09T07:50:20.779Z",
+            "modified": "2023-11-09T07:51:20.103Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\":\"nathan.kulewoshie@amalitech.com\",\n  \"password\":\"password\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "95091574-e21c-43d3-83c8-e76e78e9e3e9",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "6c23042e-d343-4b38-b0c6-6ddcff8dd2e2",
+            "name": "booking",
+            "url": "{{BASE_URL}}/bookings/",
+            "method": "POST",
+            "sortNum": 110000,
+            "created": "2023-11-09T08:59:42.637Z",
+            "modified": "2023-11-10T08:27:52.589Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"user\": {\n    \"userId\": \"654b8dea09f50a921e1436f3\",\n    \"userName\": \"Nathan\"\n  },\n  \"email\": \"seth.addo@amalitech.com\",\n  \"desk\": \"AM-B-DF-R3-D6\",\n  \"startDate\": \"2023-11-09\",\n  \"endDate\": \"2023-11-12\",\n  \"status\": \"booked\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NGI4ZGVhMDlmNTBhOTIxZTE0MzZmMyIsImVtYWlsIjoibmF0aGFuLmt1bGV3b3NoaWVAYW1hbGl0ZWNoLmNvbSIsImlhdCI6MTY5OTU5ODI5MiwiZXhwIjoxNjk5Njg0NjkyfQ.mpXLkwFrczUg9zzTLJcqRc5CuauYmszPqAeb0th7iAU"
+            },
+            "tests": []
+        },
+        {
+            "_id": "bd14e2aa-0ff9-49fb-a7f8-b6967650d1c8",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "6c23042e-d343-4b38-b0c6-6ddcff8dd2e2",
+            "name": "booking",
+            "url": "{{BASE_URL}}/bookings",
+            "method": "PUT",
+            "sortNum": 115000,
+            "created": "2023-11-09T09:37:26.228Z",
+            "modified": "2023-11-10T08:51:37.978Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"userId\": \"654b8dea09f50a921e1436f3\",\n  \"desk\": \"AM-B-DF-R3-D6\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NGI4ZGVhMDlmNTBhOTIxZTE0MzZmMyIsImVtYWlsIjoibmF0aGFuLmt1bGV3b3NoaWVAYW1hbGl0ZWNoLmNvbSIsImlhdCI6MTY5OTU5ODI5MiwiZXhwIjoxNjk5Njg0NjkyfQ.mpXLkwFrczUg9zzTLJcqRc5CuauYmszPqAeb0th7iAU"
+            },
+            "tests": []
+        },
+        {
+            "_id": "43e33b7a-e7f5-4c48-bf2f-460fe857106d",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "6c23042e-d343-4b38-b0c6-6ddcff8dd2e2",
+            "name": "booking",
+            "url": "{{BASE_URL}}/bookings/user/654b8dea09f50a921e1436f3",
+            "method": "GET",
+            "sortNum": 120000,
+            "created": "2023-11-09T09:04:15.777Z",
+            "modified": "2023-11-09T18:01:44.719Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "6683d5d7-1187-429e-8b9c-6c260bf4e96e",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "6c23042e-d343-4b38-b0c6-6ddcff8dd2e2",
+            "name": "booking",
+            "url": "{{BASE_URL}}/bookings/",
+            "method": "GET",
+            "sortNum": 130000,
+            "created": "2023-11-09T09:05:42.702Z",
+            "modified": "2023-11-09T09:05:42.702Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "674397c1-56b6-4f93-9ed9-3a1047c0550b",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "2e598003-fa0d-4dda-a1c6-d074ab0a4f95",
+            "name": "signup",
+            "url": "{{BASE_URL}}/auth/signup/",
+            "method": "POST",
+            "sortNum": 140000,
+            "created": "2023-11-10T08:04:36.726Z",
+            "modified": "2023-11-10T08:19:00.774Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"firstname\":\"Nathan\",\n  \"lastname\":\"Nunana\",\n  \"email\":\"nathan@amalitech.com\",\n  \"password\":\"abcdefgh\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "14d17811-d8ea-4356-b896-798cf88adebe",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "6c23042e-d343-4b38-b0c6-6ddcff8dd2e2",
+            "name": "deskPerDay",
+            "url": "{{SERVER_URL}}/bookings/deskPerDay/2023-11-13",
+            "method": "GET",
+            "sortNum": 150000,
+            "created": "2023-11-13T07:43:48.396Z",
+            "modified": "2023-11-13T12:27:42.178Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"date\": \"2023-11-13\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NGI4ZGVhMDlmNTBhOTIxZTE0MzZmMyIsImVtYWlsIjoibmF0aGFuLmt1bGV3b3NoaWVAYW1hbGl0ZWNoLmNvbSIsImlhdCI6MTY5OTg2MTU3MiwiZXhwIjoxNjk5OTQ3OTcyfQ.NXMzh75QAYsA0u7iU4T_ZgOqWjSK71YnSbioWnvs3PM"
+            },
+            "tests": []
+        },
+        {
+            "_id": "83838807-70fb-4dbd-a42a-2e5dc1891f41",
+            "colId": "a2abbbeb-3ebd-48c4-979a-122111963722",
+            "containerId": "6c23042e-d343-4b38-b0c6-6ddcff8dd2e2",
+            "name": "activeBookings",
+            "url": "{{BASE_URL}}/bookings/active/654b8dea09f50a921e1436f3",
+            "method": "GET",
+            "sortNum": 160000,
+            "created": "2023-11-13T12:53:42.839Z",
+            "modified": "2023-11-13T12:55:49.191Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"userId\":\"654b8dea09f50a921e1436f3\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NGI4ZGVhMDlmNTBhOTIxZTE0MzZmMyIsImVtYWlsIjoibmF0aGFuLmt1bGV3b3NoaWVAYW1hbGl0ZWNoLmNvbSIsImlhdCI6MTY5OTg2MTU3MiwiZXhwIjoxNjk5OTQ3OTcyfQ.NXMzh75QAYsA0u7iU4T_ZgOqWjSK71YnSbioWnvs3PM"
+            },
+            "tests": []
+        }
+    ]
+}
