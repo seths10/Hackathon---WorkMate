@@ -151,6 +151,33 @@ export const getBookingByUserId = async (req: Request, res: Response) => {
   }
 };
 
+export const getDesksPerDay = async (req: Request, res: Response) => {
+  const { date } = req.params;
+
+  try {
+    // Find all desks that are available
+    const availableDesks = await Desk.find({ isAvailable: true }).exec();
+
+    // Check for reservations on the specified date
+    const reservations = await Booking.find({
+      startDate: { $lte: new Date(date) },
+      endDate: { $gte: new Date(date) },
+    }).exec();
+
+    // Filter out desks that have reservations on the specified date
+    const availableDesksOnDate = availableDesks.filter(desk =>
+      reservations.every(reservation => reservation.desk && reservation.desk.toString() !== desk._id.toString())
+    );
+
+    res.status(200).json({
+      success: true,
+      data: availableDesksOnDate,
+    });
+  } catch (err) {
+    res.status(500).send(`Internal Server Error`);
+  }
+};
+
 export const addBooking = async (req: Request, res: Response) => {
   const { user, desk, startDate, endDate, email } = req.body;
   try {
@@ -245,13 +272,13 @@ export const updateBooking = async (req: Request, res: Response) => {
       });
     }
 
-    const booking = await Booking.findOne({desk}).exec();
+    const booking = await Booking.findOne({ desk }).exec();
 
-    if (booking?.user?.userId !== userId){
+    if (booking?.user?.userId?.toString() !== userId) {
       return res.status(400).json({
         success: false,
-        data: "You did not book this desk"
-      })
+        data: "You did not book this desk",
+      });
     }
 
     await Desk.findOneAndUpdate({ name: desk }, { isAvailable: true }).exec();

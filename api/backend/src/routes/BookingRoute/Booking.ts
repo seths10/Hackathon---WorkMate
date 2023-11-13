@@ -10,6 +10,7 @@ import {
   addBooking,
   updateBooking,
   deleteBooking,
+  getDesksPerDay,
 } from "../../controllers/BookingController/Booking";
 
 const router = express.Router();
@@ -19,6 +20,8 @@ const router = express.Router();
 router.get("/desk", getAllDesks);
 
 router.get("/desk/:id", getDesk);
+
+router.get("/deskPerDay", getDesksPerDay);
 
 router.post("/desk", addDesk);
 
@@ -34,9 +37,7 @@ router.get("/user/:userId", getBookingByUserId);
 
 router.post("/", addBooking);
 
-// router.put("/", updateBooking);
-
-router.put("/:desk", updateBooking);
+router.put("/", updateBooking);
 
 router.delete("/:id", deleteBooking);
 
