@@ -8,7 +8,7 @@
 }
 
 .sidebar-container {
-  margin: 10px 0;
+  margin: 0px 0;
   display: flex;
   width: 100%;
 }
@@ -22,7 +22,7 @@
 .sidebar-option {
   display: flex;
   flex-direction: column;
-  margin: 10px 0;
+  margin: 0px 0;
   font-size: 14px;
 }
 
@@ -66,11 +66,11 @@ a:hover {
   display: flex;
   flex-direction: column;
   color: rgba(0, 0, 0, 0.534);
-  margin: 0px 20px;
+  margin: 0px 0px;
 }
 
 .tags > p {
-  margin: 5px 0;
+  margin: 5px 0px;
   cursor: pointer;
 }
 

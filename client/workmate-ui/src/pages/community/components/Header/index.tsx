@@ -9,7 +9,7 @@ function Header() {
   const last = userState?.data?.lastname;
 
   return (
-    <header>
+    <header className="border-b">
       <div className="flex flex-row items-center justify-between px-[8rem] w-full bg-[#fbfafa]">
         <div className="flex my-0 mx-10 items-center">
           <Link to="/">

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import "./css/Main.css";
 import AllQuestions from "./AllQuestions";
+import { ModalLoader } from "../../../../components/loaders/Loaders";
 
 export type Prop = {
   questions: [
@@ -14,9 +15,10 @@ export type Prop = {
       content: string;
     }
   ];
+  isLoading: boolean;
 };
 
-function Main({ questions }: Prop) {
+function Main({ questions, isLoading }: Prop) {
   return (
     <div className="main">
       <div className="main-container">
@@ -29,15 +31,25 @@ function Main({ questions }: Prop) {
           </Link>
         </div>
         <div className="main-desc">
-          <p>{questions?.length} questions</p>
+          {isLoading ? (
+            <span>0 questions</span>
+          ) : (
+            <p>{questions?.length} questions</p>
+          )}
         </div>
-        <div className="questions">
-          {questions?.map((que) => (
-            <div key={que._id} className="question">
-              <AllQuestions data={que} />
-            </div>
-          ))}
-        </div>
+        {isLoading ? (
+          <div>
+            <ModalLoader />
+          </div>
+        ) : (
+          <div className="questions">
+            {questions?.map((que) => (
+              <div key={que._id} className="question">
+                <AllQuestions data={que} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
