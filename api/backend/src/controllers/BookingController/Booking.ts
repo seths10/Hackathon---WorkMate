@@ -285,10 +285,15 @@ export const deleteBooking = async (req: Request, res: Response) => {
 
     const dsk = await Desk.findOne({ desk: booking.desk }).exec();
 
-    if (dsk) {
-      dsk.isAvailable = true;
-      await dsk?.save();
+    if (!dsk) {
+      return res.status(500).json({
+        success: false,
+        data: "Server side error"
+      })
     }
+
+    dsk.isAvailable = true;
+      await dsk?.save();
 
     await Booking.findByIdAndDelete(id).exec();
 
@@ -322,7 +327,9 @@ export const updateBooking = async (req: Request, res: Response) => {
       });
     }
 
-    await Desk.findOneAndUpdate({ name: desk }, { isAvailable: true }).exec();
+    dsk.isAvailable = true;
+    await dsk.save();
+    // await Desk.findOneAndUpdate({ name: desk }, { isAvailable: true }).exec();
 
     res.status(200).json({
       success: true,
