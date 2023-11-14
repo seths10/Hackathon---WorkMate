@@ -148,6 +148,8 @@ export const postAnswer = async (req: Request, res: Response) => {
       question.total_answers += 1;
     }
 
+    await question?.save();
+
     return res.status(201).json({
       success: true,
       data: answer,
