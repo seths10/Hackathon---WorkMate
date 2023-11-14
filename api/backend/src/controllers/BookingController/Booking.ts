@@ -194,7 +194,7 @@ export const getActiveBookings = async (req: Request, res: Response) => {
       endDate: { $gte: currentDate }, // Booking must end after or on the current date
     }).exec();
 
-    const dsk = await Desk.find({}).exec();
+    const dsk = await Desk.find({isAvailable: false}).exec();
 
     if (!activeBookings || activeBookings.length === 0) {
       return res.json({
@@ -203,9 +203,14 @@ export const getActiveBookings = async (req: Request, res: Response) => {
       });
     }
 
+    console.log(activeBookings, dsk)
+
     const availableActiveBookings = activeBookings.filter((bookngs) =>
-      dsk.every((desks) => desks.isAvailable && desks.name === bookngs.desk)
-    );
+  dsk.some((desks) => desks.name === bookngs.desk)
+);
+
+
+  console.log(availableActiveBookings);
 
     res.status(200).json({
       success: true,
