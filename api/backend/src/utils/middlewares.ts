@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import { secretKey } from "./secrets";
 
+// middleware function handling authorizations using token
 export const auth = (req: Request, res: Response, next: NextFunction) => {
   var token: any = req.headers.authorization || req.query.token;
 

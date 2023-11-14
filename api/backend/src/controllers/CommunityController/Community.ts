@@ -7,13 +7,14 @@ import Comment from "../../models/CommunityModel/Comment";
 export const postQuestion = async (req: Request, res: Response) => {
   const { title, content, tags, author, votes, views } = req.body;
   try {
-    if(!title || !content){
+    // check passed data
+    if (!title || !content) {
       return res.status(400).json({
         success: false,
-        data: "Provide the title and content of question"
-      })
+        data: "Provide the title and content of question",
+      });
     }
-    //   new question
+    // new question instance
     const newQuestion = new Question({
       title,
       content,
@@ -38,6 +39,7 @@ export const postQuestion = async (req: Request, res: Response) => {
 // get all questions from workmate
 export const getQuestions = async (req: Request, res: Response) => {
   try {
+    // get all questions with comments
     const question = await Question.find({}).populate("comments").exec();
     res.status(200).json({
       success: true,
@@ -52,6 +54,7 @@ export const getQuestions = async (req: Request, res: Response) => {
 export const getQuestionById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
+    // find a question by id with it's comment
     const question = await Question.findById(id).populate("comments").exec();
 
     if (!question) {
@@ -60,24 +63,6 @@ export const getQuestionById = async (req: Request, res: Response) => {
         data: "Question not found",
       });
     }
-    // const comment = await Comment.findById(question.comment);
-
-    // const resp = {
-    //   title: question.title,
-    //   content: question.content,
-    //   tags: question.tags,
-    //   total_answers: question.total_answers,
-    //   votes: question.votes,
-    //   views: question.views,
-    //   created_at: question.created_at,
-    //   _id: question.id,
-    //   comment: {
-    //     content: comment?.content,
-    //     question_id: comment?.question_id,
-    //     author: comment?.author,
-    //     created_at: comment?.created_at,
-    //   },
-    // };
 
     res.status(200).json({
       success: true,
@@ -94,6 +79,7 @@ export const deleteQuestionById = async (req: Request, res: Response) => {
   try {
     const question = await Question.findById(id);
 
+    // checking if question exists
     if (!question) {
       return res.status(404).json({
         success: false,
@@ -101,6 +87,7 @@ export const deleteQuestionById = async (req: Request, res: Response) => {
       });
     }
 
+    // removing the existing question
     await Question.findByIdAndDelete(id);
     res.status(200).json({
       success: true,
@@ -138,11 +125,11 @@ export const getAnswersByQuestionId = async (req: Request, res: Response) => {
 export const postAnswer = async (req: Request, res: Response) => {
   const { content, question_id, author } = req.body;
   try {
-    if(!content){
+    if (!content) {
       return res.status(400).json({
         success: false,
-        data: "Provide the content"
-      })
+        data: "Provide the content",
+      });
     }
 
     const newAnswer = new Answer({
@@ -152,10 +139,10 @@ export const postAnswer = async (req: Request, res: Response) => {
     });
 
     const answer = await newAnswer.save();
-    
-    const question = await Question.findById(question_id).exec()
 
-    if(question){
+    const question = await Question.findById(question_id).exec();
+
+    if (question) {
       question.total_answers += 1;
     }
 
@@ -196,13 +183,13 @@ export const postComment = async (req: Request, res: Response) => {
   const { question_id, author, content } = req.body;
 
   try {
-    if(!content){
+    if (!content) {
       return res.status(400).json({
         success: false,
-        data: "Provide the content"
-      })
+        data: "Provide the content",
+      });
     }
-    
+
     const newComment = new Comment({
       question_id,
       author,
