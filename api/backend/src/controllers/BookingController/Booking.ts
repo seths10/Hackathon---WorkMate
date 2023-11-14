@@ -204,7 +204,7 @@ export const getActiveBookings = async (req: Request, res: Response) => {
     }
 
     const availableActiveBookings = activeBookings.filter((bookngs) =>
-      dsk.every((desks) => desks.name && desks.name === bookngs.desk)
+      dsk.every((desks) => desks.isAvailable && desks.name === bookngs.desk)
     );
 
     res.status(200).json({
