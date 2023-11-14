@@ -188,14 +188,14 @@ export const getActiveBookings = async (req: Request, res: Response) => {
   try {
     const currentDate = new Date();
 
+    // get all bookings that are active for a particular user
     const activeBookings = await Booking.find({
       "user.userId": userId,
       startDate: { $lte: currentDate }, // Booking must start before or on the current date
       endDate: { $gte: currentDate }, // Booking must end after or on the current date
     }).exec();
 
-    const dsk = await Desk.find({ isAvailable: false }).exec();
-
+    
     if (!activeBookings || activeBookings.length === 0) {
       return res.json({
         success: false,
@@ -203,11 +203,13 @@ export const getActiveBookings = async (req: Request, res: Response) => {
       });
     }
 
+    // find all desks that are active / booked
+    const dsk = await Desk.find({ isAvailable: false }).exec();
+    
+    // find all available desks that are active
     const availableActiveBookings = activeBookings.filter((bookngs) =>
       dsk.some((desks) => desks.name === bookngs.desk)
     );
-
-    console.log(availableActiveBookings);
 
     res.status(200).json({
       success: true,
@@ -222,24 +224,6 @@ export const getActiveBookings = async (req: Request, res: Response) => {
 export const addBooking = async (req: Request, res: Response) => {
   const { user, desk, startDate, endDate, email } = req.body;
   try {
-    const dsk = await Desk.findOne({ name: desk }).exec();
-
-    if (!dsk) {
-      return res.status(404).json({
-        success: false,
-        data: "Desk not found",
-      });
-    }
-
-    if (!dsk.isAvailable) {
-      return res.status(400).json({
-        success: false,
-        data: "Desk is already booked",
-      });
-    }
-
-    const booking = new Booking({ user, desk, startDate, endDate });
-
     // Validate required fields
     if (!user || !desk || !startDate || !endDate) {
       return res.status(400).json({
@@ -248,10 +232,36 @@ export const addBooking = async (req: Request, res: Response) => {
       });
     }
 
+    // find desk by unique desk name
+    const dsk = await Desk.findOne({ name: desk }).exec();
+
+    // check desk existence
+    if (!dsk) {
+      return res.status(404).json({
+        success: false,
+        data: "Desk not found",
+      });
+    }
+
+    // check desk availability
+    if (!dsk.isAvailable) {
+      return res.status(400).json({
+        success: false,
+        data: "Desk is already booked",
+      });
+    }
+
+    // create a new desk booking instance
+    const booking = new Booking({ user, desk, startDate, endDate });
+
+
+    // save a booking for the selected desk
     await booking.save();
 
+    // change availability status for desk
     dsk.isAvailable = false;
 
+    // save the updated status
     await dsk.save();
 
     // Composed email message
@@ -262,6 +272,7 @@ export const addBooking = async (req: Request, res: Response) => {
       text: `You have booked ${desk} from ${startDate} to ${endDate}`,
     };
 
+    // send mail
     transporter.sendMail(message, async (error, info) => {
       if (error) {
         console.log(error);
