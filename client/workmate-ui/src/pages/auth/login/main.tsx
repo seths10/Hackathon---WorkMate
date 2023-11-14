@@ -71,7 +71,7 @@ const LoginScreen = () => {
                     autoComplete="current-email"
                     onChange={(e) => setEmail(e.target.value)}
                     id="input-group-1"
-                    className="bg-gray-50 border placeholder:px-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#D65627] focus:border-[#D65627] block w-full pl-10 p-2.5 "
+                    className="bg-gray-50 border ml-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#D65627] focus:border-[#D65627] block w-full pl-10 p-2.5 "
                     placeholder="name@amalitech.com"
                   ></input>
                 </div>
@@ -102,8 +102,8 @@ const LoginScreen = () => {
                   disabled={isLoading}
                   className={classNames(
                     isLoading
-                      ? "cursor-not-allowed mt-10 bg-black/40 flex flex-col items-center justify-center py-[8px] px-[6px] rounded-full w-full hover:bg-homeButton"
-                      : "flex flex-col items-center mt-10 justify-center bg-black py-[8px] px-[6px] rounded-full cursor-pointer w-full"
+                      ? "cursor-not-allowed mt-10 bg-[#D65627]/80 flex flex-col items-center justify-center py-[8px] px-[6px] rounded-full w-full hover:bg-homeButton"
+                      : "flex flex-col items-center mt-10 justify-center bg-[#D65627] py-[8px] px-[6px] rounded-full cursor-pointer w-full"
                   )}
                 >
                   {isLoading ? (
@@ -111,7 +111,7 @@ const LoginScreen = () => {
                       <ButtonLoader />
                     </div>
                   ) : (
-                    <div className="mx-2 font-bold text-center text-white bg-black text-md rounded-md">
+                    <div className="mx-2 font-bold text-center text-white bg-[#D65627] text-md rounded-md">
                       Login
                     </div>
                   )}

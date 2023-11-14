@@ -142,9 +142,13 @@ export const postAnswer = async (req: Request, res: Response) => {
 
     const question = await Question.findById(question_id).exec();
 
+    console.log(question)
+
     if (question) {
       question.total_answers += 1;
     }
+
+    await question?.save();
 
     return res.status(201).json({
       success: true,

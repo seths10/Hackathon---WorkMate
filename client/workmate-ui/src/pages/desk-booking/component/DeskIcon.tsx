@@ -5,17 +5,26 @@ import { ModalLoader } from "../../../components/loaders/Loaders";
 import { instance } from "../../../utils/axios-client";
 import Drawer from "./Drawer";
 
-type Prop = {
-  date: any;
-  setBookingHistory: any;
-  setActiveBookings: any;
-};
-
-const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
+const DeskIcon = () => {
   const [selectedId, setSelectedId] = useState<string>("");
-  const [, setAvailableDesks] = useState([]);
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [date] = useState(new Date());
   const [isloading, setLoading] = useState(false);
+
+  const [availableDesks, setAvailableDesks] = useState([
+    {
+      name: "",
+      _id: "",
+      facility: "",
+      location: "",
+      isAvailable: true,
+      created_at: "",
+    },
+  ]);
+
+  const toggleDrawer = () => {
+    setIsOpen((prevState) => !prevState);
+  };
 
   const handleShapeClick = (deskId: string) => {
     setSelectedId(deskId);
@@ -23,11 +32,19 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
 
   const handleEllipseClick = (event: React.MouseEvent<SVGEllipseElement>) => {
     const dataName = event.currentTarget.getAttribute("data-name");
-    if (dataName) {
-      toast.info(`Desk ${dataName} selected.`);
-      setDrawerOpen(true);
+    const isAvailable = availableDesks.some((desk) => desk.name === dataName);
+
+    if (isAvailable && dataName) {
       handleShapeClick(dataName);
+      toggleDrawer();
+    } else {
+      toast.error(`Desk ${dataName} is already booked.`);
     }
+  };
+
+  const getEllipseFill = (dataName: string) => {
+    const desk = availableDesks.find((desk) => desk.name === dataName);
+    return desk ? "fill-[#46b200]" : "fill-[#ff3b00]";
   };
 
   React.useEffect(() => {
@@ -40,7 +57,7 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
           setLoading(false);
         })
         .catch((err) => {
-          console.log(err);
+          toast.error(err?.response?.data?.message);
           setLoading(false);
         });
     }
@@ -50,12 +67,8 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
 
   return (
     <>
-      <Drawer
-        deskId={selectedId}
-        isOpen={isDrawerOpen}
-        setActiveBookings={setActiveBookings}
-        setBookingHistory={setBookingHistory}
-      />
+      <Drawer deskId={selectedId} isOpen={isOpen} toggleDrawer={toggleDrawer}/>
+
       {isloading ? (
         <div>
           <ModalLoader />
@@ -64,8 +77,8 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
         <div>
           <svg
             viewBox="0 3.27 1657.63 961.263"
-            shape-rendering="geometricPrecision"
-            text-rendering="geometricPrecision"
+            shapeRendering="geometricPrecision"
+            textRendering="geometricPrecision"
             xmlns="http://www.w3.org/2000/svg"
           >
             <rect
@@ -77,18 +90,18 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
               transform="matrix(1, 0, 0, 1, 14.26100063323976, 32.007999420166016)"
               fill="#eff7fa"
               stroke="#88a3b8"
-              stroke-width="10"
+              strokeWidth="10"
             />
             <text
               id="workmate-block-b-df-s-text1"
               dx="0"
               dy="0"
-              font-family='"Arial, sans-serif"'
-              font-size="32"
-              font-weight="700"
+              fontFamily='"Arial, sans-serif"'
+              fontSize="32"
+              fontWeight="700"
               transform="matrix(1.3847750425338745, 0, 0, 1.6769839525222778, 487.3762279655966, 697.6706036578207)"
             >
-              <tspan id="workmate-block-b-df-s-tspan1" y="0" font-weight="700">
+              <tspan id="workmate-block-b-df-s-tspan1" y="0" fontWeight="700">
                 Block B - Ground floor
               </tspan>
             </text>
@@ -159,25 +172,21 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   transform="translate(59.895 825.364)"
                   fill="#eff7fa"
                   stroke="#88a3b8"
-                  stroke-width="6"
+                  strokeWidth="6"
                 />
               </g>
               <text
                 id="workmate-block-b-df-s-text2"
                 dx="0"
                 dy="0"
-                font-family='"Arial, sans-serif"'
-                font-size="86"
-                font-weight="700"
+                fontFamily='"Arial, sans-serif"'
+                fontSize="86"
+                fontWeight="700"
                 transform="matrix(.298663 0 0 0.361702 821.588836 909.708941)"
                 fill="#333"
                 stroke="#88a3b8"
               >
-                <tspan
-                  id="workmate-block-b-df-s-tspan2"
-                  y="0"
-                  font-weight="700"
-                >
+                <tspan id="workmate-block-b-df-s-tspan2" y="0" fontWeight="700">
                   Unavailable Desk
                 </tspan>
               </text>
@@ -185,18 +194,14 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-s-text3"
                 dx="0"
                 dy="0"
-                font-family='"Arial, sans-serif"'
-                font-size="86"
-                font-weight="700"
+                fontFamily='"Arial, sans-serif"'
+                fontSize="86"
+                fontWeight="700"
                 transform="matrix(.298663 0 0 0.361702 508.30945 908.70894)"
                 fill="#333"
                 stroke="#88a3b8"
               >
-                <tspan
-                  id="workmate-block-b-df-s-tspan3"
-                  y="0"
-                  font-weight="700"
-                >
+                <tspan id="workmate-block-b-df-s-tspan3" y="0" fontWeight="700">
                   Available Desk
                 </tspan>
               </text>
@@ -216,17 +221,13 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text"
                 dx="0"
                 dy="0"
-                font-family='"Arial, sans-serif"'
-                font-size="32"
-                font-weight="700"
+                fontFamily='"Arial, sans-serif"'
+                fontSize="32"
+                fontWeight="700"
                 transform="translate(1173.588796 303.005548)"
                 fill="#0e0e0e"
               >
-                <tspan
-                  id="workmate-block-b-df-s-tspan4"
-                  y="0"
-                  font-weight="700"
-                >
+                <tspan id="workmate-block-b-df-s-tspan4" y="0" fontWeight="700">
                   Conference Room
                 </tspan>
               </text>
@@ -234,17 +235,13 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text-2"
                 dx="0"
                 dy="0"
-                font-family='"Arial, sans-serif"'
-                font-size="32"
-                font-weight="700"
+                fontFamily='"Arial, sans-serif"'
+                fontSize="32"
+                fontWeight="700"
                 transform="translate(1183.715804 653.504108)"
                 fill="#0e0e0e"
               >
-                <tspan
-                  id="workmate-block-b-df-s-tspan5"
-                  y="0"
-                  font-weight="700"
-                >
+                <tspan id="workmate-block-b-df-s-tspan5" y="0" fontWeight="700">
                   Kitchen &amp; Wash Room
                 </tspan>
               </text>
@@ -266,7 +263,7 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   transform="translate(71.486501 114.503)"
                   fill="#fff"
                   stroke="#dde5eb"
-                  stroke-width="8"
+                  strokeWidth="8"
                 />
                 <line
                   id="workmate-block-b-df-s-line1"
@@ -277,7 +274,7 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   transform="translate(144.7325 325.4575)"
                   fill="none"
                   stroke="#9fb3c2"
-                  stroke-width="7"
+                  strokeWidth="7"
                 />
                 <line
                   id="workmate-block-b-df-s-line2"
@@ -288,7 +285,7 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   transform="translate(147.66675 392.5965)"
                   fill="none"
                   stroke="#88a3b8"
-                  stroke-width="3"
+                  strokeWidth="3"
                 />
                 <line
                   id="workmate-block-b-df-s-line3"
@@ -299,57 +296,66 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   transform="translate(144.514349 254.388)"
                   fill="none"
                   stroke="#88a3b8"
-                  stroke-width="3"
+                  strokeWidth="3"
                 />
               </g>
               <ellipse
                 onClick={handleEllipseClick}
                 data-name="AM-B-DF-R1-D6"
                 cursor={"pointer"}
-                className={"hover:fill-blue-300 drawer-open"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R1-D6"
+                )}`}
                 id="workmate-block-b-df-u-r1d6"
                 rx="13.48575"
                 ry="13.48575"
                 transform="translate(245.491921 176.169807)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
 
               <ellipse
                 onClick={handleEllipseClick}
                 data-name="AM-B-DF-R1-D5"
                 cursor={"pointer"}
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R1-D5"
+                )}`}
                 id="workmate-block-b-df-u-r1d5"
                 rx="13.48575"
                 ry="13.48575"
                 transform="translate(245.491921 319.169807)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
 
               <ellipse
                 onClick={handleEllipseClick}
                 data-name="AM-B-DF-R1-D4"
                 cursor={"pointer"}
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R1-D4"
+                )}`}
                 id="workmate-block-b-df-u-r1d4"
                 rx="13.48575"
                 ry="13.48575"
                 transform="translate(245.491921 455.169807)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
 
               <ellipse
                 data-name="AM-B-DF-R1-D3"
                 id="workmate-block-b-df-u-r1d3"
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R1-D3"
+                )}`}
                 rx="13.48575"
                 ry="13.48575"
                 transform="matrix(-.999363-.035684 0.035684-.999363 118.822047 456.068088)"
                 fill="#d2dbed"
                 cursor={"pointer"}
-                stroke-width="0"
+                strokeWidth="0"
                 onClick={handleEllipseClick}
               />
 
@@ -357,17 +363,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text-22"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 145.187474 415.127947)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan6"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 3
                 </tspan>
@@ -376,29 +382,31 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 onClick={handleEllipseClick}
                 data-name="AM-B-DF-R1-D2"
                 cursor={"pointer"}
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R1-D2"
+                )}`}
                 id="workmate-block-b-df-u-r1d2"
                 rx="13.48575"
                 ry="13.48575"
                 transform="matrix(-.999363-.035684 0.035684-.999363 118.822047 315.068088)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
               <text
                 id="workmate-block-b-df-u-copy-of-text2"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 145.187474 276.127947)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan7"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 2
                 </tspan>
@@ -406,30 +414,32 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
               <ellipse
                 onClick={handleEllipseClick}
                 data-name="AM-B-DF-R1-D1"
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R1-D1"
+                )}`}
                 cursor={"pointer"}
                 id="workmate-block-b-df-u-r1d1"
                 rx="13.48575"
                 ry="13.48575"
                 transform="matrix(-.999363-.035684 0.035684-.999363 118.822047 176.068088)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
               <text
                 id="workmate-block-b-df-s-text4"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 145.187474 137.127947)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan8"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 1
                 </tspan>
@@ -438,17 +448,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text-4"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 212.002719 275.154939)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan9"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 5
                 </tspan>
@@ -456,25 +466,25 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   id="workmate-block-b-df-s-tspan10"
                   x="0"
                   y="40"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 ></tspan>
               </text>
               <text
                 id="workmate-block-b-df-u-copy-of-text-3"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 212.002719 412.154939)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan11"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 4
                 </tspan>
@@ -483,17 +493,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text-5"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 212.002719 134.154939)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan12"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 6
                 </tspan>
@@ -501,8 +511,8 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   id="workmate-block-b-df-s-tspan13"
                   x="0"
                   y="40"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 ></tspan>
               </text>
             </g>
@@ -523,7 +533,7 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   transform="translate(71.486501 114.503)"
                   fill="#fff"
                   stroke="#dde5eb"
-                  stroke-width="8"
+                  strokeWidth="8"
                 />
                 <line
                   id="workmate-block-b-df-s-line4"
@@ -534,7 +544,7 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   transform="translate(144.7325 325.4575)"
                   fill="none"
                   stroke="#9fb3c2"
-                  stroke-width="7"
+                  strokeWidth="7"
                 />
                 <line
                   id="workmate-block-b-df-s-line5"
@@ -545,7 +555,7 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   transform="translate(147.66675 392.5965)"
                   fill="none"
                   stroke="#88a3b8"
-                  stroke-width="3"
+                  strokeWidth="3"
                 />
                 <line
                   id="workmate-block-b-df-s-line6"
@@ -556,7 +566,7 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   transform="translate(144.514349 254.388)"
                   fill="none"
                   stroke="#88a3b8"
-                  stroke-width="3"
+                  strokeWidth="3"
                 />
               </g>
               <ellipse
@@ -565,11 +575,13 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 cursor={"pointer"}
                 id="workmate-block-b-df-u-r2d6"
                 rx="13.48575"
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R2-D6"
+                )}`}
                 ry="13.48575"
                 transform="translate(245.491921 176.169807)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
 
               <ellipse
@@ -579,10 +591,12 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 cursor={"pointer"}
                 rx="13.48575"
                 ry="13.48575"
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R2-D5"
+                )}`}
                 transform="translate(245.491921 319.169807)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
 
               <ellipse
@@ -590,12 +604,14 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 data-name="AM-B-DF-R2-D4"
                 id="workmate-block-b-df-u-r2d4"
                 rx="13.48575"
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R2-D4"
+                )}`}
                 ry="13.48575"
                 cursor={"pointer"}
                 transform="translate(245.491921 455.169807)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
 
               <ellipse
@@ -604,11 +620,13 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-r2d3"
                 rx="13.48575"
                 cursor={"pointer"}
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R2-D3"
+                )}`}
                 ry="13.48575"
                 transform="matrix(-.999363-.035684 0.035684-.999363 118.822047 456.068088)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
 
               <ellipse
@@ -617,23 +635,27 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-r2d2"
                 rx="13.48575"
                 cursor={"pointer"}
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R2-D2"
+                )}`}
                 ry="13.48575"
                 transform="matrix(-.999363-.035684 0.035684-.999363 118.822047 315.068088)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
               <ellipse
                 onClick={handleEllipseClick}
                 data-name="AM-B-DF-R2-D1"
                 id="workmate-block-b-df-u-r2d1"
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R2-D1"
+                )}`}
                 rx="13.48575"
                 ry="13.48575"
                 cursor={"pointer"}
                 transform="matrix(-.999363-.035684 0.035684-.999363 118.822047 176.068088)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
             </g>
             <g
@@ -653,7 +675,7 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   transform="translate(71.486501 114.503)"
                   fill="#fff"
                   stroke="#dde5eb"
-                  stroke-width="8"
+                  strokeWidth="8"
                 />
                 <line
                   id="workmate-block-b-df-s-line7"
@@ -664,7 +686,7 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   transform="translate(144.7325 325.4575)"
                   fill="none"
                   stroke="#9fb3c2"
-                  stroke-width="7"
+                  strokeWidth="7"
                 />
                 <line
                   id="workmate-block-b-df-s-line8"
@@ -675,7 +697,7 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   transform="translate(147.66675 392.5965)"
                   fill="none"
                   stroke="#88a3b8"
-                  stroke-width="3"
+                  strokeWidth="3"
                 />
                 <line
                   id="workmate-block-b-df-s-line9"
@@ -686,7 +708,7 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   transform="translate(144.514349 254.388)"
                   fill="none"
                   stroke="#88a3b8"
-                  stroke-width="3"
+                  strokeWidth="3"
                 />
               </g>
               <ellipse
@@ -695,11 +717,13 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-r3d6"
                 rx="13.48575"
                 cursor={"pointer"}
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R3-D6"
+                )}`}
                 ry="13.48575"
                 transform="translate(245.491921 176.169807)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
 
               <ellipse
@@ -708,11 +732,13 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-r3d5"
                 rx="13.48575"
                 ry="13.48575"
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R3-D5"
+                )}`}
                 cursor={"pointer"}
                 transform="translate(245.491921 319.169807)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
 
               <ellipse
@@ -721,11 +747,13 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 cursor={"pointer"}
                 id="workmate-block-b-df-u-r3d4"
                 rx="13.48575"
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R3-D4"
+                )}`}
                 ry="13.48575"
                 transform="translate(245.491921 455.169807)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
 
               <ellipse
@@ -733,12 +761,14 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 data-name="AM-B-DF-R3-D3"
                 id="workmate-block-b-df-u-r3d3"
                 rx="13.48575"
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R3-D3"
+                )}`}
                 ry="13.48575"
                 cursor={"pointer"}
                 transform="matrix(-.999363-.035684 0.035684-.999363 118.822047 456.068088)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
 
               <ellipse
@@ -746,12 +776,14 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 data-name="AM-B-DF-R3-D2"
                 id="workmate-block-b-df-u-r3d2"
                 rx="13.48575"
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R3-D2"
+                )}`}
                 cursor={"pointer"}
                 ry="13.48575"
                 transform="matrix(-.999363-.035684 0.035684-.999363 118.822047 315.068088)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
               <ellipse
                 onClick={handleEllipseClick}
@@ -759,11 +791,13 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-r3d1"
                 rx="13.48575"
                 ry="13.48575"
-                className={"hover:fill-blue-300"}
+                className={`hover:fill-blue-300 ${getEllipseFill(
+                  "AM-B-DF-R3-D1"
+                )}`}
                 cursor={"pointer"}
                 transform="matrix(-.999363-.035684 0.035684-.999363 118.822047 176.068088)"
                 fill="#d2dbed"
-                stroke-width="0"
+                strokeWidth="0"
               />
             </g>
             <g
@@ -774,17 +808,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text3"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 500.187474 137.127947)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan14"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 1
                 </tspan>
@@ -793,17 +827,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text-23"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 500.187474 276.127947)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan15"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 2
                 </tspan>
@@ -812,17 +846,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text-32"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 500.187474 415.127947)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan16"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 3
                 </tspan>
@@ -831,17 +865,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text-42"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 567.002719 412.154939)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan17"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 4
                 </tspan>
@@ -850,17 +884,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text-52"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 567.002719 275.154939)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan18"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 5
                 </tspan>
@@ -868,25 +902,25 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   id="workmate-block-b-df-s-tspan19"
                   x="0"
                   y="40"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 ></tspan>
               </text>
               <text
                 id="workmate-block-b-df-u-copy-of-text-6"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 567.002719 134.154939)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan20"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 6
                 </tspan>
@@ -894,8 +928,8 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   id="workmate-block-b-df-s-tspan21"
                   x="0"
                   y="40"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 ></tspan>
               </text>
             </g>
@@ -907,17 +941,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text4"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 500.187474 137.127947)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan22"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 1
                 </tspan>
@@ -926,17 +960,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text-24"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 500.187474 276.127947)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan23"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 2
                 </tspan>
@@ -945,17 +979,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text-33"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 500.187474 415.127947)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan24"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 3
                 </tspan>
@@ -964,17 +998,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text-43"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 567.002719 412.154939)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan25"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 4
                 </tspan>
@@ -983,17 +1017,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                 id="workmate-block-b-df-u-copy-of-text-53"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 567.002719 275.154939)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan26"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 5
                 </tspan>
@@ -1001,25 +1035,25 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   id="workmate-block-b-df-s-tspan27"
                   x="0"
                   y="40"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 ></tspan>
               </text>
               <text
                 id="workmate-block-b-df-u-copy-of-text-62"
                 dx="0"
                 dy="0"
-                font-family='"workmate-block-b-df:::Roboto"'
-                font-size="20"
-                font-weight="400"
+                fontFamily='"workmate-block-b-df:::Roboto"'
+                fontSize="20"
+                fontWeight="400"
                 transform="matrix(.000741 1-1 0.000741 567.002719 134.154939)"
-                stroke-width="0"
+                strokeWidth="0"
               >
                 <tspan
                   id="workmate-block-b-df-s-tspan28"
                   y="0"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 >
                   DESK 6
                 </tspan>
@@ -1027,8 +1061,8 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
                   id="workmate-block-b-df-s-tspan29"
                   x="0"
                   y="40"
-                  font-weight="400"
-                  stroke-width="0"
+                  fontWeight="400"
+                  strokeWidth="0"
                 ></tspan>
               </text>
             </g>
@@ -1036,17 +1070,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
               id="workmate-block-b-df-s-text5"
               dx="0"
               dy="0"
-              font-family='"workmate-block-b-df:::Roboto"'
-              font-size="31"
-              font-weight="700"
+              fontFamily='"workmate-block-b-df:::Roboto"'
+              fontSize="31"
+              fontWeight="700"
               transform="matrix(1, 0, 0, 1, 148.5454559326172, 557.4760131835938)"
-              stroke-width="0"
+              strokeWidth="0"
             >
               <tspan
                 id="workmate-block-b-df-s-tspan30"
                 y="0"
-                font-weight="700"
-                stroke-width="0"
+                fontWeight="700"
+                strokeWidth="0"
               >
                 Row One
               </tspan>
@@ -1055,17 +1089,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
               id="workmate-block-b-df-u-copy-of-text5"
               dx="0"
               dy="0"
-              font-family='"workmate-block-b-df:::Roboto"'
-              font-size="31"
-              font-weight="700"
+              fontFamily='"workmate-block-b-df:::Roboto"'
+              fontSize="31"
+              fontWeight="700"
               transform="matrix(1, 0, 0, 1, 476.1927795410156, 557.4760131835938)"
-              stroke-width="0"
+              strokeWidth="0"
             >
               <tspan
                 id="workmate-block-b-df-s-tspan31"
                 y="0"
-                font-weight="700"
-                stroke-width="0"
+                fontWeight="700"
+                strokeWidth="0"
               >
                 Row Two
               </tspan>
@@ -1074,17 +1108,17 @@ const DeskIcon = ({ date, setActiveBookings, setBookingHistory }: Prop) => {
               id="workmate-block-b-df-u-copy-of-text-25"
               dx="0"
               dy="0"
-              font-family='"workmate-block-b-df:::Roboto"'
-              font-size="31"
-              font-weight="700"
+              fontFamily='"workmate-block-b-df:::Roboto"'
+              fontSize="31"
+              fontWeight="700"
               transform="matrix(1, 0, 0, 1, 806.2781372070312, 557.4760131835938)"
-              stroke-width="0"
+              strokeWidth="0"
             >
               <tspan
                 id="workmate-block-b-df-s-tspan32"
                 y="0"
-                font-weight="700"
-                stroke-width="0"
+                fontWeight="700"
+                strokeWidth="0"
               >
                 Row Three
               </tspan>

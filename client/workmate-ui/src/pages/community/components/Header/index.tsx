@@ -13,7 +13,7 @@ function Header() {
       <div className="flex flex-row items-center justify-between px-[8rem] w-full bg-[#fbfafa]">
         <div className="flex my-0 mx-10 items-center">
           <Link to="/">
-            <p className="font-bold text-xl text-gray-800">WorkMate.</p>
+            <p className="font-bold text-xl animate-wiggle animate-once animate-ease-in-out text-gray-800">WorkMate.</p>
           </Link>
         </div>
 

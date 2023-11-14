@@ -109,7 +109,7 @@ function MainQuestion() {
           setQuestionData(res?.data?.data);
           setIsLoading(false);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => toast.error(err?.response?.data?.message));
     }
 
     async function getComments() {
@@ -118,7 +118,7 @@ function MainQuestion() {
         .then((res) => {
           setCommentData(res?.data?.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => toast.error(err?.response?.data?.message));
     }
 
     async function getAnswers() {
@@ -127,7 +127,7 @@ function MainQuestion() {
         .then((res) => {
           setAnswerData(res?.data?.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => toast.error(err?.response?.data?.message));
     }
 
     getAnswers();
@@ -139,14 +139,14 @@ function MainQuestion() {
     await instance
       .get(`/api/community/answer/${id}`)
       .then((res) => setAnswerData(res?.data?.data))
-      .catch((err) => console.log(err));
+      .catch((err) => toast.error(err?.response?.data?.message));
   }
 
   async function getUpdatedComment() {
     await instance
       .get(`/api/community/comment/${id}`)
       .then((res) => setCommentData(res?.data?.data))
-      .catch((err) => console.log(err));
+      .catch((err) => toast.error(err?.response?.data?.message));
   }
 
   const handleSubmit = async () => {
@@ -172,7 +172,7 @@ function MainQuestion() {
         setAnswer("");
         getUpdatedAnswer();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => toast.error(err?.response?.data?.message));
   };
 
   const handleComment = async () => {
