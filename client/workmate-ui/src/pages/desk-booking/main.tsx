@@ -52,8 +52,7 @@ const DeskBooking = () => {
           setBookingHistory(res?.data?.data);
           setLoading(false);
         })
-        .catch((err) => {
-          toast.error(err?.response?.data?.message);
+        .catch(() => {
           setLoading(false);
         });
     }
@@ -65,8 +64,7 @@ const DeskBooking = () => {
           setActiveBookings(res?.data?.data);
           setLoading(false);
         })
-        .catch((err) => {
-          toast.error(err?.response?.data?.message);
+        .catch(() => {
           setLoading(false);
         });
     }
@@ -79,14 +77,14 @@ const DeskBooking = () => {
     await instance
       .get(`/api/bookings/active/${userState?.data?.id}`)
       .then((res) => setActiveBookings(res?.data?.data))
-      .catch((err) => toast.error(err?.response?.data?.message));
+      .catch(() => {});
   }
 
   async function getUpdatedBookingHistory() {
     await instance
       .get(`/api/bookings/user/${userState?.data?.id}`)
       .then((res) => setBookingHistory(res?.data?.data))
-      .catch((err) => toast.error(err?.response?.data?.message));
+      .catch(() => {});
   }
 
   const handleDeleteBooking = async (id: any) => {
@@ -96,7 +94,7 @@ const DeskBooking = () => {
         getUpdatedBookingHistory();
         toast.success("Booking Deleted successfully");
       })
-      .catch((err) => toast.error(err?.response?.data?.message));
+      .catch(() => {});
   };
 
   const handleUnBooking = async (deskName: string) => {
@@ -111,7 +109,7 @@ const DeskBooking = () => {
         getUpdatedActiveBookings();
         toast.success("Booking Cancelled successfully");
       })
-      .catch((err) => toast.error(err?.response?.data?.message));
+      .catch(() => {});
   };
 
   React.useEffect(() => {
@@ -126,7 +124,9 @@ const DeskBooking = () => {
           <div className="px-[5rem] mb-2 bg-[#6b4b4005] border-b">
             <div className="flex items-center justify-between py-[0.8rem]">
               <Link to={LANDING}>
-                <h1 className="font-bold text-xl text-gray-800">WorkMate.</h1>
+                <h1 className="font-bold animate-wiggle animate-once animate-ease-in-out text-xl text-gray-800">
+                  WorkMate.
+                </h1>
               </Link>
               <Avatar size="40" name={fullName} round />
             </div>
@@ -226,14 +226,14 @@ const DeskBooking = () => {
                 <div className="bg-gray-200 rounded py-3 px-3">
                   {loading ? (
                     <div className="flex bg-white px-3 gap-2 rounded-lg items-center justify-center border border-gray-100">
-                    <div className="flex flex-col gap-2 border-r  py-2 px-2">
-                      <div className="text-xs w-[7rem] bg-gray-100 h-2.5"></div>
-                      <div className="text-xs w-[10rem] bg-gray-100 h-2.5"></div>
-                      <div className="text-xs w-[10rem] bg-gray-100 h-2.5"></div>
-                    </div>
+                      <div className="flex flex-col gap-2 border-r  py-2 px-2">
+                        <div className="text-xs w-[7rem] bg-gray-100 h-2.5"></div>
+                        <div className="text-xs w-[10rem] bg-gray-100 h-2.5"></div>
+                        <div className="text-xs w-[10rem] bg-gray-100 h-2.5"></div>
+                      </div>
 
-                    <p className="w-[1rem] bg-gray-100 h-2"></p>
-                  </div>
+                      <p className="w-[1rem] bg-gray-100 h-2"></p>
+                    </div>
                   ) : bookingHistory.length > 0 ? (
                     bookingHistory.map((book) => (
                       <div
