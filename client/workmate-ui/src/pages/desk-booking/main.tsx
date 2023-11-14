@@ -6,7 +6,7 @@ import { capitalizeFirstWord, getDateFromISOString } from "../../utils/utils";
 import { Greetings } from "../../components/greetings";
 import { instance } from "../../utils/axios-client";
 import { Link } from "react-router-dom";
-import { ArrowPathIcon } from "@heroicons/react/24/solid";
+import { ArrowPathIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { LANDING } from "../../navigation/routes-constants";
 import { toast } from "sonner";
 import DeskIcon from "./component/DeskIcon";
@@ -99,14 +99,14 @@ const DeskBooking = () => {
       .catch((err) => toast.error(err?.response?.data?.message));
   };
 
-  const handleUnBooking = async (id: any) => {
+  const handleUnBooking = async (deskName: string) => {
     const body = {
-      desk: id,
+      desk: deskName,
       userId: userState?.data?.id,
     };
 
     await instance
-      .put(`/api/bookings/${id}`, body)
+      .put(`/api/bookings/`, body)
       .then(() => {
         getUpdatedActiveBookings();
         toast.success("Booking Cancelled successfully");
@@ -172,22 +172,22 @@ const DeskBooking = () => {
                 </div>
                 <div className="bg-gray-200 rounded py-3 px-3">
                   {loading ? (
-                    <div className="flex bg-white px-3 py-2 gap-2 rounded-lg items-center border border-gray-100">
-                      <div className="flex flex-col gap-2 border-r px-2">
+                    <div className="flex bg-white px-3 gap-2 rounded-lg items-center justify-center border border-gray-100">
+                      <div className="flex flex-col gap-2 border-r  py-2 px-2">
+                        <div className="text-xs w-[7rem] bg-gray-100 h-2.5"></div>
                         <div className="text-xs w-[10rem] bg-gray-100 h-2.5"></div>
-                        <div className="text-xs w-[15rem] bg-gray-100 h-2.5"></div>
-                        <div className="text-xs w-[15rem] bg-gray-100 h-2.5"></div>
+                        <div className="text-xs w-[10rem] bg-gray-100 h-2.5"></div>
                       </div>
 
-                      <p className="w-[2rem] bg-gray-100 h-2.5"></p>
+                      <p className="w-[1rem] bg-gray-100 h-2"></p>
                     </div>
                   ) : activeBookings.length > 0 ? (
                     activeBookings.map((book) => (
                       <div
                         key={book?._id}
-                        className="flex bg-white px-3 py-2 gap-2 rounded-lg items-center border border-gray-100"
+                        className="flex bg-white mb-3 px-3  gap-2 rounded-lg items-center border border-gray-100"
                       >
-                        <div className="border-r pr-2">
+                        <div className="border-r pr-2 py-2">
                           <p className="text-xs">
                             <span className="text-xs">Desk Name:</span>{" "}
                             {book?.desk}
@@ -202,10 +202,10 @@ const DeskBooking = () => {
                           </p>
                         </div>
                         <p
-                          onClick={() => handleUnBooking(book?._id)}
+                          onClick={() => handleUnBooking(book?.desk)}
                           className="text-red-400 cursor-pointer hover:text-red-500 text-xs"
                         >
-                          Cancel
+                          <TrashIcon className="w-4 h-4 text-gray-400 hover:text-gray-500" />
                         </p>
                       </div>
                     ))
@@ -225,18 +225,22 @@ const DeskBooking = () => {
                 </div>
                 <div className="bg-gray-200 rounded py-3 px-3">
                   {loading ? (
-                    <div className="flex flex-col gap-2 animate-pulse bg-white rounded-lg px-3 py-2">
+                    <div className="flex bg-white px-3 gap-2 rounded-lg items-center justify-center border border-gray-100">
+                    <div className="flex flex-col gap-2 border-r  py-2 px-2">
+                      <div className="text-xs w-[7rem] bg-gray-100 h-2.5"></div>
                       <div className="text-xs w-[10rem] bg-gray-100 h-2.5"></div>
-                      <div className="text-xs w-[15rem] bg-gray-100 h-2.5"></div>
-                      <div className="text-xs w-[15rem] bg-gray-100 h-2.5"></div>
+                      <div className="text-xs w-[10rem] bg-gray-100 h-2.5"></div>
                     </div>
+
+                    <p className="w-[1rem] bg-gray-100 h-2"></p>
+                  </div>
                   ) : bookingHistory.length > 0 ? (
                     bookingHistory.map((book) => (
                       <div
                         key={book?._id}
-                        className="flex bg-white px-3 py-2 gap-2 rounded-lg items-center border border-gray-100"
+                        className="flex bg-white mb-3 px-3 gap-2 rounded-lg items-center border border-gray-100"
                       >
-                        <div className="border-r pr-2">
+                        <div className="border-r py-2 pr-2">
                           <p className="text-xs">
                             <span className="text-xs">Desk Name:</span>{" "}
                             {book?.desk}
@@ -250,12 +254,13 @@ const DeskBooking = () => {
                             {getDateFromISOString(book?.endDate)}
                           </p>
                         </div>
-                        <p
+
+                        <div
                           onClick={() => handleDeleteBooking(book?._id)}
                           className="text-red-400 cursor-pointer hover:text-red-500 text-xs"
                         >
-                          Delete
-                        </p>
+                          <TrashIcon className="w-4 h-4 text-gray-400 hover:text-gray-500" />
+                        </div>
                       </div>
                     ))
                   ) : (
