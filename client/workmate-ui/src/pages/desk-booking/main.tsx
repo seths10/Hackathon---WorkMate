@@ -15,9 +15,6 @@ import Avatar from "react-avatar";
 const DeskBooking = () => {
   const { userState } = useAuthContext();
   const [loading, setLoading] = React.useState(false);
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [text, setText] = React.useState("");
-
   const fullName = userState?.data?.firstname + " " + userState?.data?.lastname;
 
   const [bookingHistory, setBookingHistory] = React.useState([
@@ -46,10 +43,6 @@ const DeskBooking = () => {
     },
   ]);
 
-  const handleClick = () => {
-    setIsOpen(!isOpen);
-  };
-
   React.useEffect(() => {
     setLoading(true);
     async function getBookingHistory() {
@@ -69,7 +62,7 @@ const DeskBooking = () => {
       await instance
         .get(`/api/bookings/active/${userState?.data?.id}`)
         .then((res) => {
-          setText(res?.data?.data);
+          setActiveBookings(res?.data?.data);
           setLoading(false);
         })
         .catch((err) => {
@@ -85,7 +78,7 @@ const DeskBooking = () => {
   async function getUpdatedActiveBookings() {
     await instance
       .get(`/api/bookings/active/${userState?.data?.id}`)
-      .then((res) => setText(res?.data?.data))
+      .then((res) => setActiveBookings(res?.data?.data))
       .catch((err) => toast.error(err?.response?.data?.message));
   }
 
@@ -189,35 +182,34 @@ const DeskBooking = () => {
                       <p className="w-[2rem] bg-gray-100 h-2.5"></p>
                     </div>
                   ) : activeBookings.length > 0 ? (
-                    <p>{text}</p>
+                    activeBookings.map((book) => (
+                      <div
+                        key={book?._id}
+                        className="flex bg-white px-3 py-2 gap-2 rounded-lg items-center border border-gray-100"
+                      >
+                        <div className="border-r pr-2">
+                          <p className="text-xs">
+                            <span className="text-xs">Desk Name:</span>{" "}
+                            {book?.desk}
+                          </p>
+                          <p className="text-xs">
+                            <span className="text-xs">Start Date:</span>{" "}
+                            {getDateFromISOString(book?.startDate)}
+                          </p>
+                          <p className="text-xs">
+                            <span className="text-xs">End Date:</span>{" "}
+                            {getDateFromISOString(book?.endDate)}
+                          </p>
+                        </div>
+                        <p
+                          onClick={() => handleUnBooking(book?._id)}
+                          className="text-red-400 cursor-pointer hover:text-red-500 text-xs"
+                        >
+                          Cancel
+                        </p>
+                      </div>
+                    ))
                   ) : (
-                    // activeBookings.map((book) => (
-                    //   <div
-                    //     key={book?._id}
-                    //     className="flex bg-white px-3 py-2 gap-2 rounded-lg items-center border border-gray-100"
-                    //   >
-                    //     <div className="border-r pr-2">
-                    //       <p className="text-xs">
-                    //         <span className="text-xs">Desk Name:</span>{" "}
-                    //         {book?.desk}
-                    //       </p>
-                    //       <p className="text-xs">
-                    //         <span className="text-xs">Start Date:</span>{" "}
-                    //         {getDateFromISOString(book?.startDate)}
-                    //       </p>
-                    //       <p className="text-xs">
-                    //         <span className="text-xs">End Date:</span>{" "}
-                    //         {getDateFromISOString(book?.endDate)}
-                    //       </p>
-                    //     </div>
-                    //     <p
-                    //       onClick={() => handleUnBooking(book?._id)}
-                    //       className="text-red-400 cursor-pointer hover:text-red-500 text-xs"
-                    //     >
-                    //       Cancel
-                    //     </p>
-                    //   </div>
-                    // ))
                     <div className="text-gray-700">No Active Bookings</div>
                   )}
                 </div>
