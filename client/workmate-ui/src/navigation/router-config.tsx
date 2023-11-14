@@ -11,6 +11,7 @@ import {
   VIEW_QUESTION,
 } from "./routes-constants";
 import { TopLoader } from "../components/loaders/Loaders";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 // lazy imports for pages
 const LoginScreen = React.lazy(() => import("../pages/auth/login"));
@@ -27,23 +28,22 @@ const HomepageScreen = React.lazy(() => import("../pages/homepage"));
 const NotFoundScreen = React.lazy(() => import("../pages/not-found"));
 
 const RouterConfig = () => {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const { userState } = useAuthContext();
 
   return (
     <React.Fragment>
       <React.Suspense fallback={TopLoader()}>
         <Routes>
           <Route
+            index
             path={LANDING}
             element={
-              user ? (
+              userState?.data ? (
                 <React.Suspense fallback={TopLoader()}>
                   <HomepageScreen />
                 </React.Suspense>
               ) : (
-                <div>
-                  <Navigate to={LOGIN} />
-                </div>
+                <Navigate to={LOGIN} />
               )
             }
           />
@@ -51,7 +51,7 @@ const RouterConfig = () => {
           <Route
             path={APP_COMMUNITY}
             element={
-              user ? (
+              userState?.data ? (
                 <React.Suspense fallback={TopLoader()}>
                   <CommunityScreen />
                 </React.Suspense>
@@ -63,7 +63,7 @@ const RouterConfig = () => {
           <Route
             path={APP_DESK_BOOKING}
             element={
-              user ? (
+              userState?.data ? (
                 <React.Suspense fallback={TopLoader()}>
                   <DeskBookingScreen />
                 </React.Suspense>
@@ -75,7 +75,7 @@ const RouterConfig = () => {
           <Route
             path={VIEW_QUESTION}
             element={
-              user ? (
+              userState?.data ? (
                 <React.Suspense fallback={TopLoader()}>
                   <ViewQuestionScreen />
                 </React.Suspense>
@@ -87,7 +87,7 @@ const RouterConfig = () => {
           <Route
             path={ASK_QUESTION}
             element={
-              user ? (
+              userState?.data ? (
                 <React.Suspense fallback={TopLoader()}>
                   <AskQuestionScreen />
                 </React.Suspense>
@@ -98,13 +98,16 @@ const RouterConfig = () => {
           />
 
           <Route
-            index
             path={LOGIN}
-            element={!user ? <LoginScreen /> : <Navigate to={LOGIN} />}
+            element={
+              !userState?.data ? <LoginScreen /> : <Navigate to={LANDING} />
+            }
           />
           <Route
             path={SIGNUP}
-            element={!user ? <SignupScreen /> : <Navigate to={LOGIN} />}
+            element={
+              !userState?.data ? <SignupScreen /> : <Navigate to={LANDING} />
+            }
           />
           <Route path={NOT_FOUND} element={<NotFoundScreen />} />
         </Routes>
