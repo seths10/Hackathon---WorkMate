@@ -198,7 +198,7 @@ export const getActiveBookings = async (req: Request, res: Response) => {
     if (!activeBookings || activeBookings.length === 0) {
       return res.json({
         success: false,
-        data: "No active bookings found for the user",
+        data: []
       });
     }
 
