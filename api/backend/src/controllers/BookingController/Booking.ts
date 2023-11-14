@@ -186,7 +186,6 @@ export const getAvailableDesksPerDay = async (req: Request, res: Response) => {
 export const getActiveBookings = async (req: Request, res: Response) => {
   const { userId } = req.params;
   try {
-    // Get active bookings for the specified user and current date
     const currentDate = new Date();
 
     const activeBookings = await Booking.find({
@@ -195,16 +194,22 @@ export const getActiveBookings = async (req: Request, res: Response) => {
       endDate: { $gte: currentDate }, // Booking must end after or on the current date
     }).exec();
 
+    const dsk = await Desk.find({}).exec();
+
     if (!activeBookings || activeBookings.length === 0) {
       return res.json({
         success: false,
-        data: []
+        data: [],
       });
     }
 
+    const availableActiveBookings = activeBookings.filter((bookngs) =>
+      dsk.every((desks) => desks.name && desks.name === bookngs.desk)
+    );
+
     res.status(200).json({
       success: true,
-      data: activeBookings,
+      data: availableActiveBookings,
     });
   } catch (err) {
     console.error(err);
@@ -288,12 +293,12 @@ export const deleteBooking = async (req: Request, res: Response) => {
     if (!dsk) {
       return res.status(500).json({
         success: false,
-        data: "Server side error"
-      })
+        data: "Server side error",
+      });
     }
 
     dsk.isAvailable = true;
-      await dsk?.save();
+    await dsk?.save();
 
     await Booking.findByIdAndDelete(id).exec();
 
