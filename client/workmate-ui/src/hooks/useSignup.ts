@@ -4,7 +4,7 @@ import { useAuthContext } from "./useAuthContext";
 import { BASE_URL } from "../constants/app";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { LANDING } from "../navigation/routes-constants";
+import { LOGIN } from "../navigation/routes-constants";
 
 export function useSignup() {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ export function useSignup() {
       dispatch({ type: "LOGIN", payload: json });
       setIsLoading(false);
       toast.success(json.data)
-      navigate(LANDING)
+      navigate(LOGIN)
     }
   };
 
