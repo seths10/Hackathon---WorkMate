@@ -7,6 +7,8 @@ import authRoute from "./routes/AuthRoute/Auth";
 import communityRoute from "./routes/CommunityRoute/Community";
 import bookingRoute from "./routes/BookingRoute/Booking";
 import { auth } from "./utils/middlewares";
+import swaggerUI from "swagger-ui-express";
+import * as swaggerDoc from "../swagger-output.json";
 
 // instance of express
 const app = express();
@@ -21,6 +23,9 @@ app.use(cors({ origin: "*" }));
 app.use("/api/auth", authRoute);
 app.use("/api/community",auth, communityRoute);
 app.use("/api/bookings", auth, bookingRoute);
+
+// swagger ui doc
+app.use("/api", swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 
 mongoose.Promise = bluebird;
 const mongodb_uri = DB_URI! 
