@@ -8,7 +8,7 @@ import communityRoute from "./routes/CommunityRoute/Community";
 import bookingRoute from "./routes/BookingRoute/Booking";
 import { auth } from "./utils/middlewares";
 import swaggerUI from "swagger-ui-express";
-import * as swaggerDoc from "../swagger-output.json";
+import * as swaggerDoc from "./swagger.json";
 
 // instance of express
 const app = express();
