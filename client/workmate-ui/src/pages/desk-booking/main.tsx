@@ -15,6 +15,10 @@ import Avatar from "react-avatar";
 const DeskBooking = () => {
   const { userState } = useAuthContext();
   const [loading, setLoading] = React.useState(false);
+  const [isActiveBookingsLoading, setIsActiveBookingsLoading] =
+    React.useState(false);
+  const [isBookingHistoryLoading, setIsBookingHistoryLoading] =
+    React.useState(false);
   const fullName = userState?.data?.firstname + " " + userState?.data?.lastname;
 
   const [bookingHistory, setBookingHistory] = React.useState([
@@ -45,27 +49,33 @@ const DeskBooking = () => {
 
   React.useEffect(() => {
     setLoading(true);
+    setIsBookingHistoryLoading(true);
     async function getBookingHistory() {
       await instance
         .get(`/api/bookings/user/${userState?.data?.id}`)
         .then((res) => {
           setBookingHistory(res?.data?.data);
           setLoading(false);
+          setIsBookingHistoryLoading(false);
         })
         .catch(() => {
           setLoading(false);
+          setIsBookingHistoryLoading(false);
         });
     }
 
     async function getActiveBookings() {
+      setIsActiveBookingsLoading(true);
       await instance
         .get(`/api/bookings/active/${userState?.data?.id}`)
         .then((res) => {
           setActiveBookings(res?.data?.data);
           setLoading(false);
+          setIsActiveBookingsLoading(false);
         })
         .catch(() => {
           setLoading(false);
+          setIsActiveBookingsLoading(false);
         });
     }
 
@@ -74,16 +84,24 @@ const DeskBooking = () => {
   }, [userState?.data?.id]);
 
   async function getUpdatedActiveBookings() {
+    setIsActiveBookingsLoading(true);
     await instance
       .get(`/api/bookings/active/${userState?.data?.id}`)
-      .then((res) => setActiveBookings(res?.data?.data))
+      .then((res) => {
+        setIsActiveBookingsLoading(false);
+        setActiveBookings(res?.data?.data);
+      })
       .catch(() => {});
   }
 
   async function getUpdatedBookingHistory() {
+    setIsBookingHistoryLoading(true);
     await instance
       .get(`/api/bookings/user/${userState?.data?.id}`)
-      .then((res) => setBookingHistory(res?.data?.data))
+      .then((res) => {
+        setBookingHistory(res?.data?.data);
+        setIsBookingHistoryLoading(false);
+      })
       .catch(() => {});
   }
 
@@ -167,7 +185,10 @@ const DeskBooking = () => {
                   <h1 className="font-bold mb-2">Active Bookings</h1>
                   <ArrowPathIcon
                     onClick={() => getUpdatedActiveBookings()}
-                    className="w-4 h-3 cursor-pointer hover:text-gray-900 text-gray-500"
+                    className={`w-4 h-3 ${
+                      isActiveBookingsLoading &&
+                      "animate-spin animate-infinite animate-ease-linear"
+                    } cursor-pointer hover:text-gray-900 text-gray-500`}
                   />
                 </div>
                 <div className="bg-gray-200 rounded py-3 px-3">
@@ -220,7 +241,10 @@ const DeskBooking = () => {
                   <h1 className="font-bold mb-2">Booking History</h1>
                   <ArrowPathIcon
                     onClick={() => getUpdatedBookingHistory()}
-                    className="w-4 h-3 cursor-pointer hover:text-gray-900 text-gray-500"
+                    className={`w-4 h-3 ${
+                      isBookingHistoryLoading &&
+                      "animate-spin animate-infinite animate-ease-linear"
+                    } cursor-pointer hover:text-gray-900 text-gray-500`}
                   />
                 </div>
                 <div className="bg-gray-200 rounded py-3 px-3">
