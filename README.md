@@ -21,7 +21,7 @@ Our solution mainly consists of functionality and software components.
 
 
 ## API Documentations 📖
->To view our endpoints used in the project, [Click Here]{https://workmate-u6j3.onrender.com/api/#/)  
+>To view our endpoints used in the project, [Click Here](https://workmate-u6j3.onrender.com/api/)  
 
 
 ## Setup ⚙️
