@@ -14,42 +14,10 @@ const transporter = nodemailer.createTransport({
 });
 
 // Desk Controllers
-export const getAllDesks = async (req: Request, res: Response) => {
-  try {
-    const desks = await Desk.find({}).exec();
-
-    return res.status(200).json({
-      success: true,
-      data: desks,
-    });
-  } catch (err) {
-    res.status(500).send("Internal Server Error");
-  }
-};
-
-export const getDeskById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  try {
-    const desk = await Desk.findById(id).exec();
-
-    if (!desk) {
-      return res.status(404).json({
-        success: false,
-        data: "Not found",
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      data: desk,
-    });
-  } catch (err) {
-    res.status(500).send(`Internal Server Error`);
-  }
-};
-
 export const addDesk = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Desk']
+       #swagger.description = 'Endpoint to register a desk' */
+
   const { name, facility, location } = req.body;
   try {
     const dsk = new Desk({ name, facility, location });
@@ -71,8 +39,28 @@ export const addDesk = async (req: Request, res: Response) => {
   }
 };
 
-export const removeDesk = async (req: Request, res: Response) => {
+export const getAllDesks = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Desk']
+        #swagger.description = 'Endpoint to get all available desks' */
+
+  try {
+    const desks = await Desk.find({}).exec();
+
+    return res.status(200).json({
+      success: true,
+      data: desks,
+    });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+export const getDeskById = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Desk']
+        #swagger.description = 'Endpoint to get a particular desks' */
+
   const { id } = req.params;
+
   try {
     const desk = await Desk.findById(id).exec();
 
@@ -83,76 +71,19 @@ export const removeDesk = async (req: Request, res: Response) => {
       });
     }
 
-    await Desk.findByIdAndDelete(id).exec();
-
     res.status(200).json({
       success: true,
-      data: "Desk removed successfully",
+      data: desk,
     });
   } catch (err) {
-    res.status(500).send("Internal Server Error");
-  }
-};
-
-// Booking Controllers
-
-export const getAllBookings = async (req: Request, res: Response) => {
-  try {
-    const bookings = await Booking.find({}).populate("desk").limit(3).exec();
-
-    res.status(200).json({
-      success: true,
-      data: bookings,
-    });
-  } catch (err) {
-    res.status(500).send("Internal Server Error");
-  }
-};
-
-export const getBookingById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    const booking = await Booking.findById(id).exec();
-
-    if (!booking) {
-      return res.status(404).json({
-        success: false,
-        data: "Not found",
-      });
-    }
-    return res.status(200).json({
-      success: true,
-      data: booking,
-    });
-  } catch (err) {
-    res.status(500).send("Internal Server Error");
-  }
-};
-
-export const getBookingByUserId = async (req: Request, res: Response) => {
-  const { userId } = req.params;
-  try {
-    const booking = await Booking.find({ "user.userId": userId })
-      .sort({ endDate: "asc" })
-      .limit(5)
-      .exec();
-
-    if (!booking) {
-      return res.status(404).json({
-        success: false,
-        data: "Not found",
-      });
-    }
-    res.status(200).json({
-      success: true,
-      data: booking,
-    });
-  } catch (err) {
-    res.status(500).send("Internal Server Error");
+    res.status(500).send(`Internal Server Error`);
   }
 };
 
 export const getAvailableDesksPerDay = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Desk']
+        #swagger.description = 'Endpoint to get all available desks for a particular date' */
+
   const { date } = req.params;
 
   try {
@@ -183,45 +114,38 @@ export const getAvailableDesksPerDay = async (req: Request, res: Response) => {
   }
 };
 
-export const getActiveBookings = async (req: Request, res: Response) => {
-  const { userId } = req.params;
+export const removeDesk = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Desk']
+        #swagger.description = 'Endpoint to remove a particular desks' */
+
+  const { id } = req.params;
   try {
-    const currentDate = new Date();
+    const desk = await Desk.findById(id).exec();
 
-    // get all bookings that are active for a particular user
-    const activeBookings = await Booking.find({
-      "user.userId": userId,
-      startDate: { $lte: currentDate }, // Booking must start before or on the current date
-      endDate: { $gte: currentDate }, // Booking must end after or on the current date
-    }).exec();
-
-    
-    if (!activeBookings || activeBookings.length === 0) {
+    if (!desk) {
       return res.status(404).json({
         success: false,
-        data: [],
+        data: "Not found",
       });
     }
 
-    // find all desks that are active / booked
-    const dsk = await Desk.find({ isAvailable: false }).exec();
-    
-    // find all available desks that are active
-    const availableActiveBookings = activeBookings.filter((bookngs) =>
-      dsk.some((desks) => desks.name === bookngs.desk)
-    );
+    await Desk.findByIdAndDelete(id).exec();
 
     res.status(200).json({
       success: true,
-      data: availableActiveBookings,
+      data: "Desk removed successfully",
     });
   } catch (err) {
-    console.error(err);
     res.status(500).send("Internal Server Error");
   }
 };
 
+
+// Booking Controllers
 export const addBooking = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Booking']
+        #swagger.description = 'Endpoint to book a desk' */
+
   const { user, desk, startDate, endDate, email } = req.body;
   try {
     // Validate required fields
@@ -253,7 +177,6 @@ export const addBooking = async (req: Request, res: Response) => {
 
     // create a new desk booking instance
     const booking = new Booking({ user, desk, startDate, endDate });
-
 
     // save a booking for the selected desk
     await booking.save();
@@ -289,7 +212,26 @@ export const addBooking = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteBooking = async (req: Request, res: Response) => {
+export const getAllBookings = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Booking']
+        #swagger.description = 'Endpoint to get all available bookings' */
+
+  try {
+    const bookings = await Booking.find({}).populate("desk").limit(3).exec();
+
+    res.status(200).json({
+      success: true,
+      data: bookings,
+    });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+export const getBookingById = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Booking']
+        #swagger.description = 'Endpoint to get a particular booking' */
+
   const { id } = req.params;
   try {
     const booking = await Booking.findById(id).exec();
@@ -300,33 +242,85 @@ export const deleteBooking = async (req: Request, res: Response) => {
         data: "Not found",
       });
     }
-
-    console.log(booking.desk);
-
-    const dsk = await Desk.findOne({ name: booking.desk }).exec();
-
-    if (!dsk) {
-      return res.status(404).json({
-        success: false,
-        data: "Desk Not Found",
-      });
-    }
-
-    dsk.isAvailable = true;
-    await dsk?.save();
-
-    await Booking.findByIdAndDelete(id).exec();
-
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      data: "Booking deleted successfully",
+      data: booking,
     });
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
 };
 
+export const getBookingByUserId = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Booking']
+        #swagger.description = 'Endpoint to get bookings for a particular user' */
+
+  const { userId } = req.params;
+  try {
+    const booking = await Booking.find({ "user.userId": userId })
+      .sort({ endDate: "asc" })
+      .limit(5)
+      .exec();
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        data: "Not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      data: booking,
+    });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+export const getActiveBookings = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Booking']
+        #swagger.description = 'Endpoint to get all active bookings for a particular user' */
+
+  const { userId } = req.params;
+  try {
+    const currentDate = new Date();
+
+    // get all bookings that are active for a particular user
+    const activeBookings = await Booking.find({
+      "user.userId": userId,
+      startDate: { $lte: currentDate }, // Booking must start before or on the current date
+      endDate: { $gte: currentDate }, // Booking must end after or on the current date
+    }).exec();
+
+    if (!activeBookings || activeBookings.length === 0) {
+      return res.status(404).json({
+        success: false,
+        data: [],
+      });
+    }
+
+    // find all desks that are active / booked
+    const dsk = await Desk.find({ isAvailable: false }).exec();
+
+    // find all available desks that are active
+    const availableActiveBookings = activeBookings.filter((bookngs) =>
+      dsk.some((desks) => desks.name === bookngs.desk)
+    );
+
+    res.status(200).json({
+      success: true,
+      data: availableActiveBookings,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 export const updateBooking = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Booking']
+        #swagger.description = 'Endpoint to unbook a desk' */
+
   const { desk, userId } = req.body;
   try {
     const dsk = await Desk.findOne({ name: desk }).exec();
@@ -359,6 +353,45 @@ export const updateBooking = async (req: Request, res: Response) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
+export const deleteBooking = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Booking']
+        #swagger.description = 'Endpoint to remove a particular booking from booking history / unbook' */
+
+  const { id } = req.params;
+  try {
+    const booking = await Booking.findById(id).exec();
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        data: "Not found",
+      });
+    }
+
+    const dsk = await Desk.findOne({ name: booking.desk }).exec();
+
+    if (!dsk) {
+      return res.status(404).json({
+        success: false,
+        data: "Desk Not Found",
+      });
+    }
+
+    dsk.isAvailable = true;
+    await dsk?.save();
+
+    await Booking.findByIdAndDelete(id).exec();
+
+    res.status(200).json({
+      success: true,
+      data: "Booking deleted successfully",
+    });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 
 // Schedule the task to run every day at midnight
 cron.schedule("0 0 * * *", async () => {

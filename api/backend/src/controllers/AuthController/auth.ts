@@ -4,7 +4,71 @@ import { emailRegEx, passwordRegEx } from "../../utils/constants";
 import User from "../../models/AuthModel/User";
 import { secretKey } from "../../utils/secrets";
 
+// user sign up controller
+export const signup = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['User']
+      #swagger.description = 'Endpoint to sign up a specific user' */
+
+  // user signup credentials
+  const { firstname, lastname, email, password } = req.body;
+
+  // checking is credentials have been passed
+  if (!firstname || !lastname || !email || !password) {
+    return res.status(400).json({
+      success: false,
+      data: "Provide firstname, lastname, email and password",
+    });
+  }
+
+  // validate email
+  if (!emailRegEx.test(email)) {
+    return res.status(422).json({
+      success: false,
+      data: "Invalid email address",
+    });
+  }
+
+  // checking for strong password using regular expression
+  if (!passwordRegEx.test(password)) {
+    return res.status(422).json({
+      success: false,
+      data: "Password does not meet the required criteria. It must have at least one lowercase letter, one uppercase letter, one digit, and one special character (@$!%*?&), and be at least 8 characters long.",
+    });
+  }
+
+  try {
+    // find existing of user
+    const existingUser = await User.findOne({ email }).exec();
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        data: "User already exist",
+      });
+    }
+    // creating new user instance
+    const user = new User({ firstname, lastname, password, email });
+
+    // saving the newly created user
+    await user.save();
+
+    // response to the client for a successful user creation
+    res
+      .status(201)
+      .json({ success: true, data: "User registered successfully" });
+  } catch (err) {
+    // server error response
+    res.status(500).json({
+      success: false,
+      data: "Internal Server Error",
+    });
+  }
+};
+
+// user sign in controller
 export const signin = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['User']
+        #swagger.description = 'Endpoint to sign in a specific user' */
+
   // user credentials
   const { email, password } = req.body;
 
@@ -69,62 +133,6 @@ export const signin = async (req: Request, res: Response) => {
       data: userData,
     });
   } catch (err) {
-    res.status(500).json({
-      success: false,
-      data: "Internal Server Error",
-    });
-  }
-};
-
-export const signup = async (req: Request, res: Response) => {
-  // user signup credentials
-  const { firstname, lastname, email, password } = req.body;
-
-  // checking is credentials have been passed
-  if (!firstname || !lastname || !email || !password) {
-    return res.status(400).json({
-      success: false,
-      data: "Provide firstname, lastname, email and password",
-    });
-  }
-
-  // validate email
-  if (!emailRegEx.test(email)) {
-    return res.status(422).json({
-      success: false,
-      data: "Invalid email address",
-    });
-  }
-
-  // checking for strong password using regular expression
-  if (!passwordRegEx.test(password)) {
-    return res.status(422).json({
-      success: false,
-      data: "Password does not meet the required criteria. It must have at least one lowercase letter, one uppercase letter, one digit, and one special character (@$!%*?&), and be at least 8 characters long.",
-    });
-  }
-
-  try {
-    // find existing of user
-    const existingUser = await User.findOne({ email }).exec();
-    if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        data: "User already exist",
-      });
-    }
-    // creating new user instance
-    const user = new User({ firstname, lastname, password, email });
-
-    // saving the newly created user
-    await user.save();
-
-    // response to the client for a successful user creation
-    res
-      .status(201)
-      .json({ success: true, data: "User registered successfully" });
-  } catch (err) {
-    // server error response
     res.status(500).json({
       success: false,
       data: "Internal Server Error",

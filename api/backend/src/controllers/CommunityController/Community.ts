@@ -5,6 +5,9 @@ import Comment from "../../models/CommunityModel/Comment";
 
 // post a question to workmate
 export const postQuestion = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Community']
+        #swagger.description = 'Endpoint to post a question to the community' */
+
   const { title, content, tags, author, votes, views } = req.body;
   try {
     // check passed data
@@ -38,6 +41,9 @@ export const postQuestion = async (req: Request, res: Response) => {
 
 // get all questions from workmate
 export const getQuestions = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Community']
+        #swagger.description = 'Endpoint to get all available questions' */
+
   try {
     // get all questions with comments
     const question = await Question.find({}).populate("comments").exec();
@@ -52,6 +58,9 @@ export const getQuestions = async (req: Request, res: Response) => {
 
 // get a particular question
 export const getQuestionById = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Community']
+        #swagger.description = 'Endpoint to get a particular questions' */
+
   const { id } = req.params;
   try {
     // find a question by id with it's comment
@@ -75,6 +84,9 @@ export const getQuestionById = async (req: Request, res: Response) => {
 
 // delete a question from workmate
 export const deleteQuestionById = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Community']
+        #swagger.description = 'Endpoint to remove a particular question' */
+
   const { id } = req.params;
   try {
     const question = await Question.findById(id);
@@ -98,8 +110,52 @@ export const deleteQuestionById = async (req: Request, res: Response) => {
   }
 };
 
+// post an answer to workmate
+export const postAnswer = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Community']
+        #swagger.description = 'Endpoint to add an answer to a question' */
+
+  const { content, question_id, author } = req.body;
+  try {
+    if (!content) {
+      return res.status(400).json({
+        success: false,
+        data: "Provide the content",
+      });
+    }
+
+    const newAnswer = new Answer({
+      content,
+      question_id,
+      author,
+    });
+
+    const answer = await newAnswer.save();
+
+    const question = await Question.findById(question_id).exec();
+
+    console.log(question);
+
+    if (question) {
+      question.total_answers += 1;
+    }
+
+    await question?.save();
+
+    return res.status(201).json({
+      success: true,
+      data: answer,
+    });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 // get a specific/particular answer from workmate
 export const getAnswersByQuestionId = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Community']
+        #swagger.description = 'Endpoint to get a particular answer to a question' */
+
   const { question_id } = req.params;
   try {
     const answer = await Answer.find({ question_id })
@@ -121,46 +177,11 @@ export const getAnswersByQuestionId = async (req: Request, res: Response) => {
   }
 };
 
-// post an answer to workmate
-export const postAnswer = async (req: Request, res: Response) => {
-  const { content, question_id, author } = req.body;
-  try {
-    if (!content) {
-      return res.status(400).json({
-        success: false,
-        data: "Provide the content",
-      });
-    }
-
-    const newAnswer = new Answer({
-      content,
-      question_id,
-      author,
-    });
-
-    const answer = await newAnswer.save();
-
-    const question = await Question.findById(question_id).exec();
-
-    console.log(question)
-
-    if (question) {
-      question.total_answers += 1;
-    }
-
-    await question?.save();
-
-    return res.status(201).json({
-      success: true,
-      data: answer,
-    });
-  } catch (err) {
-    res.status(500).send("Internal Server Error");
-  }
-};
-
 // remove an answer by id
 export const deleteAnswerById = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Community']
+        #swagger.description = 'Endpoint to remove a particular answer to a question' */
+
   const { id } = req.params;
   try {
     const answer = await Answer.findById(id);
@@ -184,6 +205,9 @@ export const deleteAnswerById = async (req: Request, res: Response) => {
 
 // comment on a question
 export const postComment = async (req: Request, res: Response) => {
+  /* 	#swagger.tags = ['Community']
+        #swagger.description = 'Endpoint to add a comment to a question' */
+
   const { question_id, author, content } = req.body;
 
   try {
@@ -213,6 +237,9 @@ export const postComment = async (req: Request, res: Response) => {
 
 // get comments to a question
 export const getComment = async (req: Request, res: Response) => {
+   /* 	#swagger.tags = ['Community']
+        #swagger.description = 'Endpoint to get comments on a question' */
+
   const { question_id } = req.params;
   try {
     const comment = await Comment.find({ question_id })
@@ -237,6 +264,9 @@ export const getComment = async (req: Request, res: Response) => {
 
 // remove a comment
 export const deleteComment = async (req: Request, res: Response) => {
+   /* 	#swagger.tags = ['Community']
+        #swagger.description = 'Endpoint to remove a particular comment' */
+
   const { id } = req.params;
   try {
     const comment = await Comment.findById(id);

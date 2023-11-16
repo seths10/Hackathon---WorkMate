@@ -1,12 +1,40 @@
 {
   "swagger": "2.0",
   "info": {
+    "version": "1.0.0",
     "title": "workmate",
-    "description": "Description",
-    "version": "1.0.0"
+    "description": "Future of Education and Smart Technology"
   },
   "host": "localhost:3000",
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "development server"
+    },
+    {
+      "url": "https://workmate-u6j3.onrender.com",
+      "description": "production server"
+    }
+  ],
   "basePath": "/",
+  "tags": [
+    {
+      "name": "User",
+      "description": "Endpoints"
+    },
+    {
+      "name": "Desk",
+      "description": "Endpoints"
+    },
+    {
+      "name": "Booking",
+      "description": "Endpoints"
+    },
+    {
+      "name": "Community",
+      "description": "Endpoints"
+    }
+  ],
   "schemes": [
     "http"
   ],
@@ -21,51 +49,12 @@
         }
       }
     },
-    "/api/auth/signin": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "422": {
-            "description": "Unprocessable Entity"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
     "/api/auth/signup": {
       "post": {
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to sign up a specific user",
         "parameters": [
           {
             "name": "body",
@@ -105,9 +94,57 @@
         }
       }
     },
+    "/api/auth/signin": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to sign in a specific user",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/api/community/question": {
       "post": {
-        "description": "",
+        "tags": [
+          "Community"
+        ],
+        "description": "Endpoint to post a question to the community",
         "parameters": [
           {
             "name": "authorization",
@@ -166,7 +203,10 @@
         }
       },
       "get": {
-        "description": "",
+        "tags": [
+          "Community"
+        ],
+        "description": "Endpoint to get all available questions",
         "parameters": [
           {
             "name": "authorization",
@@ -197,7 +237,10 @@
     },
     "/api/community/question/{id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Community"
+        ],
+        "description": "Endpoint to get a particular questions",
         "parameters": [
           {
             "name": "id",
@@ -235,50 +278,13 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Community"
+        ],
+        "description": "Endpoint to remove a particular question",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "token",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/community/answer/{question_id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "question_id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -315,7 +321,10 @@
     },
     "/api/community/answer": {
       "post": {
-        "description": "",
+        "tags": [
+          "Community"
+        ],
+        "description": "Endpoint to add an answer to a question",
         "parameters": [
           {
             "name": "authorization",
@@ -365,49 +374,12 @@
         }
       }
     },
-    "/api/community/answer/{id}": {
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "token",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/community/comment/{question_id}": {
+    "/api/community/answer/{question_id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Community"
+        ],
+        "description": "Endpoint to get a particular answer to a question",
         "parameters": [
           {
             "name": "question_id",
@@ -445,9 +417,55 @@
         }
       }
     },
+    "/api/community/answer/{id}": {
+      "delete": {
+        "tags": [
+          "Community"
+        ],
+        "description": "Endpoint to remove a particular answer to a question",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/api/community/comment": {
       "post": {
-        "description": "",
+        "tags": [
+          "Community"
+        ],
+        "description": "Endpoint to add a comment to a question",
         "parameters": [
           {
             "name": "authorization",
@@ -497,9 +515,55 @@
         }
       }
     },
+    "/api/community/comment/{question_id}": {
+      "get": {
+        "tags": [
+          "Community"
+        ],
+        "description": "Endpoint to get comments on a question",
+        "parameters": [
+          {
+            "name": "question_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/api/community/comment/{id}": {
       "delete": {
-        "description": "",
+        "tags": [
+          "Community"
+        ],
+        "description": "Endpoint to remove a particular comment",
         "parameters": [
           {
             "name": "id",
@@ -538,37 +602,11 @@
       }
     },
     "/api/bookings/desk": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "token",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
       "post": {
-        "description": "",
+        "tags": [
+          "Desk"
+        ],
+        "description": "Endpoint to register a desk",
         "parameters": [
           {
             "name": "authorization",
@@ -616,11 +654,46 @@
             "description": "Internal Server Error"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "Desk"
+        ],
+        "description": "Endpoint to get all available desks",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/api/bookings/desk/{id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Desk"
+        ],
+        "description": "Endpoint to get a particular desks",
         "parameters": [
           {
             "name": "id",
@@ -658,7 +731,10 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Desk"
+        ],
+        "description": "Endpoint to remove a particular desks",
         "parameters": [
           {
             "name": "id",
@@ -698,7 +774,10 @@
     },
     "/api/bookings/deskPerDay/{date}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Desk"
+        ],
+        "description": "Endpoint to get all available desks for a particular date",
         "parameters": [
           {
             "name": "date",
@@ -734,37 +813,11 @@
       }
     },
     "/api/bookings/": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "token",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
       "post": {
-        "description": "",
+        "tags": [
+          "Booking"
+        ],
+        "description": "Endpoint to book a desk",
         "parameters": [
           {
             "name": "authorization",
@@ -822,8 +875,43 @@
           }
         }
       },
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "description": "Endpoint to get all available bookings",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
       "put": {
-        "description": "",
+        "tags": [
+          "Booking"
+        ],
+        "description": "Endpoint to unbook a desk",
         "parameters": [
           {
             "name": "authorization",
@@ -875,7 +963,10 @@
     },
     "/api/bookings/{id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Booking"
+        ],
+        "description": "Endpoint to get a particular booking",
         "parameters": [
           {
             "name": "id",
@@ -913,7 +1004,10 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Booking"
+        ],
+        "description": "Endpoint to remove a particular booking from booking history / unbook",
         "parameters": [
           {
             "name": "id",
@@ -953,7 +1047,10 @@
     },
     "/api/bookings/user/{userId}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Booking"
+        ],
+        "description": "Endpoint to get bookings for a particular user",
         "parameters": [
           {
             "name": "userId",
@@ -993,7 +1090,10 @@
     },
     "/api/bookings/active/{userId}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Booking"
+        ],
+        "description": "Endpoint to get all active bookings for a particular user",
         "parameters": [
           {
             "name": "userId",
