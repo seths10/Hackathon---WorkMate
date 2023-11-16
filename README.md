@@ -4,23 +4,27 @@
 https://github.com/seths10/WorkMate/assets/59029978/f26ede9c-35ef-40d3-982f-534cebe26704
 
 
-<h1 align="center"> WorkMate </h1>
+<h1 align="center"> WorkMate 🏢 </h1>
 <!-- <p align="center">This project is designed to </p> -->
 
 
 ### Description
 Our solution mainly consists of functionality and software components.
    
- - A desk booking system to help with office space utilization.
+ - A desk booking system to help with office space utilization. 🖥️🧾
   
- - A Stack Overflow inspired software for asking questions and receiving answers from individuals in the company on several topics
+ - A Stack Overflow inspired software for asking questions and receiving answers from individuals in the company on several topics. 🙋‍♂️🙋‍♀️
 
 
-## Designs
+## Figma Designs 🎨
 >To view the designs, [Click Here](https://www.figma.com/file/33UUWwoHytGtxEBDerbvP0/Workmate?type=design&node-id=0%3A1&mode=design&t=pw7ODjmDXHEvgdls-1)  
 
 
-## Setup
+## API Documentations 📖
+>To view our endpoints used in the project, [Click Here]{https://workmate-u6j3.onrender.com/api/#/)  
+
+
+## Setup ⚙️
 
   ##### Clone the repository
 ```bash
@@ -40,10 +44,10 @@ cd backend
 npm run devStart
 ```
 
-## About
-Our solution primarily targets the themes: `Future of Education` and `Smart Technology for Sustainable Living`. We are **Team <SPAN />**! 
+## About 
+Our solution primarily targets the themes: `Future of Education 📚` and `Smart Technology for Sustainable Living 🧑‍💻♻️`. We are **Team <SPAN />**! 
 
-##### Build by 
+##### Built by 🛠️
 
 <p align="left">
 <a href="https://github.com/seths10"><img width="128px" src="https://avatars1.githubusercontent.com/seths10"></a>
